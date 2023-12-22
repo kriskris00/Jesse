@@ -1,50 +1,45 @@
 body {
     font-family: 'Helvetica', sans-serif;
-    background-color: #000;
-    color: #fff;
+    background-color: #ffd699;
+    color: #663300;
     text-align: center;
     margin: 50px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure the body takes at least the full viewport height */
 }
 
 h1 {
-    color: #808080;
+    color: #996633;
     font-size: 4em;
     letter-spacing: 8px;
     text-transform: uppercase;
     margin-bottom: 20px;
-    animation: glow 2s infinite alternate;
 }
 
 p {
-    color: #808080;
+    color: #663300;
     font-size: 1.5em;
     line-height: 1.6;
-    animation: shimmer 2s infinite linear;
+    margin-bottom: 20px;
 }
 
 a {
-    color: #808080;
+    color: #996633;
     text-decoration: none;
 }
 
 a:hover {
-    border-bottom: 2px solid #808080;
+    border-bottom: 2px solid #996633;
 }
 
-@keyframes glow {
-    from {
-        text-shadow: 0 0 10px #fff, 0 0 20px #808080, 0 0 30px #808080;
-    }
-    to {
-        text-shadow: 0 0 20px #fff, 0 0 40px #808080, 0 0 60px #808080;
-    }
+footer {
+    margin-top: auto; /* Push the footer to the bottom */
+    padding: 10px;
 }
 
-@keyframes shimmer {
-    from {
-        background-position: 0% 0%;
-    }
-    to {
-        background-position: 100% 100%;
-    }
+footer p {
+    color: #996633;
+    font-size: 0.8em;
+    margin: 0;
 }
