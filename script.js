@@ -1,8 +1,6 @@
 // 获取元素
 const glowingTitle = document.getElementById('glowing-title');
 const image = document.querySelector('.content img');
-const playMusicBtn = document.getElementById('play-music-btn');
-const backgroundMusic = document.getElementById('background-music');
 
 // Function to change text color
 function changeColor() {
@@ -63,9 +61,3 @@ function fadeOut(element) {
         }
     }, 200);
 }
-
-// 播放背景音乐按钮点击事件
-playMusicBtn.addEventListener('click', function() {
-    backgroundMusic.play();
-    playMusicBtn.disabled = true; // 禁用按钮，防止重复点击
-});
