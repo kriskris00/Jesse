@@ -39,6 +39,7 @@ a:hover {
 .content {
     position: relative;
     z-index: 1;
+    max-width: 100%;
 }
 
 footer {
