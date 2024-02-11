@@ -28,12 +28,12 @@ p {
 }
 
 a {
-    color: #000; /* 黑色 */
+    color: #a1fc12; /* 黑色 */
     text-decoration: none;
 }
 
 a:hover {
-    border-bottom: 2px solid #000; /* 黑色 */
+    border-bottom: 2px solid #a1fc12; /* 黑色 */
 }
 
 .content {
