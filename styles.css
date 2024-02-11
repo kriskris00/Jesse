@@ -33,7 +33,7 @@ a {
 }
 
 a:hover {
-    border-bottom: 2px solid #35ee02; /* 黑色 */
+    border-bottom: 2px solid #fff; /* 黑色 */
 }
 
 .content {
