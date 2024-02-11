@@ -24,16 +24,16 @@ p {
     font-size: 0.8em; /* 调小字体大小 */
     line-height: 1.6;
     margin: 15px 0;
-    color: #a1fc12; /* 淡粉色 */
+    color: #35ee02; /* 淡粉色 */
 }
 
 a {
-    color: #a1fc12; /* 黑色 */
+    color: #35ee02; /* 黑色 */
     text-decoration: none;
 }
 
 a:hover {
-    border-bottom: 2px solid #a1fc12; /* 黑色 */
+    border-bottom: 2px solid #35ee02; /* 黑色 */
 }
 
 .content {
