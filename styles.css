@@ -41,12 +41,6 @@ a:hover {
     max-width: 100%;
 }
 
-footer {
-    margin-top: auto;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.5);
-}
-
 footer p {
     color: #fff; /* 白色 */
     font-size: 0.8em;
