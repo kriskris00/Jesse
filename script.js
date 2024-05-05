@@ -6,8 +6,10 @@ const nextButton = document.getElementById('nextButton');
 let currentIndex = 0;
 const media = [
     { type: 'image', src: 'selahx.PNG' },
-    { type: 'image', src: 'https://example.com/image2.jpg' },
-    { type: 'video', src: 'https://example.com/video1.mp4' },
+    { type: 'image', src: 'IMG_9151.heic' },
+    { type: 'image', src: 'IMG_8788.heic' },
+    { type: 'image', src: 'IMG_9399.jpeg' },
+    { type: 'video', src: '001_WC-EditVideo_1.MOV' },
     { type: 'video', src: 'https://example.com/video2.mp4' }
 ];
 
