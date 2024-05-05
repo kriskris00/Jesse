@@ -1,56 +1,77 @@
 body {
     font-family: 'Gloria Hallelujah', sans-serif;
-    color: #fff; /* 黑色 */
+    color: #eee; /* 修改页面文字颜色为浅灰色 */
     text-align: center;
     margin: 0;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #fff; /* 白色 */
+    background-color: #fff; /* 将背景色改为白色 */
+    background-image: url('background.jpg'); /* 更换背景图片 */
+    background-size: cover;
+    background-position: center;
 }
 
+/* 标题样式 */
 h1 {
     font-size: 3em;
     letter-spacing: 5px;
     text-transform: uppercase;
     margin: 15px 0;
-    color: #fff; /*绿 */
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.5), 0 0 15px rgba(255, 255, 255, 0.5);
+    color: #fff; /* 修改标题文字颜色为白色 */
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 0, 0, 0.5);
     animation: glow 2s infinite alternate;
 }
 
+/* 段落样式 */
 p {
-    font-size: 0.8em; /* 调小字体大小 */
+    font-size: 0.9em; /* 修改段落文字大小 */
     line-height: 1.6;
     margin: 15px 0;
-    color: #000; /* 黑色 */
+    color: #ccc; /* 修改段落文字颜色为深灰色 */
 }
 
+/* 链接样式 */
 a {
-    color: #ff69b4; /* 粉色 */
+    color: #ff6666; /* 修改链接颜色为浅红色 */
     text-decoration: none;
 }
 
 a:hover {
-    border-bottom: 2px solid #ff69b4; /* 粉色 */
+    border-bottom: 1px solid #ff6666; /* 修改鼠标悬停时链接下划线颜色为浅红色 */
 }
 
+/* 内容样式 */
 .content {
     position: relative;
-    z-index: 1;
-    max-width: 100%;
 }
 
+/* 按钮样式 */
+button {
+    font-size: 1em; /* 修改按钮字体大小 */
+    padding: 10px 20px; /* 调整按钮内边距 */
+    background-color: rgba(255, 255, 255, 0.2); /* 修改按钮背景颜色为淡白色 */
+    border: none; /* 去掉按钮边框 */
+    border-radius: 5px;
+    color: #fff; /* 修改按钮文字颜色为白色 */
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: rgba(255, 255, 255, 0.3); /* 鼠标悬停时修改按钮背景颜色为更亮的淡白色 */
+}
+
+/* 页脚样式 */
 footer p {
-    color: #000; /* 黑 */
+    color: #ccc; /* 修改页脚文字颜色为深灰色 */
     font-size: 0.8em;
-    margin: 0;
+    margin: 20px 0 0; /* 调整页脚上边距 */
 }
 
+/* 字体发光动画 */
 @keyframes glow {
     from {
         text-shadow: 0 0 5px rgba(0, 255, 0, 0.8), 0 0 10px rgba(0, 255, 0, 0.8), 0 0 15px rgba(0, 255, 0, 0.8);
-
     }
     to {
         text-shadow: 0 0 10px rgba(255, 182, 193, 0.8), 0 0 20px rgba(255, 182, 193, 0.8), 0 0 30px rgba(255, 182, 193, 0.8);
