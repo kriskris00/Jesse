@@ -5,11 +5,15 @@ const prevButton = document.getElementById('prevButton');
 const nextButton = document.getElementById('nextButton');
 let currentIndex = 0;
 const media = [
-    { type: 'video', src: '001_WC-EditVideo_1.MOV' },
-    { type: 'image', src: 'IMG_9399.jpeg' },
-    { type: 'image', src: 'IMG_9151.heic' },
-    { type: 'image', src: 'IMG_8788.heic' },
-    { type: 'image', src: 'IMG_9399.jpeg' }
+    { type: 'image', src: 'selahx.PNG' },
+    { type: 'image', src: 'J-1.png' },
+    { type: 'image', src: 'J-2.PNG' },
+    { type: 'image', src: 'J-3.PNG' },
+    { type: 'image', src: 'J-4.png' },
+    { type: 'image', src: 'J-5.png' },
+    { type: 'image', src: 'J-6.png' },
+    { type: 'image', src: 'J-7.png' },
+    { type: 'image', src: 'J-8.png' }
 ];
 
 // Function to change text color
