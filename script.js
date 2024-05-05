@@ -13,7 +13,7 @@ const media = [
     { type: 'image', src: 'J-5.png' },
     { type: 'image', src: 'J-6.png' },
     { type: 'image', src: 'J-7.png' },
-    { type: 'image', src: 'J-8.png' }
+    { type: 'image', src: 'J-8.PNG' }
 ];
 
 // Function to change text color
@@ -121,7 +121,7 @@ function createParticlesCanvas() {
             radius: Math.random() * 5 + 1,
             vx: Math.random() * 2 - 1,
             vy: Math.random() * 2 - 1,
-            color: 'rgba(255, 215, 0, 0.5)' // 金色
+            color: Math.random() < 0.5 ? '#98FB98' : '#FFC0CB' // 使用浅绿色和粉色
         });
     }
 
@@ -154,3 +154,17 @@ function createParticlesCanvas() {
 
 // 初始加载粒子效果
 createParticlesCanvas();
+
+const lightModeButton = document.getElementById('lightModeButton');
+const darkModeButton = document.getElementById('darkModeButton');
+const body = document.body;
+
+lightModeButton.addEventListener('click', () => {
+    body.style.backgroundColor = '#fff';
+    body.style.color = '#000';
+});
+
+darkModeButton.addEventListener('click', () => {
+    body.style.backgroundColor = '#000';
+    body.style.color = '#fff';
+});
