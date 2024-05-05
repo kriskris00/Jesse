@@ -5,7 +5,7 @@ const prevButton = document.getElementById('prevButton');
 const nextButton = document.getElementById('nextButton');
 let currentIndex = 0;
 const media = [
-    { type: 'image', src: 'https://example.com/image1.jpg' },
+    { type: 'image', src: 'selahx.PNG' },
     { type: 'image', src: 'https://example.com/image2.jpg' },
     { type: 'video', src: 'https://example.com/video1.mp4' },
     { type: 'video', src: 'https://example.com/video2.mp4' }
