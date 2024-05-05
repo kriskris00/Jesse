@@ -5,12 +5,11 @@ const prevButton = document.getElementById('prevButton');
 const nextButton = document.getElementById('nextButton');
 let currentIndex = 0;
 const media = [
-    { type: 'image', src: 'selahx.PNG' },
+    { type: 'video', src: '001_WC-EditVideo_1.MOV' },
+    { type: 'image', src: 'IMG_9399.jpeg' },
     { type: 'image', src: 'IMG_9151.heic' },
     { type: 'image', src: 'IMG_8788.heic' },
-    { type: 'image', src: 'IMG_9399.jpeg' },
-    { type: 'video', src: '001_WC-EditVideo_1.MOV' },
-    { type: 'video', src: 'https://example.com/video2.mp4' }
+    { type: 'image', src: 'IMG_9399.jpeg' }
 ];
 
 // Function to change text color
@@ -44,8 +43,10 @@ function changeMedia(index) {
         const img = document.createElement('img');
         img.src = currentMedia.src;
         img.alt = 'Your Image Description';
-        img.style.width = '100%';
-        img.style.height = 'auto';
+        img.style.maxWidth = '80%'; // Adjust image size
+        img.style.maxHeight = '80vh'; // Adjust image size
+        img.style.display = 'block'; // Ensure image is centered
+        img.style.margin = 'auto'; // Ensure image is centered
         replaceMedia(img);
     } else if (currentMedia.type === 'video') {
         // 显示视频
@@ -53,8 +54,9 @@ function changeMedia(index) {
         video.src = currentMedia.src;
         video.controls = true;
         video.autoplay = true;
-        video.style.width = '100%';
-        video.style.height = 'auto';
+        video.style.maxWidth = '80%'; // Adjust video size
+        video.style.display = 'block'; // Ensure video is centered
+        video.style.margin = 'auto'; // Ensure video is centered
         replaceMedia(video);
     }
 }
