@@ -37,20 +37,17 @@ h1 {
 .description {
     font-size: 0.8em;
     color: #000; /* 文字颜色 */
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    background-color: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(15px) saturate(70%);
+    -webkit-backdrop-filter: blur(15px) saturate(70%);
+    background-color: rgba(252, 252, 252, 0.5);
     border-radius: 12px;
     border: 1px solid rgba(209, 213, 219, 0.3);
-    display: inline-block; /* 使背景只围绕文字 */
 }
-}
-
 .contact {
     color: #000; /* 文字颜色 */
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    background-color: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(15px) saturate(70%);
+    -webkit-backdrop-filter: blur(15px) saturate(70%);
+    background-color: rgba(252, 252, 252, 0.5);
     border-radius: 12px;
     border: 1px solid rgba(209, 213, 219, 0.3);
     font-size: 0.8em;
