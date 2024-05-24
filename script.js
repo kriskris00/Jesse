@@ -66,6 +66,14 @@ function changeMedia(index) {
         replaceMedia(img);
     }
 }
+// 调整按钮位置
+prevButton.style.position = 'absolute';
+prevButton.style.left = '10px';
+prevButton.style.top = '50%';
+
+nextButton.style.position = 'absolute';
+nextButton.style.right = '10px';
+nextButton.style.top = '50%';
 
 function replaceMedia(newMedia) {
     while (mediaContainer.firstChild) {
