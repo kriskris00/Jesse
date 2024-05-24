@@ -6,7 +6,6 @@ const footerText = document.querySelector('footer p');
 let currentIndex = 0;
 
 const media = [
-    { type: 'image', src: 'J-0.png' },
     { type: 'image', src: 'J-1.png' },
     { type: 'image', src: 'J-2.PNG' },
     { type: 'image', src: 'J-3.PNG' },
