@@ -7,7 +7,7 @@ body {
     flex-direction: column;
     min-height: 100vh;
     background-color: #ffffff;
-    background-image: url('js.GIF');
+    background-image: url('JS.GIF');
     background-size: cover;
     background-position: center;
     transition: background-color 0.3s, color 0.3s;
