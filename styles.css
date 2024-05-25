@@ -11,8 +11,8 @@ body {
 
 #background-video {
     position: fixed;
-    right: 0;
-    bottom: 0;
+    top: 0;
+    left: 0;
     min-width: 100%; /* 确保视频覆盖整个背景 */
     min-height: 100%; /* 确保视频覆盖整个背景 */
     width: auto;
