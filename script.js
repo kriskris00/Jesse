@@ -16,19 +16,7 @@ const media = [
     { type: 'image', src: 'J-8.WEBP' },
     { type: 'image', src: 'J-9.WEBP' },
     { type: 'image', src: 'J-10.WEBP' },
-    { type: 'image', src: 'J-11.WEBP' },
-    { type: 'image', src: 'D-1.WEBP' },
-    { type: 'image', src: 'D-2.WEBP' },
-    { type: 'image', src: 'D-3.WEBP' },
-    { type: 'image', src: 'D-4.WEBP' },
-    { type: 'image', src: 'D-5.WEBP' },
-    { type: 'image', src: 'D-6.WEBP' },
-    { type: 'image', src: 'D-7.WEBP' },
-    { type: 'image', src: 'D-8.WEBP' },
-    { type: 'image', src: 'D-9.WEBP' },
-    { type: 'image', src: 'D-10.WEBP' },
-    { type: 'image', src: 'D-11.WEBP' },
-    { type: 'image', src: 'D-12.WEBP' }
+    { type: 'image', src: 'J-11.WEBP' }
 ];
 
 function changeMedia(index) {
