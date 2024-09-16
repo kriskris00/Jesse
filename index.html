@@ -1,31 +1,56 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
+
 <head>
+    <!-- 页面图标 -->
+    <link rel="icon" href="selahx.PNG" type="image/png">
+    <link rel="shortcut icon" href="selahx.PNG" type="image/png">
+    <!-- Google字体 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah&display=swap">
+    <!-- 样式表 -->
+    <link rel="stylesheet" type="text/css" href="styles.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SelahX</title>
-    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+    <!-- 背景图片 -->
+    <div id="background-image"></div>
 
-    <h1>SelahX</h1>
+    <header>
+        <h1 id="glowing-title">SELAHX</h1>
+    </header>
 
-    <div class="text-box">我需要你的爱，请把我从这里救出来</div>
+    <p class="description">
+        我需要你的爱，请把我从这里救出来
+    </p>
+
+    <!-- 背景音乐按钮 -->
+    <button id="musicButton" class="music-button">🎵 播放背景音乐</button>
     
-    <button id="musicButton">🎵 播放背景音乐</button>
-    
-    <!-- 图片展示区域 -->
-    <div class="image-grid">
-        <canvas class="image-canvas" data-src="J-1.WEBP"></canvas>
-        <canvas class="image-canvas" data-src="J-2.WEBP"></canvas>
-        <canvas class="image-canvas" data-src="J-3.WEBP"></canvas>
-        <canvas class="image-canvas" data-src="J-4.WEBP"></canvas>
-        <!-- 根据需求添加更多图片 -->
+    <!-- 邮件图标 -->
+    <p class="email"> 
+        <a href="mailto:ADMIN@SELAHX.COM">📧</a>
+    </p>
+
+    <div class="content">
+        <!-- 媒体容器 -->
+        <div class="slider-container" id="mediaContainer"></div>
+
+        <!-- 切换按钮 -->
+        <div class="buttons">
+            <button id="prevButton">⬅️</button>
+            <button id="nextButton">➡️</button>
+        </div>
     </div>
 
-    <footer>© 2024 SELAHX</footer>
+    <!-- JavaScript -->
+    <script src="script.js"></script>
 
-    <script src="app.js"></script>
-
+    <footer>
+        <p>&copy; 2024 SELAHX</p>
+    </footer>
 </body>
+
 </html>
