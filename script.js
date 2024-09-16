@@ -1,3 +1,4 @@
+
 // 获取页面中的元素
 const glowingTitle = document.getElementById('glowing-title');
 const mediaContainer = document.getElementById('mediaContainer');
@@ -70,10 +71,10 @@ musicButton.addEventListener('click', () => {
     if (!isPlaying) {
         backgroundMusic.play();
         isPlaying = true;
-        musicButton.textContent = '🎵 停止音乐';
+        musicButton.textContent = '🎵 STOP';
     } else {
         backgroundMusic.pause();
         isPlaying = false;
-        musicButton.textContent = '🎵 播放背景音乐';
+        musicButton.textContent = '🎵 PLAY';
     }
 });
