@@ -1,59 +1,122 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="zh-CN">
 <head>
-    <!-- 页面图标 -->
-    <link rel="icon" href="selahx.PNG" type="image/png">
-    <link rel="shortcut icon" href="selahx.PNG" type="image/png">
-    <!-- Google字体 -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah&display=swap">
-    <!-- 样式表 -->
-    <link rel="stylesheet" type="text/css" href="styles.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SelahX</title>
+    <title>图片粒子逐步加载效果</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            text-align: center;
+            color: #FFF;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background-color: #000;
+        }
+    </style>
 </head>
-
 <body>
-    <!-- 视频背景 -->
-    <video autoplay muted loop playsinline id="background-video">
-        <source src="VD.webm" type="video/webm">
-        您的浏览器不支持HTML5视频。
-    </video>
 
-    <header>
-        <h1 id="glowing-title">SELAHX</h1>
-    </header>
+    <h1>SelahX</h1>
+    <canvas id="particleCanvas"></canvas>
 
-    <p class="description">
-        我需要你的爱，请把我从这里救出来
-    </p>
+    <script>
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        const imgSrc = '/mnt/data/9E0ED98D-9356-4F01-96D2-CC9862066C81.jpeg';  // 替换为你要加载的图片路径
+        const img = new Image();
+        let particles = [];
+        let particleDensity = 0.05; // 粒子密度，决定加载速度
 
-    <!-- 背景音乐按钮 -->
-    <button id="musicButton" class="music-button">🎵 播放背景音乐</button>
-    
-    <!-- 邮件图标 -->
-    <p class="email"> 
-        <a href="mailto:ADMIN@SELAHX.COM">📧</a>
-    </p>
+        // 调整canvas的尺寸为窗口大小
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-    <div class="content">
-        <!-- 媒体容器 -->
-        <div class="slider-container" id="mediaContainer"></div>
+        // 粒子类
+        class Particle {
+            constructor(x, y, color) {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.destX = x;
+                this.destY = y;
+                this.color = color;
+                this.radius = 1;
+                this.velocity = Math.random() * 5;
+            }
 
-        <!-- 切换按钮 -->
-        <div class="buttons">
-            <button id="prevButton">⬅️</button>
-            <button id="nextButton">➡️</button>
-        </div>
-    </div>
+            draw() {
+                ctx.beginPath();
+                ctx.fillStyle = this.color;
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
 
-    <!-- JavaScript -->
-    <script src="script.js"></script>
+            update() {
+                let dx = this.destX - this.x;
+                let dy = this.destY - this.y;
+                let dist = Math.sqrt(dx * dx + dy * dy);
+                let moveSpeed = this.velocity;
 
-    <footer>
-        <p>&copy; 2024 SELAHX</p>
-    </footer>
+                this.x += (dx / dist) * moveSpeed;
+                this.y += (dy / dist) * moveSpeed;
+
+                this.draw();
+            }
+        }
+
+        // 创建粒子数组
+        function createParticles() {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+            for (let y = 0; y < canvas.height; y += Math.floor(1 / particleDensity)) {
+                for (let x = 0; x < canvas.width; x += Math.floor(1 / particleDensity)) {
+                    const index = (y * canvas.width + x) * 4;
+                    const red = imageData[index];
+                    const green = imageData[index + 1];
+                    const blue = imageData[index + 2];
+                    const alpha = imageData[index + 3];
+                    if (alpha > 0) {
+                        const color = `rgba(${red},${green},${blue},${alpha / 255})`;
+                        particles.push(new Particle(x, y, color));
+                    }
+                }
+            }
+        }
+
+        // 动画循环，逐步将粒子加载到目标位置
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // 图片加载完毕后，开始创建粒子并启动动画
+        img.onload = function () {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            createParticles();
+            animate();
+        };
+
+        // 加载图片
+        img.src = imgSrc;
+
+        // 窗口调整时重置画布大小
+        window.addEventListener('resize', function () {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            createParticles();
+        });
+    </script>
 </body>
-
 </html>
