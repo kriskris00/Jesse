@@ -2,9 +2,12 @@
 <html lang="en">
 
 <head>
+    <!-- 页面图标 -->
     <link rel="icon" href="selahx.PNG" type="image/png">
     <link rel="shortcut icon" href="selahx.PNG" type="image/png">
+    <!-- Google字体 -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah&display=swap">
+    <!-- 样式表 -->
     <link rel="stylesheet" type="text/css" href="styles.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,30 +15,40 @@
 </head>
 
 <body>
+    <!-- 视频背景 -->
     <video autoplay muted loop playsinline id="background-video">
         <source src="VD.webm" type="video/webm">
-        Your browser does not support HTML5 video.
+        您的浏览器不支持HTML5视频。
     </video>
+
     <header>
         <h1 id="glowing-title">SELAHX</h1>
     </header>
 
     <p class="description">
-        I WANT YOUR LOVE JUST BAIL ME OUT OF HERE
+        我需要你的爱，请把我从这里救出来
     </p>
-    <p class="3"> 
+
+    <!-- 背景音乐按钮 -->
+    <button id="musicButton" class="music-button">🎵 播放背景音乐</button>
+    
+    <!-- 邮件图标 -->
+    <p class="email"> 
         <a href="mailto:ADMIN@SELAHX.COM">📧</a>
     </p>
+
     <div class="content">
-        <div class="slider-container" id="mediaContainer">
-            <!-- Image or Video will be loaded here -->
-        </div>
+        <!-- 媒体容器 -->
+        <div class="slider-container" id="mediaContainer"></div>
+
+        <!-- 切换按钮 -->
         <div class="buttons">
             <button id="prevButton">⬅️</button>
             <button id="nextButton">➡️</button>
         </div>
     </div>
 
+    <!-- JavaScript -->
     <script src="script.js"></script>
 
     <footer>
