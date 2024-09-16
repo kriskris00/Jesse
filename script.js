@@ -1,79 +1,65 @@
-// 获取页面中的元素
-const glowingTitle = document.getElementById('glowing-title');
-const mediaContainer = document.getElementById('mediaContainer');
-const prevButton = document.getElementById('prevButton');
-const nextButton = document.getElementById('nextButton');
-const musicButton = document.getElementById('musicButton'); // 背景音乐按钮
-let currentIndex = 0;
-let isPlaying = false; // 用于检测音乐是否在播放
+// 音乐播放控制
+const musicButton = document.getElementById('musicButton');
+let isPlaying = false;
+const audio = new Audio('path-to-your-audio-file.mp3'); // 替换为实际音乐文件路径
 
-// 媒体资源
-const media = [
-    { type: 'image', src: 'J-1.WEBP' },
-    { type: 'image', src: 'J-2.WEBP' },
-    { type: 'image', src: 'J-3.WEBP' },
-    { type: 'image', src: 'J-4.WEBP' },
-    { type: 'image', src: 'J-5.WEBP' },
-    { type: 'image', src: 'J-6.WEBP' },
-    { type: 'image', src: 'J-7.WEBP' },
-    { type: 'image', src: 'J-8.WEBP' },
-    { type: 'image', src: 'J-9.WEBP' },
-    { type: 'image', src: 'J-10.WEBP' },
-    { type: 'image', src: 'J-11.WEBP' }
-];
-
-// 初始化背景音乐
-const backgroundMusic = new Audio('background-music.mp3'); // 替换为你自己的音乐文件
-
-// 切换媒体函数
-function changeMedia(index) {
-    currentIndex = (currentIndex + index + media.length) % media.length;
-    const currentMedia = media[currentIndex];
-    if (currentMedia.type === 'image') {
-        const img = document.createElement('img');
-        img.src = currentMedia.src;
-        img.alt = '图片描述';
-        img.style.maxWidth = '80%';
-        img.style.maxHeight = '80vh';
-        img.style.display = 'block';
-        img.style.margin = 'auto';
-
-        // 添加图像淡入淡出效果
-        img.style.opacity = '0';
-        img.style.transform = 'scale(1.2)';
-        requestAnimationFrame(() => {
-            img.style.opacity = '1';
-            img.style.transform = 'scale(1)';
-        });
-
-        replaceMedia(img);
-    }
-}
-
-// 更新媒体容器中的内容
-function replaceMedia(newMedia) {
-    while (mediaContainer.firstChild) {
-        mediaContainer.removeChild(mediaContainer.firstChild);
-    }
-    mediaContainer.appendChild(newMedia);
-}
-
-// 切换媒体按钮事件
-prevButton.addEventListener('click', () => changeMedia(-1));
-nextButton.addEventListener('click', () => changeMedia(1));
-
-// 初始化为第一个媒体
-changeMedia(0);
-
-// 背景音乐按钮事件
 musicButton.addEventListener('click', () => {
-    if (!isPlaying) {
-        backgroundMusic.play();
-        isPlaying = true;
-        musicButton.textContent = '🎵 停止音乐';
-    } else {
-        backgroundMusic.pause();
-        isPlaying = false;
+    if (isPlaying) {
+        audio.pause();
         musicButton.textContent = '🎵 播放背景音乐';
+    } else {
+        audio.play();
+        musicButton.textContent = '⏸ 暂停背景音乐';
     }
+    isPlaying = !isPlaying;
+});
+
+// 粒子效果加载多张图片
+const canvases = document.querySelectorAll('.image-canvas');
+
+canvases.forEach(canvas => {
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    const src = canvas.getAttribute('data-src');
+
+    img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+
+        const imageData = ctx.getImageData(0, 0, img.width, img.height);
+        const pixels = imageData.data;
+        
+        let particles = [];
+
+        for (let y = 0; y < img.height; y += 4) {
+            for (let x = 0; x < img.width; x += 4) {
+                const index = (y * img.width + x) * 4;
+                const r = pixels[index];
+                const g = pixels[index + 1];
+                const b = pixels[index + 2];
+                const a = pixels[index + 3];
+
+                if (a > 128) { // 仅对不透明的像素点生成粒子
+                    particles.push({x, y, color: `rgba(${r},${g},${b},${a / 255})`});
+                }
+            }
+        }
+
+        let i = 0;
+
+        function renderParticles() {
+            if (i < particles.length) {
+                const {x, y, color} = particles[i];
+                ctx.fillStyle = color;
+                ctx.fillRect(x, y, 4, 4);
+                i++;
+                requestAnimationFrame(renderParticles);
+            }
+        }
+
+        renderParticles();
+    };
+
+    img.src = src;
 });
