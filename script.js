@@ -24,7 +24,7 @@ const media = [
 ];
 
 // 初始化背景音乐
-const backgroundMusic = new Audio('background-music.mp3'); // 替换为你自己的音乐文件
+const backgroundMusic = new Audio('KW - PREACHER MAN.mp3'); // 替换为你自己的音乐文件
 
 // 切换媒体函数
 function changeMedia(index) {
