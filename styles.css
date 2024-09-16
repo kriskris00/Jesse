@@ -38,14 +38,16 @@ h1 {
 /* 背景音乐按钮样式 */
 .music-button {
     font-size: 1em;
+    padding: 10px 20px;
     color: #ff0000; /* 红色字体 */
+    background-color: rgba(0, 0, 0, 0.7); /* 黑色按钮背景 */
+    border-radius: 12px;
+    border: 1px solid rgba(209, 213, 219, 0.3);
 }
 
 .music-button:hover {
     background-color: #ff0000; /* 红色按钮背景悬停效果 */
-    color: #000; /* 黑色字体悬停效果 */
 }
-
 .music-button:active {
     transform: translateY(4px);
 }
