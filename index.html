@@ -3,120 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图片粒子逐步加载效果</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #000;
-            text-align: center;
-            color: #FFF;
-            overflow: hidden;
-        }
-
-        canvas {
-            display: block;
-            margin: 0 auto;
-            background-color: #000;
-        }
-    </style>
+    <title>SelahX - 粒子图片展示</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <h1>SelahX</h1>
-    <canvas id="particleCanvas"></canvas>
 
-    <script>
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        const imgSrc = '/mnt/data/9E0ED98D-9356-4F01-96D2-CC9862066C81.jpeg';  // 替换为你要加载的图片路径
-        const img = new Image();
-        let particles = [];
-        let particleDensity = 0.05; // 粒子密度，决定加载速度
+    <div class="text-box">我需要你的爱，请把我从这里救出来</div>
+    
+    <button id="musicButton">🎵 播放背景音乐</button>
+    
+    <!-- 图片展示区域 -->
+    <div class="image-grid">
+        <canvas class="image-canvas" data-src="J-1.WEBP"></canvas>
+        <canvas class="image-canvas" data-src="J-2.WEBP"></canvas>
+        <canvas class="image-canvas" data-src="J-3.WEBP"></canvas>
+        <canvas class="image-canvas" data-src="J-4.WEBP"></canvas>
+        <!-- 根据需求添加更多图片 -->
+    </div>
 
-        // 调整canvas的尺寸为窗口大小
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    <footer>© 2024 SELAHX</footer>
 
-        // 粒子类
-        class Particle {
-            constructor(x, y, color) {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.destX = x;
-                this.destY = y;
-                this.color = color;
-                this.radius = 1;
-                this.velocity = Math.random() * 5;
-            }
+    <script src="app.js"></script>
 
-            draw() {
-                ctx.beginPath();
-                ctx.fillStyle = this.color;
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            update() {
-                let dx = this.destX - this.x;
-                let dy = this.destY - this.y;
-                let dist = Math.sqrt(dx * dx + dy * dy);
-                let moveSpeed = this.velocity;
-
-                this.x += (dx / dist) * moveSpeed;
-                this.y += (dy / dist) * moveSpeed;
-
-                this.draw();
-            }
-        }
-
-        // 创建粒子数组
-        function createParticles() {
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
-            for (let y = 0; y < canvas.height; y += Math.floor(1 / particleDensity)) {
-                for (let x = 0; x < canvas.width; x += Math.floor(1 / particleDensity)) {
-                    const index = (y * canvas.width + x) * 4;
-                    const red = imageData[index];
-                    const green = imageData[index + 1];
-                    const blue = imageData[index + 2];
-                    const alpha = imageData[index + 3];
-                    if (alpha > 0) {
-                        const color = `rgba(${red},${green},${blue},${alpha / 255})`;
-                        particles.push(new Particle(x, y, color));
-                    }
-                }
-            }
-        }
-
-        // 动画循环，逐步将粒子加载到目标位置
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-            }
-            requestAnimationFrame(animate);
-        }
-
-        // 图片加载完毕后，开始创建粒子并启动动画
-        img.onload = function () {
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            createParticles();
-            animate();
-        };
-
-        // 加载图片
-        img.src = imgSrc;
-
-        // 窗口调整时重置画布大小
-        window.addEventListener('resize', function () {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            particles = [];
-            createParticles();
-        });
-    </script>
 </body>
 </html>
