@@ -1,10 +1,13 @@
+// 获取页面中的元素
 const glowingTitle = document.getElementById('glowing-title');
 const mediaContainer = document.getElementById('mediaContainer');
 const prevButton = document.getElementById('prevButton');
 const nextButton = document.getElementById('nextButton');
-const footerText = document.querySelector('footer p');
+const musicButton = document.getElementById('musicButton'); // 背景音乐按钮
 let currentIndex = 0;
+let isPlaying = false; // 用于检测音乐是否在播放
 
+// 媒体资源
 const media = [
     { type: 'image', src: 'J-1.WEBP' },
     { type: 'image', src: 'J-2.WEBP' },
@@ -19,19 +22,23 @@ const media = [
     { type: 'image', src: 'J-11.WEBP' }
 ];
 
+// 初始化背景音乐
+const backgroundMusic = new Audio('background-music.mp3'); // 替换为你自己的音乐文件
+
+// 切换媒体函数
 function changeMedia(index) {
     currentIndex = (currentIndex + index + media.length) % media.length;
     const currentMedia = media[currentIndex];
     if (currentMedia.type === 'image') {
         const img = document.createElement('img');
         img.src = currentMedia.src;
-        img.alt = 'Your Image Description';
+        img.alt = '图片描述';
         img.style.maxWidth = '80%';
         img.style.maxHeight = '80vh';
         img.style.display = 'block';
         img.style.margin = 'auto';
 
-        // 添加图片切换过渡动画
+        // 添加图像淡入淡出效果
         img.style.opacity = '0';
         img.style.transform = 'scale(1.2)';
         requestAnimationFrame(() => {
@@ -42,15 +49,8 @@ function changeMedia(index) {
         replaceMedia(img);
     }
 }
-// 调整按钮位置
-prevButton.style.position = 'absolute';
-prevButton.style.left = '10px';
-prevButton.style.top = '50%';
 
-nextButton.style.position = 'absolute';
-nextButton.style.right = '10px';
-nextButton.style.top = '50%';
-
+// 更新媒体容器中的内容
 function replaceMedia(newMedia) {
     while (mediaContainer.firstChild) {
         mediaContainer.removeChild(mediaContainer.firstChild);
@@ -58,6 +58,22 @@ function replaceMedia(newMedia) {
     mediaContainer.appendChild(newMedia);
 }
 
+// 切换媒体按钮事件
 prevButton.addEventListener('click', () => changeMedia(-1));
 nextButton.addEventListener('click', () => changeMedia(1));
+
+// 初始化为第一个媒体
 changeMedia(0);
+
+// 背景音乐按钮事件
+musicButton.addEventListener('click', () => {
+    if (!isPlaying) {
+        backgroundMusic.play();
+        isPlaying = true;
+        musicButton.textContent = '🎵 停止音乐';
+    } else {
+        backgroundMusic.pause();
+        isPlaying = false;
+        musicButton.textContent = '🎵 播放背景音乐';
+    }
+});
