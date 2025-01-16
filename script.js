@@ -1,13 +1,12 @@
 const mediaContainer = document.getElementById('mediaContainer');
 const musicButton = document.getElementById('musicButton');
-const backgroundMusic = new Audio('1.mp3'); // 替换为您的音乐路径
 
-let currentIndex = 0; // 当前图片索引
-let isPlaying = false; // 记录背景音乐是否正在播放
-let startX = 0; // 触摸起始位置
-let isDragging = false; // 是否处于拖动状态
+let currentIndex = 0;
+let isPlaying = false;
+let startX = 0;
+let isDragging = false;
 
-// 媒体资源 - 替换为您自己的图片链接
+// 媒体资源
 const media = [
     { src: 'IMG_8322.jpeg' },
     { src: 'IMG_8329.jpeg' },
@@ -15,6 +14,9 @@ const media = [
     { src: 'IMG_8317.jpeg' },
     { src: 'IMG_8318.jpeg' }
 ];
+
+// 背景音乐
+const backgroundMusic = new Audio('1.mp3');
 
 // 初始化图片
 function initializeMedia() {
