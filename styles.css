@@ -74,68 +74,30 @@ body {
     transform: translateX(100%) scale(1.1); /* 初始位置为右侧 */
     transition: transform 0.8s ease, opacity 0.8s ease; /* 平滑过渡 */
 }
-
-/* 加载中动画样式 */
-.loader {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 10;
-}
-
-.loader::before {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(138, 97, 53, 0.2); /* 浅大地色边框 */
-    border-top: 4px solid #8A6135; /* 深大地色旋转部分 */
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-/* 加载中旋转动画 */
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* 图片可见时 */
 .media-container img.visible {
     opacity: 1;
-    transform: translateX(0) scale(1); /* 回到中心 */
+    transform: scale(1) translateX(0);
 }
 
-/* 左右滑动切换效果 */
 .media-container img.exiting-left {
     opacity: 0;
-    transform: translateX(-100%) scale(1.1); /* 向左退出 */
+    transform: scale(1.1) translateX(-100%);
 }
 
 .media-container img.exiting-right {
     opacity: 0;
-    transform: translateX(100%) scale(1.1); /* 向右退出 */
+    transform: scale(1.1) translateX(100%);
 }
 
 .media-container img.entering-left {
-    opacity: 1;
-    transform: translateX(0) scale(1); /* 从左进入 */
+    opacity: 0.5;
+    transform: scale(1.2) translateX(-100%);
 }
 
 .media-container img.entering-right {
-    opacity: 1;
-    transform: translateX(0) scale(1); /* 从右进入 */
+    opacity: 0.5;
+    transform: scale(1.2) translateX(100%);
 }
-
 /* 页脚样式 */
 footer {
     color: #6B4226;
