@@ -50,9 +50,6 @@ body {
     position: relative;
     align-items: center;
     justify-content: center;
-    background-color: #F5EFE6; /* 辅助大地色背景 */
-    border-radius: 0px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .media-container img {
