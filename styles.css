@@ -28,13 +28,13 @@ body {
     margin-bottom: 20px;
 }
 
-/* 背景音乐按钮样式 - 大地色风格 */
+/* 背景音乐按钮 */
 .music-button {
     padding: 10px 20px;
     background-color: #8A6135; /* 默认深大地色 */
     color: #FFFFFF;
     border: none;
-    border-radius: 20px;
+    border-radius: 20px; /* 圆角按钮 */
     font-weight: bold;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -43,18 +43,12 @@ body {
 
 .music-button:hover {
     background-color: #6B4226; /* 更深的大地色 */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* 加深阴影 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     transform: scale(1.05); /* 悬停时放大 */
 }
 
 .music-button:active {
     transform: scale(1); /* 按下时取消放大效果 */
-}
-
-/* 音乐播放时的按钮样式 */
-.music-button.playing {
-    background-color: #6B4226; /* 播放状态颜色 */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* 媒体容器样式 */
@@ -67,22 +61,22 @@ body {
     align-items: center;
     justify-content: center;
     position: relative;
-    overflow: hidden;
-    background: none; /* 去掉背景色 */
+    overflow: hidden; /* 隐藏溢出的内容 */
+    border-radius: 12px; /* 圆角边框 */
 }
 
 /* 图片样式 */
 .media-container img {
     width: auto;
     height: auto;
-    max-width: 100%;
+    max-width: 100%; /* 确保图片不会超出容器 */
     max-height: 100%;
     opacity: 0;
-    transform: translateX(100%) scale(1.1); /* 初始位置 */
-    transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
+    transform: translateX(100%) scale(1.1); /* 初始位置为右侧 */
+    transition: transform 0.8s ease, opacity 0.8s ease; /* 平滑过渡 */
 }
 
-/* 加载中动画 - 大地色风格 */
+/* 加载中动画样式 */
 .loader {
     display: flex;
     justify-content: center;
@@ -106,7 +100,7 @@ body {
     animation: spin 1s linear infinite;
 }
 
-/* 动画效果 */
+/* 加载中旋转动画 */
 @keyframes spin {
     from {
         transform: rotate(0deg);
@@ -119,28 +113,28 @@ body {
 /* 图片可见时 */
 .media-container img.visible {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    transform: translateX(0) scale(1); /* 回到中心 */
 }
 
 /* 左右滑动切换效果 */
 .media-container img.exiting-left {
     opacity: 0;
-    transform: translateX(-100%) scale(1.1);
+    transform: translateX(-100%) scale(1.1); /* 向左退出 */
 }
 
 .media-container img.exiting-right {
     opacity: 0;
-    transform: translateX(100%) scale(1.1);
+    transform: translateX(100%) scale(1.1); /* 向右退出 */
 }
 
 .media-container img.entering-left {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    transform: translateX(0) scale(1); /* 从左进入 */
 }
 
 .media-container img.entering-right {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    transform: translateX(0) scale(1); /* 从右进入 */
 }
 
 /* 页脚样式 */
