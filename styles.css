@@ -2,102 +2,150 @@
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(to bottom, #d9cbb5, #ffffff 50%, #d9cbb5); /* 大地色到白色渐变 */
+    background: linear-gradient(to bottom, #d9cbb5, #ffffff 50%, #d9cbb5);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     text-align: center;
 }
 
-/* 渐变字体颜色 */
+/* 标题样式 */
 #glowing-title {
     font-size: 3rem;
     text-transform: uppercase;
-    background: linear-gradient(to right, #8a6135, #c8a67d); /* 深棕到浅棕渐变 */
+    background: linear-gradient(to right, #8a6135, #c8a67d);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-top: 20px;
 }
 
-/* 描述文字的渐变颜色 */
+/* 描述文字样式 */
 .description {
     font-size: 1.2rem;
-    background: linear-gradient(to right, #8a6135, #c8a67d); /* 深棕到浅棕渐变 */
+    background: linear-gradient(to right, #8a6135, #c8a67d);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 20px;
 }
 
-
-/* 背景音乐按钮样式 */
+/* 背景音乐按钮样式 - 大地色风格 */
 .music-button {
     padding: 10px 20px;
-    background-color: rgba(107, 66, 38, 0.8); /* 半透明大地色 */
-    color: #FFF;
+    background-color: #8A6135; /* 默认深大地色 */
+    color: #FFFFFF;
     border: none;
-    border-radius: 5px;
+    border-radius: 20px;
+    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .music-button:hover {
-    background-color: #6B4226; /* 深色按钮 */
+    background-color: #6B4226; /* 更深的大地色 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* 加深阴影 */
+    transform: scale(1.05); /* 悬停时放大 */
+}
+
+.music-button:active {
+    transform: scale(1); /* 按下时取消放大效果 */
+}
+
+/* 音乐播放时的按钮样式 */
+.music-button.playing {
+    background-color: #6B4226; /* 播放状态颜色 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* 媒体容器样式 */
 .media-container {
-    margin: 10px auto;
-    width: 100%;
+    margin: 0 auto;
+    width: 90%; /* 小于屏幕宽度 */
     max-width: 800px;
-    height: 70vh;
+    height: 65vh; /* 高度调整 */
     display: flex;
-    overflow: hidden;
-    position: relative;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: none; /* 去掉背景色 */
 }
 
+/* 图片样式 */
 .media-container img {
-    position: absolute;
     width: auto;
     height: auto;
     max-width: 100%;
     max-height: 100%;
     opacity: 0;
-    transform: scale(1.2) translateX(0);
-    transition: transform 0.8s ease, opacity 0.8s ease;
-    border-radius: 8px;
-    object-fit: contain; /* 确保图片完整显示 */
+    transform: translateX(100%) scale(1.1); /* 初始位置 */
+    transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
 }
 
+/* 加载中动画 - 大地色风格 */
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+.loader::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(138, 97, 53, 0.2); /* 浅大地色边框 */
+    border-top: 4px solid #8A6135; /* 深大地色旋转部分 */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* 动画效果 */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 图片可见时 */
 .media-container img.visible {
     opacity: 1;
-    transform: scale(1) translateX(0);
+    transform: translateX(0) scale(1);
 }
 
+/* 左右滑动切换效果 */
 .media-container img.exiting-left {
     opacity: 0;
-    transform: scale(1.1) translateX(-100%);
+    transform: translateX(-100%) scale(1.1);
 }
 
 .media-container img.exiting-right {
     opacity: 0;
-    transform: scale(1.1) translateX(100%);
+    transform: translateX(100%) scale(1.1);
 }
 
 .media-container img.entering-left {
-    opacity: 0.5;
-    transform: scale(1.2) translateX(-100%);
+    opacity: 1;
+    transform: translateX(0) scale(1);
 }
 
 .media-container img.entering-right {
-    opacity: 0.5;
-    transform: scale(1.2) translateX(100%);
+    opacity: 1;
+    transform: translateX(0) scale(1);
 }
 
-/* 页脚 */
+/* 页脚样式 */
 footer {
     color: #6B4226;
     font-size: 0.9rem;
-    margin-top: auto;
+    margin-top: 10px;
 }
