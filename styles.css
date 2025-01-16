@@ -74,6 +74,7 @@ body {
     transform: translateX(100%) scale(1.1); /* 初始位置为右侧 */
     transition: transform 0.8s ease, opacity 0.8s ease; /* 平滑过渡 */
 }
+
 .media-container img.visible {
     opacity: 1;
     transform: scale(1) translateX(0);
