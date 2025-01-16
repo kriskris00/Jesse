@@ -55,7 +55,7 @@ body {
 .time-display {
     font-size: 0.9rem;
     color: #6B4226;
-    margin-top: 6px;
+    margin-top: 2px;
     font-weight: bold;
     transition: all 0.5s ease;
 }
@@ -113,7 +113,7 @@ body {
     max-width: 800px;
     height: calc(100vh - 200px); /* 自动适配高度，减去标题、按钮和页脚的空间 */
     position: relative;
-    margin: 0 auto;
+    margin: 0 ;
     overflow: hidden;
 }
 
@@ -163,5 +163,4 @@ footer {
     color: #6B4226;
     font-size: 0.9rem;
     margin-top: auto;
-    padding: 10px 0;
 }
