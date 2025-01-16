@@ -9,28 +9,44 @@ let isPlaying = false; // 记录背景音乐是否播放
 let startX = 0; // 触摸起始位置
 let isDragging = false; // 是否处于拖动状态
 
-// 农历节日固定规则
+const timeDisplay = document.getElementById('timeDisplay');
+const specialEffect = document.getElementById('specialEffect');
+
+// Emoji effects for each festival
+const emojiEffects = {
+    "new-year": ["🎉", "🎆", "✨"],
+    "spring-festival": ["🧨", "🎊", "🧧"],
+    "mid-autumn": ["🌕", "🥮", "🏮"],
+    "valentine": ["💖", "❤️", "💕"],
+    "halloween": ["🎃", "👻", "🕸"],
+    "birthday": ["🎂", "🎉", "🎁"],
+    "womens-day": ["🌹", "💐", "👩"],
+    "christmas": ["🎄", "🎅", "⛄"]
+};
+
+// Lunar festivals and their conversion rules to Solar (Gregorian) calendar
 const lunarFestivals = {
-    "春节": { lunarMonth: 1, lunarDay: 1, effect: "spring-festival" },
-    "元宵节": { lunarMonth: 1, lunarDay: 15, effect: "spring-festival" },
-    "端午节": { lunarMonth: 5, lunarDay: 5, effect: "spring-festival" },
-    "中秋节": { lunarMonth: 8, lunarDay: 15, effect: "spring-festival" },
-    "除夕": { lunarMonth: 12, lunarDay: 30, effect: "spring-festival" }
+    "Spring Festival": { lunarMonth: 1, lunarDay: 1, effect: "spring-festival" },
+    "Lantern Festival": { lunarMonth: 1, lunarDay: 15, effect: "spring-festival" },
+    "Dragon Boat Festival": { lunarMonth: 5, lunarDay: 5, effect: "spring-festival" },
+    "Mid-Autumn Festival": { lunarMonth: 8, lunarDay: 15, effect: "mid-autumn" },
+    "Chinese New Year's Eve": { lunarMonth: 12, lunarDay: 30, effect: "spring-festival" }
 };
 
-// 固定节日日期
+// Fixed-date festivals
 const fixedFestivals = {
-    "01-01": { name: "元旦节", effect: "new-year" },
-    "02-14": { name: "情人节", effect: "valentine" },
-    "06-01": { name: "儿童节", effect: "childrens-day" },
-    "06-24": { name: "你的生日 🎂", effect: "birthday" },
-    "10-01": { name: "国庆节", effect: "national-day" },
-    "12-25": { name: "圣诞节", effect: "christmas" }
+    "01-01": { name: "New Year's Day", effect: "new-year" },
+    "02-14": { name: "Valentine's Day", effect: "valentine" },
+    "03-08": { name: "Women's Day", effect: "womens-day" },
+    "06-01": { name: "Children's Day", effect: "childrens-day" },
+    "06-24": { name: "Your Birthday 🎂", effect: "birthday" },
+    "10-31": { name: "Halloween", effect: "halloween" },
+    "12-25": { name: "Christmas", effect: "christmas" },
+    "12-31": { name: "New Year's Eve", effect: "new-year" }
 };
 
-// 农历转公历规则
+// Lunar to Solar (Gregorian) conversion (example for 2025)
 const lunarToSolar = (lunarMonth, lunarDay) => {
-    // 使用 2025 年数据为示例
     const lunar2025 = {
         "1-1": "02-09",
         "1-15": "02-23",
@@ -41,12 +57,12 @@ const lunarToSolar = (lunarMonth, lunarDay) => {
     return lunar2025[`${lunarMonth}-${lunarDay}`];
 };
 
-// 显示节日动态效果
+// Show dynamic effects for each festival
 function showSpecialEffect(effectKey) {
-    specialEffect.innerHTML = ""; // 清空之前的特效
+    specialEffect.innerHTML = ""; // Clear previous effects
     specialEffect.style.display = "block";
 
-    const emojis = ["🎉", "🎆", "✨"];
+    const emojis = emojiEffects[effectKey] || [];
     for (let i = 0; i < 50; i++) {
         const confetti = document.createElement("div");
         confetti.classList.add("confetti");
@@ -56,48 +72,49 @@ function showSpecialEffect(effectKey) {
         specialEffect.appendChild(confetti);
     }
 
-    // 隐藏特效
+    // Hide the effect after 5 seconds
     setTimeout(() => {
         specialEffect.style.display = "none";
     }, 5000);
 }
 
-// 实时更新时间函数
+// Update time and check festivals
 function updateTime() {
     const now = new Date();
-    const offset = now.getTimezoneOffset() + 480; // 北京时间为 UTC+8
+    const offset = now.getTimezoneOffset() + 480; // Beijing time (UTC+8)
     const beijingTime = new Date(now.getTime() + offset * 60 * 1000);
 
+    const year = beijingTime.getFullYear();
+    const month = String(beijingTime.getMonth() + 1).padStart(2, '0');
+    const date = String(beijingTime.getDate()).padStart(2, '0');
     const hours = String(beijingTime.getHours()).padStart(2, '0');
     const minutes = String(beijingTime.getMinutes()).padStart(2, '0');
     const seconds = String(beijingTime.getSeconds()).padStart(2, '0');
-    const month = String(beijingTime.getMonth() + 1).padStart(2, '0');
-    const date = String(beijingTime.getDate()).padStart(2, '0');
 
-    const currentTime = `${hours}:${minutes}:${seconds}`;
-    timeDisplay.textContent = `北京时间：${currentTime}`;
+    const currentTime = `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+    timeDisplay.textContent = `Beijing Time: ${currentTime}`;
 
-    // 检查固定节日
+    // Check if today's date is a fixed festival
     const today = `${month}-${date}`;
     if (fixedFestivals[today]) {
         const { name, effect } = fixedFestivals[today];
-        timeDisplay.textContent += ` 🎉 ${name}快乐！`;
+        timeDisplay.textContent += ` 🎉 ${name} is here!`;
         timeDisplay.className = `time-display festival-effect ${effect}`;
         showSpecialEffect(effect);
     }
 
-    // 检查农历节日
+    // Check if today's date is a lunar festival
     for (const [name, info] of Object.entries(lunarFestivals)) {
         const solarDate = lunarToSolar(info.lunarMonth, info.lunarDay);
         if (today === solarDate) {
-            timeDisplay.textContent += ` 🎉 ${name}快乐！`;
+            timeDisplay.textContent += ` 🎉 ${name} is here!`;
             timeDisplay.className = `time-display festival-effect ${info.effect}`;
             showSpecialEffect(info.effect);
         }
     }
 }
 
-// 每秒更新一次时间
+// Update time every second
 setInterval(updateTime, 1000);
 updateTime();
 
