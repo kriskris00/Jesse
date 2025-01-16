@@ -9,17 +9,6 @@ body {
     text-align: center;
 }
 
-/* 标题样式 */
-#glowing-title {
-    font-size: 3rem;
-    text-transform: uppercase;
-    background: linear-gradient(to right, #8a6135, #c8a67d);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-top: 20px;
-    margin-bottom: 10px; /* 缩小标题与内容间距 */
-}
-
 /* 描述文字样式 */
 .description {
     font-size: 1.2rem;
