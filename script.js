@@ -16,7 +16,7 @@ const media = [
 ];
 
 // 背景音乐
-const backgroundMusic = new Audio('KW - PREACHER MAN.mp3');
+const backgroundMusic = new Audio('1.mp3');
 
 // 初始化图片
 function initializeMedia() {
@@ -96,10 +96,10 @@ function handleTouchEnd() {
 musicButton.addEventListener('click', () => {
     if (isPlaying) {
         backgroundMusic.pause();
-        musicButton.textContent = '🎵 PLAY';
+        musicButton.textContent = '♾️';
     } else {
         backgroundMusic.play();
-        musicButton.textContent = '🎵 STOP';
+        musicButton.textContent = '🎶';
     }
     isPlaying = !isPlaying;
 });
