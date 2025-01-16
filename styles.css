@@ -17,14 +17,16 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-top: 20px;
+    margin-bottom: 10px; /* 缩小标题与内容间距 */
 }
 
+/* 描述文字样式 */
 .description {
     font-size: 1.2rem;
     background: linear-gradient(to right, #8a6135, #c8a67d);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* 缩小描述与内容间距 */
 }
 
 /* 背景音乐按钮 */
@@ -121,4 +123,12 @@ body {
 .media-container img.entering-right {
     transform: translate(150%, -50%) scale(1.1);
     opacity: 0;
+}
+
+/* 页脚样式 */
+footer {
+    color: #6B4226;
+    font-size: 0.9rem;
+    margin-top: auto; /* 页脚紧贴内容 */
+    padding: 10px 0; /* 减少页脚上下空白 */
 }
