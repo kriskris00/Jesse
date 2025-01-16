@@ -8,11 +8,11 @@ let isDragging = false;
 
 // 媒体资源
 const media = [
-    { src: 'J-1.WEBP' },
-    { src: 'J-2.WEBP' },
-    { src: 'J-3.WEBP' },
-    { src: 'J-4.WEBP' },
-    { src: 'J-5.WEBP' }
+    { src: 'IMG_8322.jpeg' },
+    { src: 'IMG_8329.jpeg' },
+    { src: 'IMG_8340.jpeg' },
+    { src: 'IMG_8317.jpeg' },
+    { src: 'IMG_8318.jpeg' }
 ];
 
 // 背景音乐
