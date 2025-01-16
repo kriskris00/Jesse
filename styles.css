@@ -26,7 +26,7 @@ body {
     background: linear-gradient(to right, #8a6135, #c8a67d);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 10px; /* 缩小描述与内容间距 */
+    margin-bottom: 10px;
 }
 
 /* 背景音乐按钮 */
@@ -55,7 +55,7 @@ body {
 .media-container {
     width: 100%;
     max-width: 800px;
-    height: 65vh;
+    height: calc(100vh - 200px); /* 自动适配高度，减去标题、按钮和页脚的空间 */
     position: relative;
     margin: 0 auto;
     overflow: hidden;
@@ -65,70 +65,47 @@ body {
 .media-container img {
     width: auto;
     height: auto;
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 85%; /* 图片最大宽度为容器的 85% */
+    max-height: 85%; /* 图片最大高度为容器的 85% */
     opacity: 0;
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(1.1);
-    transition: transform 0.8s ease, opacity 0.8s ease;
-}
-
-/* 加载动画 */
-.loader {
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(138, 97, 53, 0.2);
-    border-top: 4px solid #8A6135;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+    transform: translate(-50%, -50%) scale(1.1); /* 初始缩放比例 */
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
 }
 
 /* 图片可见时 */
 .media-container img.visible {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%) scale(1); /* 缩放回正常大小 */
 }
 
 /* 图片滑动效果 */
 .media-container img.exiting-left {
-    transform: translate(-150%, -50%) scale(1.1);
+    transform: translate(-120%, -50%) scale(0.9);
     opacity: 0;
 }
 
 .media-container img.exiting-right {
-    transform: translate(150%, -50%) scale(1.1);
+    transform: translate(120%, -50%) scale(0.9);
     opacity: 0;
 }
 
 .media-container img.entering-left {
-    transform: translate(-150%, -50%) scale(1.1);
-    opacity: 0;
+    transform: translate(-120%, -50%) scale(1.1);
+    opacity: 0.5;
 }
 
 .media-container img.entering-right {
-    transform: translate(150%, -50%) scale(1.1);
-    opacity: 0;
+    transform: translate(120%, -50%) scale(1.1);
+    opacity: 0.5;
 }
 
 /* 页脚样式 */
 footer {
     color: #6B4226;
     font-size: 0.9rem;
-    margin-top: auto; /* 页脚紧贴内容 */
-    padding: 10px 0; /* 减少页脚上下空白 */
+    margin-top: auto;
+    padding: 10px 0;
 }
