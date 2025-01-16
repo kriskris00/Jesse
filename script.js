@@ -9,11 +9,11 @@ let isDragging = false; // 是否处于拖动状态
 
 // 媒体资源 - 替换为您自己的图片链接
 const media = [
-    { src: 'images/IMG_8322.jpeg' },
-    { src: 'images/IMG_8329.jpeg' },
-    { src: 'images/IMG_8340.jpeg' },
-    { src: 'images/IMG_8317.jpeg' },
-    { src: 'images/IMG_8318.jpeg' }
+    { src: 'IMG_8322.jpeg' },
+    { src: 'IMG_8329.jpeg' },
+    { src: 'IMG_8340.jpeg' },
+    { src: 'IMG_8317.jpeg' },
+    { src: 'IMG_8318.jpeg' }
 ];
 
 // 初始化媒体容器
