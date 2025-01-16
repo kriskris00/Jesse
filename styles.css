@@ -2,27 +2,32 @@
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    color: #6B4226; /* 大地色字体 */
-    background-color: #EAE2D7; /* 大地色背景 */
+    background: linear-gradient(to bottom, #d9cbb5, #ffffff 50%, #d9cbb5); /* 大地色到白色渐变 */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     text-align: center;
 }
 
-/* 标题样式 */
+/* 渐变字体颜色 */
 #glowing-title {
     font-size: 3rem;
     text-transform: uppercase;
-    color: #6B4226; /* 大地色字体 */
+    background: linear-gradient(to right, #8a6135, #c8a67d); /* 深棕到浅棕渐变 */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin-top: 20px;
 }
 
+/* 描述文字的渐变颜色 */
 .description {
-    color: #6B4226;
     font-size: 1.2rem;
+    background: linear-gradient(to right, #8a6135, #c8a67d); /* 深棕到浅棕渐变 */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin-bottom: 20px;
 }
+
 
 /* 背景音乐按钮样式 */
 .music-button {
