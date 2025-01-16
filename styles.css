@@ -1,92 +1,101 @@
-/* 全局设置 */
+/* 全局样式 */
 body {
-    font-family: 'Gloria Hallelujah', sans-serif;
-    color: #ff0000; /* 红色字体 */
-    text-align: center;
     margin: 0;
+    font-family: 'Inter', sans-serif;
+    color: #6B4226; /* 大地色字体 */
+    background-color: #EAE2D7; /* 大地色背景 */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #000000; /* 黑色背景 */
+    text-align: center;
 }
-
-
 
 /* 标题样式 */
-h1 {
-    font-size: 3em;
-    letter-spacing: 5px;
+#glowing-title {
+    font-size: 3rem;
     text-transform: uppercase;
-    margin: 0;
-    color: #ff0000; /* 红色发光 */
+    color: #6B4226; /* 大地色字体 */
+    margin-top: 20px;
 }
 
-/* 内容容器样式 */
-.container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-/* 描述文字样式 */
 .description {
-    font-size: 0.9em;
-    color: #ff0000; /* 红色字体 */
+    color: #6B4226;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
 
 /* 背景音乐按钮样式 */
 .music-button {
-    font-size: 1em;
     padding: 10px 20px;
-    color: #ff0000; /* 红色字体 */
-    background-color: rgba(0, 0, 0, 0.7); /* 黑色按钮背景 */
-    border-radius: 12px;
-    border: 1px solid rgba(209, 213, 219, 0.3);
+    background-color: rgba(107, 66, 38, 0.8); /* 半透明大地色 */
+    color: #FFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .music-button:hover {
-    background-color: #ff0000; /* 红色按钮背景悬停效果 */
-}
-.music-button:active {
-    transform: translateY(4px);
+    background-color: #6B4226; /* 深色按钮 */
 }
 
-/* 媒体容器中的图片过渡效果 */
-.slider-container img {
-    transition: transform 0.5s ease, opacity 0.5s ease;
+/* 媒体容器样式 */
+.media-container {
+    margin: 20px auto;
+    width: 100%;
+    max-width: 800px;
+    height: 70vh;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    background-color: #F5EFE6; /* 辅助大地色背景 */
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* 切换按钮样式 */
-button {
-    font-size: 1em;
-    padding: 10px 20px;
-    color: #ff0000; /* 红色字体 */
-    background-color: rgba(0, 0, 0, 0.7); /* 黑色按钮背景 */
-    border-radius: 12px;
-    border: 1px solid rgba(209, 213, 219, 0.3);
+.media-container img {
+    position: absolute;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    opacity: 0;
+    transform: scale(1.2) translateX(0);
+    transition: transform 0.8s ease, opacity 0.8s ease;
+    border-radius: 8px;
+    object-fit: contain; /* 确保图片完整显示 */
 }
 
-button:hover {
-    background-color: #ff0000; /* 红色按钮背景悬停效果 */
+.media-container img.visible {
+    opacity: 1;
+    transform: scale(1) translateX(0);
 }
 
-button:active {
-    transform: translateY(4px);
+.media-container img.exiting-left {
+    opacity: 0;
+    transform: scale(1.1) translateX(-100%);
 }
 
-/* 页脚文字样式 */
-footer p {
-    color: #ff0000; /* 红色字体 */
-    font-size: 0.8em;
-    margin: 20px 0 0;
+.media-container img.exiting-right {
+    opacity: 0;
+    transform: scale(1.1) translateX(100%);
 }
 
-@keyframes glow {
-    from {
-        text-shadow: 0 0 10px rgba(255, 0, 0, 0.8), 0 0 20px rgba(255, 0, 0, 0.8), 0 0 30px rgba(255, 0, 0, 0.8);
-    }
-    to {
-        text-shadow: 0 0 20px rgba(255, 0, 0, 0.8), 0 0 30px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.8);
-    }
+.media-container img.entering-left {
+    opacity: 0.5;
+    transform: scale(1.2) translateX(-100%);
+}
+
+.media-container img.entering-right {
+    opacity: 0.5;
+    transform: scale(1.2) translateX(100%);
+}
+
+/* 页脚 */
+footer {
+    color: #6B4226;
+    font-size: 0.9rem;
+    margin-top: auto;
 }
