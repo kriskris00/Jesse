@@ -51,6 +51,62 @@ body {
     transform: scale(1);
 }
 
+/* 北京时间显示样式 */
+.time-display {
+    font-size: 1.5rem;
+    color: #6B4226;
+    margin-top: 10px;
+    font-weight: bold;
+    transition: all 0.5s ease;
+}
+
+/* 通用节日特效 */
+.festival-effect {
+    animation: glow 1s infinite alternate;
+}
+
+/* 动态发光效果 */
+@keyframes glow {
+    from {
+        text-shadow: 0 0 5px #FFFFFF, 0 0 10px #FFA500;
+    }
+    to {
+        text-shadow: 0 0 10px #FF4500, 0 0 20px #FF4500;
+    }
+}
+
+/* 动态礼花效果 */
+.special-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: none;
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #FFD700;
+    animation: fall 2s linear infinite;
+    border-radius: 50%;
+}
+
+/* 礼花动画 */
+@keyframes fall {
+    0% {
+        transform: translateY(-10px) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) scale(0.5);
+        opacity: 0;
+    }
+}
+
 /* 图片容器 */
 .media-container {
     width: 100%;
