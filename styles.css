@@ -2,7 +2,7 @@
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(to bottom, #d9cbb5, #ffffff 50%, #d9cbb5);
+    background: linear-gradient(to bottom, #d9cbb5, #ffffff 50%, #d9cbb5); /* 大地色背景渐变 */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -54,15 +54,14 @@ body {
 /* 媒体容器样式 */
 .media-container {
     margin: 0 auto;
-    width: 90%; /* 小于屏幕宽度 */
+    width: 100%; /* 占满宽度 */
     max-width: 800px;
-    height: 65vh; /* 高度调整 */
+    height: 65vh; /* 高度为视口的 65% */
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden; /* 隐藏溢出的内容 */
-    border-radius: 12px; /* 圆角边框 */
 }
 
 /* 图片样式 */
