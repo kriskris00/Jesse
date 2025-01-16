@@ -16,55 +16,53 @@ const media = [
     { src: 'IMG_8318.jpeg' }
 ];
 
-// 初始化媒体容器
+// 初始化图片
 function initializeMedia() {
-    const loader = mediaContainer.querySelector('.loader'); // 获取加载动画
+    if (media.length === 0) {
+        mediaContainer.innerHTML = '<p>No media available</p>';
+        return;
+    }
 
     media.forEach((item, index) => {
-        const img = new Image(); // 动态创建图片
+        const img = document.createElement('img');
         img.src = item.src;
         img.alt = `Image ${index + 1}`;
-        img.className = index === currentIndex ? 'visible' : ''; // 只显示当前图片
-        img.onload = () => {
-            if (loader) loader.style.display = 'none'; // 图片加载后隐藏加载动画
-        };
-        img.onerror = () => {
-            console.error(`Failed to load image: ${item.src}`);
-        };
-        mediaContainer.appendChild(img); // 添加图片到容器
+        if (index === currentIndex) img.classList.add('visible');
+        mediaContainer.appendChild(img);
     });
 }
 
-// 更新媒体（图片切换）
+// 更新图片
 function updateMedia(nextIndex, direction) {
     const images = mediaContainer.querySelectorAll('img');
     const currentImage = images[currentIndex];
     const nextImage = images[nextIndex];
 
-    // 当前图片滑出
+    // 动画效果
     currentImage.classList.remove('visible');
     currentImage.classList.add(direction === 'left' ? 'exiting-left' : 'exiting-right');
-
-    // 新图片滑入
     nextImage.classList.add(direction === 'left' ? 'entering-left' : 'entering-right');
+
+    // 确保新图片进入
     setTimeout(() => {
         nextImage.classList.remove('entering-left', 'entering-right');
         nextImage.classList.add('visible');
         currentImage.classList.remove('exiting-left', 'exiting-right');
     }, 800);
 
-    currentIndex = nextIndex; // 更新索引
+    // 更新索引
+    currentIndex = nextIndex;
 }
 
-// 切换到下一张图片
+// 切换到下一张
 function goToNext() {
-    const nextIndex = (currentIndex + 1) % media.length; // 循环到下一张
+    const nextIndex = (currentIndex + 1) % media.length;
     updateMedia(nextIndex, 'right');
 }
 
-// 切换到上一张图片
+// 切换到上一张
 function goToPrevious() {
-    const previousIndex = (currentIndex - 1 + media.length) % media.length; // 循环到上一张
+    const previousIndex = (currentIndex - 1 + media.length) % media.length;
     updateMedia(previousIndex, 'left');
 }
 
@@ -79,11 +77,11 @@ function handleTouchMove(event) {
     const endX = event.touches[0].clientX;
     const deltaX = endX - startX;
 
-    if (deltaX > 100) {
-        goToPrevious(); // 滑动右切换到上一张
+    if (deltaX > 50) {
+        goToPrevious();
         isDragging = false;
-    } else if (deltaX < -100) {
-        goToNext(); // 滑动左切换到下一张
+    } else if (deltaX < -50) {
+        goToNext();
         isDragging = false;
     }
 }
