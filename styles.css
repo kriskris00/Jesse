@@ -51,21 +51,21 @@ body {
     transform: scale(1);
 }
 
-/* 北京时间显示样式 */
+/* Real-time time display */
 .time-display {
-    font-size: 1.5rem;
+    font-size: 1.2rem; /* Smaller font */
     color: #6B4226;
     margin-top: 10px;
     font-weight: bold;
     transition: all 0.5s ease;
 }
 
-/* 通用节日特效 */
+/* General festival effects */
 .festival-effect {
     animation: glow 1s infinite alternate;
 }
 
-/* 动态发光效果 */
+/* Dynamic glowing effect */
 @keyframes glow {
     from {
         text-shadow: 0 0 5px #FFFFFF, 0 0 10px #FFA500;
@@ -75,7 +75,7 @@ body {
     }
 }
 
-/* 动态礼花效果 */
+/* Dynamic confetti effect */
 .special-effect {
     position: fixed;
     top: 0;
@@ -95,7 +95,7 @@ body {
     border-radius: 50%;
 }
 
-/* 礼花动画 */
+/* Confetti animation */
 @keyframes fall {
     0% {
         transform: translateY(-10px) scale(1);
