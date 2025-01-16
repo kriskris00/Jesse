@@ -19,20 +19,19 @@ const media = [
 // 初始化媒体容器
 function initializeMedia() {
     const loader = mediaContainer.querySelector('.loader'); // 获取加载动画
+
     media.forEach((item, index) => {
         const img = new Image(); // 动态创建图片
         img.src = item.src;
         img.alt = `Image ${index + 1}`;
+        img.className = index === currentIndex ? 'visible' : ''; // 只显示当前图片
         img.onload = () => {
-            if (index === currentIndex) {
-                img.classList.add('visible'); // 显示第一张图片
-                loader.style.display = 'none'; // 隐藏加载动画
-            }
-            mediaContainer.appendChild(img); // 添加图片到容器
+            if (loader) loader.style.display = 'none'; // 图片加载后隐藏加载动画
         };
         img.onerror = () => {
             console.error(`Failed to load image: ${item.src}`);
         };
+        mediaContainer.appendChild(img); // 添加图片到容器
     });
 }
 
