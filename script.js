@@ -44,7 +44,7 @@ function updateMedia(nextIndex, direction) {
         nextImage.classList.remove('entering-left', 'entering-right');
         nextImage.classList.add('visible');
         currentImage.classList.remove('exiting-left', 'exiting-right');
-    }, 800);
+    }, 500);
 
     currentIndex = nextIndex;
 }
