@@ -96,10 +96,10 @@ function handleTouchEnd() {
 musicButton.addEventListener('click', () => {
     if (isPlaying) {
         backgroundMusic.pause();
-        musicButton.textContent = '♾️';
+        musicButton.textContent = '🎶';
     } else {
         backgroundMusic.play();
-        musicButton.textContent = '🎶';
+        musicButton.textContent = '♾️';
     }
     isPlaying = !isPlaying;
 });
