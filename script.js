@@ -1,80 +1,113 @@
-
-// 获取页面中的元素
-const glowingTitle = document.getElementById('glowing-title');
 const mediaContainer = document.getElementById('mediaContainer');
-const prevButton = document.getElementById('prevButton');
-const nextButton = document.getElementById('nextButton');
-const musicButton = document.getElementById('musicButton'); // 背景音乐按钮
+const musicButton = document.getElementById('musicButton');
+
 let currentIndex = 0;
-let isPlaying = false; // 用于检测音乐是否在播放
+let isPlaying = false;
+let startX = 0;
+let isDragging = false;
 
 // 媒体资源
 const media = [
-    { type: 'image', src: 'J-1.WEBP' },
-    { type: 'image', src: 'J-2.WEBP' },
-    { type: 'image', src: 'J-3.WEBP' },
-    { type: 'image', src: 'J-4.WEBP' },
-    { type: 'image', src: 'J-5.WEBP' },
-    { type: 'image', src: 'J-6.WEBP' },
-    { type: 'image', src: 'J-7.WEBP' },
-    { type: 'image', src: 'J-8.WEBP' },
-    { type: 'image', src: 'J-9.WEBP' },
-    { type: 'image', src: 'J-10.WEBP' },
-    { type: 'image', src: 'J-11.WEBP' }
+    { src: 'J-1.WEBP' },
+    { src: 'J-2.WEBP' },
+    { src: 'J-3.WEBP' },
+    { src: 'J-4.WEBP' },
+    { src: 'J-5.WEBP' }
 ];
 
-// 初始化背景音乐
-const backgroundMusic = new Audio('KW - PREACHER MAN.mp3'); // 替换为你自己的音乐文件
+// 背景音乐
+const backgroundMusic = new Audio('KW - PREACHER MAN.mp3');
 
-// 切换媒体函数
-function changeMedia(index) {
-    currentIndex = (currentIndex + index + media.length) % media.length;
-    const currentMedia = media[currentIndex];
-    if (currentMedia.type === 'image') {
+// 初始化图片
+function initializeMedia() {
+    if (media.length === 0) {
+        mediaContainer.innerHTML = '<p>No media available</p>';
+        return;
+    }
+
+    media.forEach((item, index) => {
         const img = document.createElement('img');
-        img.src = currentMedia.src;
-        img.alt = '图片描述';
-        img.style.maxWidth = '80%';
-        img.style.maxHeight = '80vh';
-        img.style.display = 'block';
-        img.style.margin = 'auto';
+        img.src = item.src;
+        img.alt = `Image ${index + 1}`;
+        if (index === currentIndex) img.classList.add('visible');
+        mediaContainer.appendChild(img);
+    });
+}
 
-        // 添加图像淡入淡出效果
-        img.style.opacity = '0';
-        img.style.transform = 'scale(1.2)';
-        requestAnimationFrame(() => {
-            img.style.opacity = '1';
-            img.style.transform = 'scale(1)';
-        });
+// 更新图片
+function updateMedia(nextIndex, direction) {
+    const images = mediaContainer.querySelectorAll('img');
+    const currentImage = images[currentIndex];
+    const nextImage = images[nextIndex];
 
-        replaceMedia(img);
+    // 动画效果
+    currentImage.classList.remove('visible');
+    currentImage.classList.add(direction === 'left' ? 'exiting-left' : 'exiting-right');
+    nextImage.classList.add(direction === 'left' ? 'entering-left' : 'entering-right');
+
+    // 确保新图片进入
+    setTimeout(() => {
+        nextImage.classList.remove('entering-left', 'entering-right');
+        nextImage.classList.add('visible');
+        currentImage.classList.remove('exiting-left', 'exiting-right');
+    }, 800);
+
+    // 更新索引
+    currentIndex = nextIndex;
+}
+
+// 切换到下一张
+function goToNext() {
+    const nextIndex = (currentIndex + 1) % media.length;
+    updateMedia(nextIndex, 'right');
+}
+
+// 切换到上一张
+function goToPrevious() {
+    const previousIndex = (currentIndex - 1 + media.length) % media.length;
+    updateMedia(previousIndex, 'left');
+}
+
+// 触摸滑动事件处理
+function handleTouchStart(event) {
+    startX = event.touches[0].clientX;
+    isDragging = true;
+}
+
+function handleTouchMove(event) {
+    if (!isDragging) return;
+    const endX = event.touches[0].clientX;
+    const deltaX = endX - startX;
+
+    if (deltaX > 50) {
+        goToPrevious();
+        isDragging = false;
+    } else if (deltaX < -50) {
+        goToNext();
+        isDragging = false;
     }
 }
 
-// 更新媒体容器中的内容
-function replaceMedia(newMedia) {
-    while (mediaContainer.firstChild) {
-        mediaContainer.removeChild(mediaContainer.firstChild);
-    }
-    mediaContainer.appendChild(newMedia);
+function handleTouchEnd() {
+    isDragging = false;
 }
 
-// 切换媒体按钮事件
-prevButton.addEventListener('click', () => changeMedia(-1));
-nextButton.addEventListener('click', () => changeMedia(1));
-
-// 初始化为第一个媒体
-changeMedia(0);
-
-// 背景音乐按钮事件
+// 背景音乐控制
 musicButton.addEventListener('click', () => {
-    if (!isPlaying) {
-        backgroundMusic.play();
-        isPlaying = true;
-        musicButton.textContent = '🎵 STOP';
-    } else {
+    if (isPlaying) {
         backgroundMusic.pause();
-        isPlaying = false;
         musicButton.textContent = '🎵 PLAY';
+    } else {
+        backgroundMusic.play();
+        musicButton.textContent = '🎵 STOP';
     }
+    isPlaying = !isPlaying;
 });
+
+// 添加触摸事件监听器
+mediaContainer.addEventListener('touchstart', handleTouchStart);
+mediaContainer.addEventListener('touchmove', handleTouchMove);
+mediaContainer.addEventListener('touchend', handleTouchEnd);
+
+// 初始化
+initializeMedia();
