@@ -2,7 +2,7 @@ const mediaContainer = document.getElementById('mediaContainer');
 const musicButton = document.getElementById('musicButton');
 const backgroundMusic = new Audio('1.mp3'); // ✅ 确保音乐文件在根目录
 
-// 🖼️ 你的图片列表（确保每行两张）
+// 🖼️ 图片列表
 const media = [
   { src: 'IMG_8322.jpeg' },
   { src: 'IMG_8329.jpeg' },
@@ -11,7 +11,7 @@ const media = [
   { src: 'IMG_8318.jpeg' }
 ];
 
-// 🔄 确保图片加载后正常显示
+// 🔄 图片加载优化（确保正确加载）
 function initializeMedia() {
   const loader = mediaContainer.querySelector('.loader');
   media.forEach((item) => {
@@ -23,8 +23,8 @@ function initializeMedia() {
       if (loader) loader.style.display = 'none';
     };
     img.onerror = () => {
-      console.error(`Failed to load image: ${item.src}`);
-      loader.textContent = "图片加载失败";
+      console.error(`❌ 图片加载失败: ${item.src}`);
+      loader.textContent = "⚠️ 图片加载失败";
     };
     mediaContainer.appendChild(img);
   });
@@ -35,13 +35,19 @@ let isPlaying = false;
 musicButton.addEventListener('click', () => {
   if (isPlaying) {
     backgroundMusic.pause();
-    musicButton.textContent = '🎵 PLAY';
+    musicButton.innerHTML = '🎵 PLAY';
   } else {
     backgroundMusic.play();
-    musicButton.textContent = '⏸️ PLAYING';
+    musicButton.innerHTML = '⏸️ PLAYING';
   }
   isPlaying = !isPlaying;
 });
 
-// 初始化
+// ✅ 处理音乐播放完成时自动切换按钮状态
+backgroundMusic.addEventListener('ended', () => {
+  isPlaying = false;
+  musicButton.innerHTML = '🎵 PLAY';
+});
+
+// ✅ 初始化图片
 initializeMedia();
