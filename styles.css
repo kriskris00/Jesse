@@ -1,4 +1,4 @@
-/* 全局样式 */
+/* 🌿 全局：背景全覆盖（大地色渐变流动） */
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -8,34 +8,35 @@ body {
   text-align: center;
   overflow-x: hidden;
   
-  /* 大地色流动背景 */
+  /* 🌀 大地色渐变背景 */
   background: linear-gradient(270deg, #d9cbb5, #c8a67d, #a67b5b, #8a6135);
   background-size: 800% 800%;
   animation: gradientFlow 30s ease infinite;
 }
 
-/* 背景渐变动画 */
+/* 🎨 背景渐变动画 */
 @keyframes gradientFlow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-/* 头部 */
-header {
-  padding: 20px;
+/* 📌 页眉、页脚、音乐播放器 背景全覆盖 */
+header, footer, .dynamic-island {
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
+  width: 100%;
+  padding: 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.header-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-/* Logo */
+/* 🏆 LOGO */
 .logo img {
   width: 80px;
   height: 80px;
@@ -47,7 +48,7 @@ header {
   transform: scale(1.1);
 }
 
-/* 描述文字 */
+/* 🌟 标题文字 */
 .description {
   font-size: 1.2rem;
   background: linear-gradient(to right, #8a6135, #c8a67d);
@@ -56,14 +57,12 @@ header {
   margin-top: 10px;
 }
 
-/* 灵动岛背景音乐播放器 */
+/* 🎶 灵动岛音乐播放器 */
 .dynamic-island {
   position: relative;
   margin: 20px auto;
   width: fit-content;
   padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(15px);
   border-radius: 30px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, background 0.3s ease;
@@ -74,7 +73,7 @@ header {
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* 音乐按钮 */
+/* 🎵 播放按钮 */
 .music-button {
   padding: 10px 20px;
   background-color: #8A6135;
@@ -83,6 +82,7 @@ header {
   border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
@@ -91,41 +91,52 @@ header {
   transform: scale(1.05);
 }
 
-/* 主内容区域 */
-main {
-  flex: 1;
-}
-
-/* 图片和视频展示区 */
+/* 📸 图片区域（两张一排） */
 .media-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 15px;
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* 图片样式 */
+/* 🔄 加载动画 */
+.loader {
+  grid-column: 1 / -1;
+  font-size: 1.2rem;
+  color: #6B4226;
+  text-align: center;
+}
+
+/* 🖼️ 图片样式 */
 .media-container img {
   width: 100%;
   height: auto;
+  max-height: 300px;
+  object-fit: cover;
   border-radius: 10px;
   opacity: 0;
-  transform: translateY(20px);
   animation: fadeInUp 0.6s forwards;
 }
 
-@keyframes fadeInUp {
-  to { opacity: 1; transform: translateY(0); }
+/* 🔍 图片悬停效果 */
+.media-container img:hover {
+  transform: scale(1.03);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* 页脚 */
-footer {
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  color: #6B4226;
-  font-size: 0.9rem;
+/* 🎭 渐入动画 */
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 📱 移动端优化（单列布局） */
+@media (max-width: 600px) {
+  .media-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
