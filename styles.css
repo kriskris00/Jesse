@@ -29,10 +29,10 @@ body {
 
 /* 📌 让 `header`、`footer`、`音乐播放器` 继承 **完全相同** 的背景 */
 header, footer, .dynamic-island {
-  background: inherit; /* 继承 body 背景 */
+  background: inherit;
   width: 100%;
   padding: 20px;
-  border: none; /* ❌ 去除分割线 */
+  border: none;
 }
 
 /* 🏆 LOGO */
@@ -47,7 +47,7 @@ header, footer, .dynamic-island {
   transform: scale(1.1);
 }
 
-/* 🌟 标题和文字保持居中 */
+/* 🌟 标题样式 */
 .header-container {
   display: flex;
   align-items: center;
@@ -55,33 +55,34 @@ header, footer, .dynamic-island {
   text-align: center;
 }
 
-/* 🌟 让标题文字和播放器之间无过多间距 */
 .description {
   font-size: 1.2rem;
   background: linear-gradient(to right, #8a6135, #c8a67d);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-top: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
-/* 🎶 灵动岛音乐播放器 */
+/* 🎶 音乐播放器（带回框架，但优化视觉效果） */
 .dynamic-island {
-  margin: 10px auto; /* 🔥 让播放器和标题更紧凑 */
-  padding: 10px 20px;
+  margin: 10px auto;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 30px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
   transition: transform 0.3s ease, background 0.3s ease;
 }
 
 .dynamic-island:hover {
   transform: scale(1.05);
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.25);
 }
 
 /* 🎵 播放按钮 */
 .music-button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   background-color: #8A6135;
   color: #FFFFFF;
   border: none;
@@ -97,17 +98,17 @@ header, footer, .dynamic-island {
   transform: scale(1.05);
 }
 
-/* 📸 图片区域（两张一排，确保网格布局正确） */
+/* 📸 图片区域（两张一排） */
 .media-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* PC 端两列 */
+  grid-template-columns: repeat(2, 1fr);
   gap: 15px;
   padding: 20px;
   max-width: 1000px;
   margin: 0 auto;
 }
 
-/* 🖼️ 图片样式 */
+/* 🖼️ 确保图片正确显示 */
 .media-container img {
   width: 100%;
   height: auto;
@@ -120,6 +121,6 @@ header, footer, .dynamic-island {
 /* 📱 移动端优化（保持两列） */
 @media (max-width: 600px) {
   .media-container {
-    grid-template-columns: repeat(2, 1fr); /* 保持 2 列 */
+    grid-template-columns: repeat(2, 1fr);
   }
 }
