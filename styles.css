@@ -1,4 +1,4 @@
-/* 全局样式，整个页面均使用流动大地色背景 */
+/* 全局样式 */
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -8,7 +8,7 @@ body {
   text-align: center;
   overflow-x: hidden;
   
-  /* 大地色渐变流动背景（覆盖整个页面） */
+  /* 大地色流动背景 */
   background: linear-gradient(270deg, #d9cbb5, #c8a67d, #a67b5b, #8a6135);
   background-size: 800% 800%;
   animation: gradientFlow 30s ease infinite;
@@ -16,23 +16,16 @@ body {
 
 /* 背景渐变动画 */
 @keyframes gradientFlow {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* 头部样式 */
+/* 头部 */
 header {
   padding: 20px;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .header-container {
@@ -42,7 +35,7 @@ header {
   flex-direction: column;
 }
 
-/* Logo 样式 */
+/* Logo */
 .logo img {
   width: 80px;
   height: 80px;
@@ -63,7 +56,7 @@ header {
   margin-top: 10px;
 }
 
-/* 灵动岛风格背景音乐播放器（毛玻璃效果） */
+/* 灵动岛背景音乐播放器 */
 .dynamic-island {
   position: relative;
   margin: 20px auto;
@@ -81,7 +74,7 @@ header {
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* 背景音乐按钮 */
+/* 音乐按钮 */
 .music-button {
   padding: 10px 20px;
   background-color: #8A6135;
@@ -90,7 +83,6 @@ header {
   border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
@@ -99,16 +91,12 @@ header {
   transform: scale(1.05);
 }
 
-.music-button:active {
-  transform: scale(1);
-}
-
 /* 主内容区域 */
 main {
   flex: 1;
 }
 
-/* 媒体网格：支持图片和视频 */
+/* 图片和视频展示区 */
 .media-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -118,41 +106,18 @@ main {
   margin: 0 auto;
 }
 
-/* 加载指示器 */
-.loader {
-  grid-column: 1 / -1;
-  font-size: 1.2rem;
-  color: #6B4226;
-  text-align: center;
-}
-
-/* 图片与视频样式（确保显示原生图片效果，适合 HDR 文件） */
-.media-container img,
-.media-container video {
+/* 图片样式 */
+.media-container img {
   width: 100%;
   height: auto;
-  max-height: 300px;
-  object-fit: cover;
   border-radius: 10px;
   opacity: 0;
   transform: translateY(20px);
   animation: fadeInUp 0.6s forwards;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* 悬停效果 */
-.media-container img:hover,
-.media-container video:hover {
-  transform: scale(1.03);
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* 渐入动画 */
 @keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* 页脚 */
@@ -163,31 +128,4 @@ footer {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   color: #6B4226;
   font-size: 0.9rem;
-}
-
-footer a {
-  color: #8A6135;
-  text-decoration: none;
-}
-
-footer a:hover {
-  text-decoration: underline;
-}
-
-/* 移动端优化 */
-@media (max-width: 600px) {
-  .description {
-    font-size: 1rem;
-  }
-  .logo img {
-    width: 60px;
-    height: 60px;
-  }
-  .music-button {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-  }
-  .media-container {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  }
 }
