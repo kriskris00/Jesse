@@ -11,7 +11,7 @@ const media = [
   { src: 'IMG_8318.jpeg' }
 ];
 
-// 🔄 加载图片
+// 🔄 确保图片加载后正常显示
 function initializeMedia() {
   const loader = mediaContainer.querySelector('.loader');
   media.forEach((item) => {
@@ -22,7 +22,10 @@ function initializeMedia() {
       img.classList.add('visible');
       if (loader) loader.style.display = 'none';
     };
-    img.onerror = () => console.error(`Failed to load image: ${item.src}`);
+    img.onerror = () => {
+      console.error(`Failed to load image: ${item.src}`);
+      loader.textContent = "图片加载失败";
+    };
     mediaContainer.appendChild(img);
   });
 }
