@@ -27,12 +27,12 @@ body {
   }
 }
 
-/* 📌 让页眉、页脚、音乐播放器背景完全一致 */
+/* 📌 让 `header`、`footer`、`音乐播放器` 继承 **完全相同** 的背景 */
 header, footer, .dynamic-island {
-  background: inherit; /* 继承 body 的背景 */
+  background: inherit; /* 继承 body 背景 */
   width: 100%;
   padding: 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border: none; /* ❌ 去除分割线 */
 }
 
 /* 🏆 LOGO */
@@ -47,20 +47,27 @@ header, footer, .dynamic-island {
   transform: scale(1.1);
 }
 
-/* 🌟 标题文字 */
+/* 🌟 标题和文字保持居中 */
+.header-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+/* 🌟 让标题文字和播放器之间无过多间距 */
 .description {
   font-size: 1.2rem;
   background: linear-gradient(to right, #8a6135, #c8a67d);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-top: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 /* 🎶 灵动岛音乐播放器 */
 .dynamic-island {
-  position: relative;
-  margin: 20px auto;
-  width: fit-content;
+  margin: 10px auto; /* 🔥 让播放器和标题更紧凑 */
   padding: 10px 20px;
   border-radius: 30px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -93,19 +100,11 @@ header, footer, .dynamic-island {
 /* 📸 图片区域（两张一排，确保网格布局正确） */
 .media-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 两列布局 */
+  grid-template-columns: repeat(2, 1fr); /* PC 端两列 */
   gap: 15px;
   padding: 20px;
   max-width: 1000px;
   margin: 0 auto;
-}
-
-/* 🔄 加载动画 */
-.loader {
-  grid-column: 1 / -1;
-  font-size: 1.2rem;
-  color: #6B4226;
-  text-align: center;
 }
 
 /* 🖼️ 图片样式 */
@@ -118,23 +117,9 @@ header, footer, .dynamic-island {
   animation: fadeInUp 0.6s forwards;
 }
 
-/* 🔍 图片悬停效果 */
-.media-container img:hover {
-  transform: scale(1.03);
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* 🎭 渐入动画 */
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* 📱 移动端优化（单列布局） */
+/* 📱 移动端优化（保持两列） */
 @media (max-width: 600px) {
   .media-container {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* 保持 2 列 */
   }
 }
