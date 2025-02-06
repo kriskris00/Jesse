@@ -1,155 +1,193 @@
-/* 全局样式 */
+/* 全局样式，整个页面均使用流动大地色背景 */
 body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(to bottom, #d9cbb5, #ffffff 50%, #d9cbb5);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    text-align: center;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  text-align: center;
+  overflow-x: hidden;
+  
+  /* 大地色渐变流动背景（覆盖整个页面） */
+  background: linear-gradient(270deg, #d9cbb5, #c8a67d, #a67b5b, #8a6135);
+  background-size: 800% 800%;
+  animation: gradientFlow 30s ease infinite;
 }
 
-/* 描述文字样式 */
+/* 背景渐变动画 */
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 头部样式 */
+header {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* Logo 样式 */
+.logo img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+  transform: scale(1.1);
+}
+
+/* 描述文字 */
 .description {
-    font-size: 1.2rem;
-    background: linear-gradient(to right, #8a6135, #c8a67d);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 10px;
+  font-size: 1.2rem;
+  background: linear-gradient(to right, #8a6135, #c8a67d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-top: 10px;
+}
+
+/* 灵动岛风格背景音乐播放器（毛玻璃效果） */
+.dynamic-island {
+  position: relative;
+  margin: 20px auto;
+  width: fit-content;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border-radius: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.dynamic-island:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 /* 背景音乐按钮 */
 .music-button {
-    padding: 10px 20px;
-    background-color: #8A6135;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease, background-color 0.3s ease;
+  padding: 10px 20px;
+  background-color: #8A6135;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
 .music-button:hover {
-    background-color: #6B4226;
-    transform: scale(1.05);
+  background-color: #6B4226;
+  transform: scale(1.05);
 }
 
 .music-button:active {
-    transform: scale(1);
+  transform: scale(1);
 }
 
-/* 北京时间显示样式 */
-.time-display {
-    font-size: 0.9rem;
-    color: #6B4226;
-    margin-top: 2px;
-    font-weight: bold;
-    transition: all 0.5s ease;
+/* 主内容区域 */
+main {
+  flex: 1;
 }
 
-/* 通用节日特效 */
-.festival-effect {
-    animation: glow 1s infinite alternate;
-}
-
-/* 动态发光效果 */
-@keyframes glow {
-    from {
-        text-shadow: 0 0 5px #FFFFFF, 0 0 10px #FFA500;
-    }
-    to {
-        text-shadow: 0 0 10px #FF4500, 0 0 20px #FF4500;
-    }
-}
-
-/* 动态礼花效果 */
-.special-effect {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    display: none;
-}
-
-.confetti {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: #FFD700;
-    animation: fall 2s linear infinite;
-    border-radius: 50%;
-}
-
-/* 礼花动画 */
-@keyframes fall {
-    0% {
-        transform: translateY(-10px) scale(1);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(100vh) scale(0.5);
-        opacity: 0;
-    }
-}
-
-/* 图片容器 */
+/* 媒体网格：支持图片和视频 */
 .media-container {
-    width: 100%;
-    max-width: 800px;
-    height: calc(100vh - 200px); /* 自动适配高度，减去标题、按钮和页脚的空间 */
-    position: relative;
-    margin: 0 ;
-    overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* 图片样式 */
-.media-container img {
-    width: auto;
-    height: auto;
-    max-width: 85%; /* 图片最大宽度为容器的 85% */
-    max-height: 85%; /* 图片最大高度为容器的 85% */
-    opacity: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1.1); /* 初始缩放比例 */
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+/* 加载指示器 */
+.loader {
+  grid-column: 1 / -1;
+  font-size: 1.2rem;
+  color: #6B4226;
+  text-align: center;
 }
 
-/* 图片可见时 */
-.media-container img.visible {
+/* 图片与视频样式（确保显示原生图片效果，适合 HDR 文件） */
+.media-container img,
+.media-container video {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 10px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 悬停效果 */
+.media-container img:hover,
+.media-container video:hover {
+  transform: scale(1.03);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 渐入动画 */
+@keyframes fadeInUp {
+  to {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1); /* 缩放回正常大小 */
+    transform: translateY(0);
+  }
 }
 
-/* 图片滑动效果 */
-.media-container img.exiting-left {
-    transform: translate(-120%, -50%) scale(0.9);
-    opacity: 0;
-}
-
-.media-container img.exiting-right {
-    transform: translate(120%, -50%) scale(0.9);
-    opacity: 0;
-}
-
-.media-container img.entering-left {
-    transform: translate(-120%, -50%) scale(1.1);
-    opacity: 0.5;
-}
-
-.media-container img.entering-right {
-    transform: translate(120%, -50%) scale(1.1);
-    opacity: 0.5;
-}
-
-/* 页脚样式 */
+/* 页脚 */
 footer {
-    color: #6B4226;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  color: #6B4226;
+  font-size: 0.9rem;
+}
+
+footer a {
+  color: #8A6135;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* 移动端优化 */
+@media (max-width: 600px) {
+  .description {
+    font-size: 1rem;
+  }
+  .logo img {
+    width: 60px;
+    height: 60px;
+  }
+  .music-button {
+    padding: 8px 16px;
     font-size: 0.9rem;
-    margin-top: auto;
+  }
+  .media-container {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
 }
