@@ -27,10 +27,9 @@ body {
   }
 }
 
-/* 📌 页眉、页脚、音乐播放器 背景全覆盖 */
+/* 📌 让页眉、页脚、音乐播放器背景完全一致 */
 header, footer, .dynamic-island {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
+  background: inherit; /* 继承 body 的背景 */
   width: 100%;
   padding: 20px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -91,13 +90,13 @@ header, footer, .dynamic-island {
   transform: scale(1.05);
 }
 
-/* 📸 图片区域（两张一排） */
+/* 📸 图片区域（两张一排，确保网格布局正确） */
 .media-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr); /* 两列布局 */
   gap: 15px;
   padding: 20px;
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -113,7 +112,6 @@ header, footer, .dynamic-island {
 .media-container img {
   width: 100%;
   height: auto;
-  max-height: 300px;
   object-fit: cover;
   border-radius: 10px;
   opacity: 0;
