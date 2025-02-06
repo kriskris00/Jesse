@@ -2,7 +2,7 @@ const mediaContainer = document.getElementById('mediaContainer');
 const musicButton = document.getElementById('musicButton');
 const backgroundMusic = new Audio('1.mp3'); // ✅ 确保音乐文件在根目录
 
-// 🖼️ 图片资源（确保每行两张）
+// 🖼️ 你的图片列表（确保每行两张）
 const media = [
   { src: 'IMG_8322.jpeg' },
   { src: 'IMG_8329.jpeg' },
