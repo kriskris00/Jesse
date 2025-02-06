@@ -1,24 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SELAHX</title>
-  <link rel="icon" href="selahx.PNG" type="image/png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="selahx.PNG" type="image/png" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <img src="selahx.PNG" alt="SelahX Logo" />
+      </div>
+      <p class="description">SAID IT'S MY YEAR, KNOW IT'S MY YEAR</p>
+    </div>
+  </header>
 
   <!-- 灵动岛风格背景音乐播放器 -->
   <div id="dynamicIsland" class="dynamic-island">
     <button id="musicButton" class="music-button">🎵 PLAY</button>
-    <audio id="backgroundMusic" src="1.mp3"></audio>
   </div>
 
-  <!-- 图片网格区域 -->
-  <main id="mediaContainer" class="media-container">
-    <div class="loader">Loading…</div>
+  <main>
+    <div id="mediaContainer" class="media-container">
+      <div class="loader">Loading…</div>
+    </div>
   </main>
+
+  <footer>
+    <p>&copy; 2025 SelahX</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
