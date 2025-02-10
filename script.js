@@ -4,11 +4,18 @@ const backgroundMusic = new Audio('1.mp3'); // ✅ 确保音乐文件在根目�
 
 // 🖼️ 图片列表
 const media = [
-  { src: 'IMG_8322.jpeg' },
-  { src: 'IMG_8329.jpeg' },
-  { src: 'IMG_8340.jpeg' },
-  { src: 'IMG_8317.jpeg' },
-  { src: 'IMG_8318.jpeg' }
+  { src: 'selahx1.webp' },
+  { src: 'J-1.WEBP' },
+  { src: 'J-2.WEBP' },
+  { src: 'J-3.WEBP' },
+  { src: 'J-4.WEBP' },
+  { src: 'J-5.WEBP' },
+  { src: 'J-6.WEBP' },
+  { src: 'J-7.WEBP' },
+  { src: 'J-8.WEBP' },
+  { src: 'J-9.WEBP' },
+  { src: 'J-10.WEBP' },
+  { src: 'J-11.WEBP' }
 ];
 
 // 🔄 图片加载优化（确保正确加载）
