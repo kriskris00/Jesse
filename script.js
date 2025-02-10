@@ -5,6 +5,7 @@ const backgroundMusic = new Audio('1.mp3'); // ✅ 确保音乐文件在根目�
 // 🖼️ 图片列表
 const media = [
   { src: 'selahx1.webp' },
+  { src: 'DanLevi.webp' },
   { src: 'J-1.WEBP' },
   { src: 'J-2.WEBP' },
   { src: 'J-3.WEBP' },
