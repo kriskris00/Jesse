@@ -47,9 +47,7 @@ backgroundMusic.addEventListener('ended', () => {
 
 window.addEventListener('DOMContentLoaded', () => {
   initializeMedia();
-  backgroundMusic.play().catch(() => {});
-  isPlaying = true;
-  musicButton.innerHTML = '⏸️ PLAYING';
+  // 自动播放已关闭
 });
 
 // Lightbox Logic
