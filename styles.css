@@ -5,7 +5,6 @@ body {
   flex-direction: column;
   min-height: 100vh;
   text-align: center;
-  overflow-x: hidden;
   background: linear-gradient(to bottom, #d9cbb5, #ffffff 50%, #d9cbb5);
   background-size: 400% 400%;
   animation: backgroundFlow 10s infinite alternate ease-in-out;
@@ -23,13 +22,14 @@ header, footer, .dynamic-island {
 }
 
 footer {
-  padding: 10px;
   margin-top: auto;
+  padding: 20px;
 }
 
 .logo {
   font-size: 1.8rem;
   font-weight: bold;
+  text-transform: uppercase;
   background: linear-gradient(270deg, #8a6135, #c8a67d, #8a6135);
   background-size: 200% 200%;
   -webkit-background-clip: text;
@@ -67,19 +67,17 @@ footer {
   border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   transition: transform 0.2s ease;
 }
 
-.music-button:hover {
-  background-color: #6B4226;
-  transform: scale(1.05);
+.music-button:active {
+  transform: scale(0.95);
 }
 
 .media-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
+  gap: 8px;
   padding: 20px;
   max-width: 1000px;
   margin: 0 auto;
@@ -88,90 +86,85 @@ footer {
 .media-container img {
   width: 100%;
   height: auto;
+  object-fit: cover;
   border-radius: 8px;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s;
 }
 
 .media-container img:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
 .loader {
-  font-size: 1.2rem;
-  padding: 40px;
+  margin: 40px auto;
+  font-size: 1.2em;
+  animation: blink 1s infinite;
 }
 
-/* Lightbox 样式 */
+@keyframes blink {
+  50% { opacity: 0.5; }
+}
+
+@media (max-width: 600px) {
+  .media-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Lightbox styles */
 .lightbox {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.8);
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 999;
+  justify-content: center;
   flex-direction: column;
+  z-index: 1000;
 }
 
 .lightbox.hidden {
   display: none;
 }
 
-.lightbox-content {
-  position: relative;
-  max-width: 90%;
-  max-height: 90%;
-}
-
-.lightbox-caption {
-  color: #fff;
-  margin-bottom: 10px;
-  display: block;
-  font-size: 1rem;
-}
-
 .lightbox img {
-  max-width: 100%;
-  max-height: 80vh;
-  border-radius: 10px;
-  animation: fadeInUp 0.5s ease;
+  max-width: 80vw;
+  max-height: 70vh;
+  transition: opacity 0.4s ease-in-out;
 }
 
-.nav-button {
+.lightbox .close-btn,
+.lightbox .nav-btn {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255,255,255,0.6);
+  background: none;
   border: none;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 1.5rem;
-  border-radius: 50%;
-}
-
-.left { left: -50px; }
-.right { right: -50px; }
-
-.close-btn {
-  position: absolute;
-  top: -40px;
-  right: 0;
-  color: #fff;
+  color: white;
   font-size: 2rem;
   cursor: pointer;
+  user-select: none;
 }
 
-/* 手机端调整 */
-@media (max-width: 600px) {
-  .media-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.close-btn {
+  top: 10px;
+  right: 20px;
+}
 
-  .left, .right {
-    display: none;
-  }
+.nav-btn.prev {
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.nav-btn.next {
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#imageName {
+  color: white;
+  margin-top: 10px;
+  font-size: 1rem;
 }
