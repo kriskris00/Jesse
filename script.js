@@ -1,8 +1,7 @@
 const mediaContainer = document.getElementById('mediaContainer');
 const musicButton = document.getElementById('musicButton');
-const backgroundMusic = new Audio('1.mp3'); // ✅ 确保音乐文件在根目录
+const backgroundMusic = new Audio('1.mp3'); // 确保路径正确
 
-// 🖼️ 图片列表
 const media = [
   { src: 'selahx1.webp' },
   { src: 'DanLevi.webp' },
@@ -19,7 +18,7 @@ const media = [
   { src: 'J-11.WEBP' }
 ];
 
-// 🔄 图片加载优化（确保正确加载）
+// 初始化图片
 function initializeMedia() {
   const loader = mediaContainer.querySelector('.loader');
   media.forEach((item) => {
@@ -38,7 +37,7 @@ function initializeMedia() {
   });
 }
 
-// 🎶 播放/暂停音乐
+// 音乐播放控制
 let isPlaying = false;
 musicButton.addEventListener('click', () => {
   if (isPlaying) {
@@ -51,11 +50,29 @@ musicButton.addEventListener('click', () => {
   isPlaying = !isPlaying;
 });
 
-// ✅ 处理音乐播放完成时自动切换按钮状态
 backgroundMusic.addEventListener('ended', () => {
   isPlaying = false;
   musicButton.innerHTML = '🎵 PLAY';
 });
 
-// ✅ 初始化图片
+// 图片点击放大查看
+const lightboxOverlay = document.getElementById('lightboxOverlay');
+const lightboxImage = document.querySelector('.lightbox-image');
+const lightboxClose = document.querySelector('.lightbox-close');
+
+mediaContainer.addEventListener('click', (e) => {
+  if (e.target.tagName === 'IMG') {
+    lightboxImage.src = e.target.src;
+    lightboxOverlay.style.display = 'flex';
+  }
+});
+
+lightboxOverlay.addEventListener('click', (e) => {
+  if (e.target === lightboxOverlay || e.target === lightboxClose) {
+    lightboxOverlay.style.display = 'none';
+    lightboxImage.src = '';
+  }
+});
+
+// 初始化
 initializeMedia();
