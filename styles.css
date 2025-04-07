@@ -1,42 +1,177 @@
-/* 原有内容保留，这里添加新内容 */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  text-align: center;
+  overflow-x: hidden;
+  background: linear-gradient(to bottom, #d9cbb5, #ffffff 50%, #d9cbb5);
+  background-size: 400% 400%;
+  animation: backgroundFlow 10s infinite alternate ease-in-out;
+}
 
-#loading-screen {
+@keyframes backgroundFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+header, footer, .dynamic-island {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+}
+
+footer {
+  padding: 10px;
+  margin-top: auto;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  background: linear-gradient(270deg, #8a6135, #c8a67d, #8a6135);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textGradient 3s infinite alternate ease-in-out;
+}
+
+.description {
+  font-size: 1.2rem;
+  background: linear-gradient(270deg, #8a6135, #c8a67d, #8a6135);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textGradient 3s infinite alternate ease-in-out;
+}
+
+@keyframes textGradient {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.dynamic-island {
+  margin: 20px auto;
+  width: fit-content;
+  padding: 10px 20px;
+  border-radius: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.music-button {
+  padding: 10px 20px;
+  background-color: #8A6135;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease;
+}
+
+.music-button:hover {
+  background-color: #6B4226;
+  transform: scale(1.05);
+}
+
+.media-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.media-container img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.media-container img:hover {
+  transform: scale(1.05);
+}
+
+.loader {
+  font-size: 1.2rem;
+  padding: 40px;
+}
+
+/* Lightbox 样式 */
+.lightbox {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: #fefefe;
+  background: rgba(0,0,0,0.8);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 9999;
+  align-items: center;
+  z-index: 999;
+  flex-direction: column;
 }
 
-.spinner {
-  border: 6px solid #e0e0e0;
-  border-top: 6px solid #a87543;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  animation: spin 1s linear infinite;
+.lightbox.hidden {
+  display: none;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+.lightbox-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
 }
 
-/* Lightbox caption */
-#lightbox-caption {
-  position: absolute;
-  top: 16px;
+.lightbox-caption {
   color: #fff;
-  font-size: 1.2rem;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 6px 12px;
-  border-radius: 8px;
-  max-width: 80%;
-  text-align: center;
+  margin-bottom: 10px;
+  display: block;
+  font-size: 1rem;
+}
+
+.lightbox img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 10px;
+  animation: fadeInUp 0.5s ease;
+}
+
+.nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.6);
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  border-radius: 50%;
+}
+
+.left { left: -50px; }
+.right { right: -50px; }
+
+.close-btn {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* 手机端调整 */
+@media (max-width: 600px) {
+  .media-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .left, .right {
+    display: none;
+  }
 }
