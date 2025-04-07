@@ -2,6 +2,7 @@ const mediaContainer = document.getElementById('mediaContainer');
 const musicButton = document.getElementById('musicButton');
 const backgroundMusic = new Audio('1.mp3');
 
+// 图片数据
 const media = [
   { src: 'selahx1.webp', name: 'REED🌄', date: '2025-01-14' },
   { src: 'DanLevi.webp', name: 'DANLEVI🫶🏻', date: '2025-01-14' },
@@ -42,29 +43,21 @@ backgroundMusic.addEventListener('ended', () => {
   musicButton.textContent = '🎵 PLAY';
 });
 
-function openLightbox(index, withAnimation = false) {
+function openLightbox(index) {
   currentIndex = index;
   const lightbox = document.getElementById('lightbox');
   const img = document.getElementById('lightbox-img');
   const name = document.getElementById('lightbox-name');
   const date = document.getElementById('lightbox-date');
   const item = media[currentIndex];
-
-  if (withAnimation) {
-    img.classList.add('fade-out');
-    setTimeout(() => {
-      img.src = item.src;
-      name.textContent = item.name;
-      date.textContent = item.date;
-      img.classList.remove('fade-out');
-    }, 250);
-  } else {
-    img.src = item.src;
-    name.textContent = item.name;
-    date.textContent = item.date;
-  }
-
+  img.src = item.src;
+  name.textContent = item.name;
+  date.textContent = item.date;
   lightbox.classList.remove('hidden');
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.add('hidden');
 }
 
 function navigateLightbox(direction) {
@@ -73,7 +66,7 @@ function navigateLightbox(direction) {
   } else {
     currentIndex = (currentIndex + 1) % media.length;
   }
-  openLightbox(currentIndex, true);
+  openLightbox(currentIndex);
 }
 
 document.getElementById('closeBtn').addEventListener('click', closeLightbox);
