@@ -1,78 +1,69 @@
-const mediaContainer = document.getElementById('mediaContainer');
-const musicButton = document.getElementById('musicButton');
-const backgroundMusic = new Audio('1.mp3'); // 确保路径正确
+const playBtn = document.getElementById('play-btn');
+const audio = document.getElementById('audio');
+const images = document.querySelectorAll('.gallery img');
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const lightboxCaption = document.getElementById('lightbox-caption');
+const closeBtn = document.getElementById('close-btn');
+const nextBtn = document.getElementById('next-btn');
+const prevBtn = document.getElementById('prev-btn');
 
-const media = [
-  { src: 'selahx1.webp' },
-  { src: 'DanLevi.webp' },
-  { src: 'J-1.WEBP' },
-  { src: 'J-2.WEBP' },
-  { src: 'J-3.WEBP' },
-  { src: 'J-4.WEBP' },
-  { src: 'J-5.WEBP' },
-  { src: 'J-6.WEBP' },
-  { src: 'J-7.WEBP' },
-  { src: 'J-8.WEBP' },
-  { src: 'J-9.WEBP' },
-  { src: 'J-10.WEBP' },
-  { src: 'J-11.WEBP' }
-];
+let currentIndex = 0;
 
-// 初始化图片
-function initializeMedia() {
-  const loader = mediaContainer.querySelector('.loader');
-  media.forEach((item) => {
-    const img = new Image();
-    img.src = item.src;
-    img.alt = "Image";
-    img.onload = () => {
-      img.classList.add('visible');
-      if (loader) loader.style.display = 'none';
-    };
-    img.onerror = () => {
-      console.error(`❌ 图片加载失败: ${item.src}`);
-      loader.textContent = "⚠️ 图片加载失败";
-    };
-    mediaContainer.appendChild(img);
+// 自动播放音乐
+window.addEventListener('load', () => {
+  // 自动播放，防止某些浏览器拦截
+  setTimeout(() => {
+    audio.play().catch(() => {
+      console.log("Auto-play blocked, user must click first");
+    });
+  }, 100);
+});
+
+// 点击播放按钮
+playBtn.addEventListener('click', () => {
+  audio.play();
+});
+
+// 图片点击放大
+images.forEach((img, index) => {
+  img.addEventListener('click', () => {
+    currentIndex = index;
+    showImage();
   });
+});
+
+function showImage() {
+  const img = images[currentIndex];
+  lightboxImg.src = img.src;
+  lightboxCaption.textContent = img.dataset.info || '';
+  lightbox.classList.remove('hidden');
 }
 
-// 音乐播放控制
-let isPlaying = false;
-musicButton.addEventListener('click', () => {
-  if (isPlaying) {
-    backgroundMusic.pause();
-    musicButton.innerHTML = '🎵 PLAY';
-  } else {
-    backgroundMusic.play();
-    musicButton.innerHTML = '⏸️ PLAYING';
-  }
-  isPlaying = !isPlaying;
+// 切换图片
+nextBtn.addEventListener('click', () => {
+  currentIndex = (currentIndex + 1) % images.length;
+  showImage();
 });
 
-backgroundMusic.addEventListener('ended', () => {
-  isPlaying = false;
-  musicButton.innerHTML = '🎵 PLAY';
+prevBtn.addEventListener('click', () => {
+  currentIndex = (currentIndex - 1 + images.length) % images.length;
+  showImage();
 });
 
-// 图片点击放大查看
-const lightboxOverlay = document.getElementById('lightboxOverlay');
-const lightboxImage = document.querySelector('.lightbox-image');
-const lightboxClose = document.querySelector('.lightbox-close');
-
-mediaContainer.addEventListener('click', (e) => {
-  if (e.target.tagName === 'IMG') {
-    lightboxImage.src = e.target.src;
-    lightboxOverlay.style.display = 'flex';
-  }
+// 关闭查看
+closeBtn.addEventListener('click', () => {
+  lightbox.classList.add('hidden');
 });
 
-lightboxOverlay.addEventListener('click', (e) => {
-  if (e.target === lightboxOverlay || e.target === lightboxClose) {
-    lightboxOverlay.style.display = 'none';
-    lightboxImage.src = '';
-  }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') lightbox.classList.add('hidden');
+  if (e.key === 'ArrowRight') nextBtn.click();
+  if (e.key === 'ArrowLeft') prevBtn.click();
 });
 
-// 初始化
-initializeMedia();
+// 页面加载完成后隐藏 loading
+window.addEventListener('load', () => {
+  document.getElementById('loading-screen').style.display = 'none';
+  document.querySelector('.container').style.display = 'flex';
+});
