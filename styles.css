@@ -1,172 +1,42 @@
-/* 🌿 全局背景 */
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  text-align: center;
-  overflow-x: hidden;
-  max-width: 100vw;
-  background: linear-gradient(to bottom, #d9cbb5, #ffffff 50%, #d9cbb5);
-  background-size: 400% 400%;
-  animation: backgroundFlow 10s infinite alternate ease-in-out;
-}
+/* 原有内容保留，这里添加新内容 */
 
-@keyframes backgroundFlow {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
-}
-
-header, footer, .dynamic-island {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(10px);
-  border: none;
-}
-
-/* LOGO 字体渐变 */
-.logo {
-  font-size: 1.8rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  background: linear-gradient(270deg, #8a6135, #c8a67d, #8a6135);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: textGradient 3s infinite alternate ease-in-out;
-}
-
-.description {
-  font-size: 1.2rem;
-  background: linear-gradient(270deg, #8a6135, #c8a67d, #8a6135);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: textGradient 3s infinite alternate ease-in-out;
-}
-
-@keyframes textGradient {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
-}
-
-/* 灵动岛按钮 */
-.dynamic-island {
-  position: relative;
-  margin: 20px auto;
-  width: fit-content;
-  padding: 10px 20px;
-  border-radius: 30px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, background 0.3s ease;
-}
-
-.dynamic-island:hover {
-  transform: scale(1.05);
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.music-button {
-  padding: 10px 20px;
-  background-color: #8A6135;
-  color: #FFFFFF;
-  border: none;
-  border-radius: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease, background-color 0.3s ease;
-}
-
-.music-button:hover {
-  background-color: #6B4226;
-  transform: scale(1.05);
-}
-
-/* 图片网格 */
-.media-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 8px;
-  padding: 20px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-/* 图片样式与 Tooltip */
-.media-container img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 8px;
-  position: relative;
-  animation: fadeInUp 0.6s forwards;
-}
-
-.media-container img::after {
-  content: attr(src);
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  background: rgba(255, 255, 255, 0.7);
-  color: #333;
-  padding: 3px 6px;
-  border-radius: 6px;
-  font-size: 0.65rem;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.media-container img:hover::after {
-  opacity: 1;
-}
-
-@keyframes fadeInUp {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-/* 移动端固定两列 */
-@media (max-width: 600px) {
-  .media-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Lightbox 样式 */
-.lightbox-overlay {
+#loading-screen {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.75);
+  background: #fefefe;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   z-index: 9999;
 }
 
-.lightbox-image {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 10px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+.spinner {
+  border: 6px solid #e0e0e0;
+  border-top: 6px solid #a87543;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: spin 1s linear infinite;
 }
 
-.lightbox-close {
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Lightbox caption */
+#lightbox-caption {
   position: absolute;
-  top: 30px;
-  right: 50px;
-  font-size: 3rem;
+  top: 16px;
   color: #fff;
-  cursor: pointer;
-  font-weight: bold;
-  transition: color 0.3s;
-}
-
-.lightbox-close:hover {
-  color: #ffcccc;
+  font-size: 1.2rem;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 6px 12px;
+  border-radius: 8px;
+  max-width: 80%;
+  text-align: center;
 }
