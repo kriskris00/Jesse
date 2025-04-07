@@ -2,7 +2,6 @@ const mediaContainer = document.getElementById('mediaContainer');
 const musicButton = document.getElementById('musicButton');
 const backgroundMusic = new Audio('1.mp3');
 
-// 图片数据
 const media = [
   { src: 'selahx1.webp', name: 'REED🌄', date: '2025-01-14' },
   { src: 'DanLevi.webp', name: 'DANLEVI🫶🏻', date: '2025-01-14' },
@@ -61,11 +60,9 @@ function closeLightbox() {
 }
 
 function navigateLightbox(direction) {
-  if (direction === 'prev') {
-    currentIndex = (currentIndex - 1 + media.length) % media.length;
-  } else {
-    currentIndex = (currentIndex + 1) % media.length;
-  }
+  currentIndex = direction === 'prev'
+    ? (currentIndex - 1 + media.length) % media.length
+    : (currentIndex + 1) % media.length;
   openLightbox(currentIndex);
 }
 
