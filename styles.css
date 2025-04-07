@@ -8,6 +8,7 @@ body {
   background-size: 400% 400%;
   animation: backgroundFlow 10s infinite alternate ease-in-out;
   overflow-x: hidden;
+  align-items: center;
 }
 
 @keyframes backgroundFlow {
@@ -72,6 +73,7 @@ header, footer, .dynamic-island {
 .media-container-wrapper {
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 .media-container {
@@ -114,6 +116,7 @@ footer {
   text-align: center;
   padding: 20px 0;
   margin-top: auto;
+  width: 100%;
 }
 
 .lightbox {
@@ -137,6 +140,12 @@ footer {
   max-width: 90%;
   width: 600px;
   text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .lightbox-content img {
@@ -166,6 +175,11 @@ footer {
   padding: 10px;
   cursor: pointer;
   border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.lightbox-nav:hover {
+  transform: translateY(-50%) scale(1.1);
 }
 
 .lightbox-nav.prev {
