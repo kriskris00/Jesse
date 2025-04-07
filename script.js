@@ -1,17 +1,10 @@
 const media = [
   { src: 'selahx1.webp' },
   { src: 'DanLevi.webp' },
-  { src: 'J-1.WEBP' },
-  { src: 'J-2.WEBP' },
-  { src: 'J-3.WEBP' },
-  { src: 'J-4.WEBP' },
-  { src: 'J-5.WEBP' },
-  { src: 'J-6.WEBP' },
-  { src: 'J-7.WEBP' },
-  { src: 'J-8.WEBP' },
-  { src: 'J-9.WEBP' },
-  { src: 'J-10.WEBP' },
-  { src: 'J-11.WEBP' }
+  { src: '1.WEBP' },
+  { src: '2.WEBP' },
+  { src: '3.WEBP' },
+  { src: '4.WEBP' }
 ];
 
 const mediaContainer = document.getElementById('mediaContainer');
