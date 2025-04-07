@@ -1,3 +1,9 @@
+const mediaContainer = document.getElementById('mediaContainer');
+const musicButton = document.getElementById('musicButton');
+const backgroundMusic = new Audio('1.mp3');
+backgroundMusic.loop = true;
+backgroundMusic.volume = 0.6;
+
 const media = [
   { src: 'selahx1.webp' },
   { src: 'DanLevi.webp' },
@@ -7,80 +13,77 @@ const media = [
   { src: '4.WEBP' }
 ];
 
-const mediaContainer = document.getElementById('mediaContainer');
-const loader = document.getElementById('loader');
-const musicButton = document.getElementById('musicButton');
-const backgroundMusic = new Audio('1.mp3');
-backgroundMusic.loop = true;
+function initializeMedia() {
+  const loader = mediaContainer.querySelector('.loader');
+  media.forEach((item, index) => {
+    const img = new Image();
+    img.src = item.src;
+    img.alt = item.src;
+    img.addEventListener('click', () => openLightbox(index));
+    img.onload = () => {
+      if (loader) loader.style.display = 'none';
+    };
+    mediaContainer.appendChild(img);
+  });
+}
 
 let isPlaying = false;
-
-// 自动播放音乐
-window.addEventListener('load', () => {
-  backgroundMusic.play().catch(() => {
-    console.log("⚠️ 用户未互动，自动播放被阻止");
-  });
-});
-
-// 播放按钮控制
 musicButton.addEventListener('click', () => {
-  if (navigator.vibrate) navigator.vibrate(100);
+  navigator.vibrate?.(100);
   if (isPlaying) {
     backgroundMusic.pause();
-    musicButton.textContent = '🎵 PLAY';
+    musicButton.innerHTML = '🎵 PLAY';
   } else {
     backgroundMusic.play();
-    musicButton.textContent = '⏸️ PLAYING';
+    musicButton.innerHTML = '⏸️ PLAYING';
   }
   isPlaying = !isPlaying;
 });
 
-// 图片加载
-function initializeMedia() {
-  loader.style.display = 'block';
-  media.forEach((item, index) => {
-    const img = new Image();
-    img.src = item.src;
-    img.alt = `Image ${index + 1}`;
-    img.addEventListener('click', () => openLightbox(index));
-    img.onload = () => {
-      loader.style.display = 'none';
-      mediaContainer.appendChild(img);
-    };
-  });
-}
+backgroundMusic.addEventListener('ended', () => {
+  isPlaying = false;
+  musicButton.innerHTML = '🎵 PLAY';
+});
 
-// 图片放大功能
+window.addEventListener('DOMContentLoaded', () => {
+  initializeMedia();
+  backgroundMusic.play().catch(() => {});
+  isPlaying = true;
+  musicButton.innerHTML = '⏸️ PLAYING';
+});
+
+// Lightbox Logic
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightboxImage');
-const lightboxCaption = document.getElementById('lightboxCaption');
+const imageName = document.getElementById('imageName');
 let currentIndex = 0;
 
 function openLightbox(index) {
   currentIndex = index;
-  lightbox.classList.remove('hidden');
   updateLightbox();
+  lightbox.classList.remove('hidden');
 }
 
 function updateLightbox() {
-  const current = media[currentIndex];
-  lightboxImg.src = current.src;
-  lightboxCaption.textContent = `${currentIndex + 1} / ${media.length}`;
+  const imgObj = media[currentIndex];
+  lightboxImg.style.opacity = 0;
+  setTimeout(() => {
+    lightboxImg.src = imgObj.src;
+    imageName.textContent = imgObj.src;
+    lightboxImg.style.opacity = 1;
+  }, 100);
 }
 
-document.getElementById('closeBtn').addEventListener('click', () => {
+document.querySelector('.close-btn').addEventListener('click', () => {
   lightbox.classList.add('hidden');
 });
 
-document.getElementById('prevBtn').addEventListener('click', () => {
+document.querySelector('.prev').addEventListener('click', () => {
   currentIndex = (currentIndex - 1 + media.length) % media.length;
   updateLightbox();
 });
 
-document.getElementById('nextBtn').addEventListener('click', () => {
+document.querySelector('.next').addEventListener('click', () => {
   currentIndex = (currentIndex + 1) % media.length;
   updateLightbox();
 });
-
-// 初始化
-initializeMedia();
