@@ -20,8 +20,10 @@
   </div>
 
   <main>
-    <div id="mediaContainer" class="media-container">
-      <div class="loader">LOADING…</div>
+    <div class="media-container-wrapper">
+      <div id="mediaContainer" class="media-container">
+        <div class="loader"></div>
+      </div>
     </div>
   </main>
 
@@ -29,13 +31,15 @@
     <p>&copy; 2025 SelahX</p>
   </footer>
 
-  <!-- Lightbox -->
   <div id="lightbox" class="lightbox hidden">
-    <button class="close-btn">×</button>
-    <button class="nav-btn prev">⟨</button>
-    <img id="lightboxImage" src="" alt="">
-    <div id="imageName"></div>
-    <button class="nav-btn next">⟩</button>
+    <div class="lightbox-content">
+      <span id="lightbox-date" class="lightbox-date"></span>
+      <img id="lightbox-img" />
+      <p id="lightbox-name" class="lightbox-name"></p>
+      <button id="prevBtn" class="lightbox-nav prev">←</button>
+      <button id="nextBtn" class="lightbox-nav next">→</button>
+      <button id="closeBtn" class="close-btn">×</button>
+    </div>
   </div>
 
   <script src="script.js"></script>
