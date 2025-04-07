@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,23 +20,22 @@
   </div>
 
   <main>
-    <div class="loader" id="loader">Loading…</div>
-    <div id="mediaContainer" class="media-container"></div>
+    <div id="mediaContainer" class="media-container">
+      <div class="loader">加载中…</div>
+    </div>
   </main>
 
   <footer>
     <p>&copy; 2025 SelahX</p>
   </footer>
 
-  <!-- 放大查看图片的弹窗 -->
+  <!-- Lightbox -->
   <div id="lightbox" class="lightbox hidden">
-    <div class="lightbox-content">
-      <span class="lightbox-caption" id="lightboxCaption"></span>
-      <img id="lightboxImage" src="" alt="Preview" />
-      <button class="nav-button left" id="prevBtn">←</button>
-      <button class="nav-button right" id="nextBtn">→</button>
-      <span class="close-btn" id="closeBtn">×</span>
-    </div>
+    <button class="close-btn">×</button>
+    <button class="nav-btn prev">⟨</button>
+    <img id="lightboxImage" src="" alt="">
+    <div id="imageName"></div>
+    <button class="nav-btn next">⟩</button>
   </div>
 
   <script src="script.js"></script>
