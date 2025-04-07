@@ -20,6 +20,10 @@ header, footer, .dynamic-island {
   width: 100%;
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* Center the content */
+  justify-content: center;  /* Center vertically */
 }
 
 .logo {
@@ -31,6 +35,8 @@ header, footer, .dynamic-island {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: textGradient 3s infinite alternate ease-in-out;
+  text-align: center;  /* Center the logo */
+  margin: 0;  /* Remove default margins */
 }
 
 .description {
@@ -40,6 +46,8 @@ header, footer, .dynamic-island {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: textGradient 3s infinite alternate ease-in-out;
+  text-align: center;  /* Center the description */
+  margin: 0;  /* Remove default margins */
 }
 
 @keyframes textGradient {
@@ -56,13 +64,14 @@ header, footer, .dynamic-island {
 }
 
 .music-button {
-  padding: 10px 20px;
-  background-color: #8A6135;
+  padding: 12px 30px;  /* Adjust padding */
+  background-color: #8A6135;  /* Ensure background color is applied */
   color: #fff;
-  border: none;
+  border: 2px solid #8A6135;  /* Ensure border color matches background */
   border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
+  font-size: 1.1rem;  /* Adjust font size if needed */
   transition: transform 0.2s ease;
 }
 
@@ -115,8 +124,9 @@ header, footer, .dynamic-island {
 footer {
   text-align: center;
   padding: 20px 0;
-  margin-top: auto;
+  margin-top: 0;  /* Adjust margin-top */
   width: 100%;
+  position: relative;  /* Ensures the footer sticks at the bottom of the page */
 }
 
 .lightbox {
