@@ -1,40 +1,58 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SELAHX</title>
-  <link rel="icon" href="selahx.PNG" type="image/png" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <div class="header-container">
-      <div class="logo">SELAHX</div>
-      <p class="description">HELLO, I GOT PLACES TO BE</p>
-    </div>
-  </header>
-
-  <div class="dynamic-island">
-    <button id="musicButton" class="music-button">🎵 PLAY</button>
+  <!-- Loading 动画 -->
+  <div id="loading-screen">
+    <div class="spinner"></div>
   </div>
 
-  <main>
-    <div id="mediaContainer" class="media-container">
-      <div class="loader">Loading…</div>
-    </div>
-  </main>
+  <div class="container" style="display: none;">
+    <header>
+      <h1>SELAHX</h1>
+      <p>HELLO, I GOT PLACES TO BE</p>
+      <button id="play-btn">🎵 PLAY</button>
+    </header>
 
-  <footer>
-    <p>&copy; 2025 SelahX</p>
-  </footer>
+    <main>
+      <div class="gallery">
+        <!-- 加上 title 作为提示信息 & data-info 作为放大时显示文字 -->
+        <img src="images/1.jpg" title="Sunset Grass" data-info="Sunset Grass" />
+        <img src="images/2.jpg" title="Mountain Goat" data-info="Mountain Goat" />
+        <img src="images/3.jpg" title="Girl with Tree" data-info="Girl with Tree" />
+        <img src="images/4.jpg" title="Field & Girl" data-info="Field & Girl" />
+        <img src="images/5.jpg" title="Digital Fantasy" data-info="Digital Fantasy" />
+        <img src="images/6.jpg" title="Windy Day" data-info="Windy Day" />
+        <img src="images/7.jpg" title="Red Coat Lady" data-info="Red Coat Lady" />
+        <img src="images/8.jpg" title="Angel & Stars" data-info="Angel & Stars" />
+        <img src="images/9.jpg" title="Dark Elegance" data-info="Dark Elegance" />
+        <img src="images/10.jpg" title="White Shawl" data-info="White Shawl" />
+        <img src="images/11.jpg" title="Home Studio" data-info="Home Studio" />
+        <img src="images/12.jpg" title="Coffee Break" data-info="Coffee Break" />
+        <img src="images/13.jpg" title="Flower Girl" data-info="Flower Girl" />
+      </div>
+    </main>
 
-  <!-- Lightbox Modal -->
-  <div id="lightboxOverlay" class="lightbox-overlay" style="display: none;">
-    <span class="lightbox-close">&times;</span>
-    <img class="lightbox-image" src="" alt="Zoomed Image" />
+    <footer>
+      <p>© 2025 SelahX</p>
+    </footer>
   </div>
 
+  <!-- Lightbox -->
+  <div id="lightbox" class="hidden">
+    <span id="close-btn">&times;</span>
+    <div id="lightbox-caption"></div>
+    <img id="lightbox-img" src="" alt="preview" />
+    <button id="prev-btn">⟵</button>
+    <button id="next-btn">⟶</button>
+  </div>
+
+  <audio id="audio" src="1.mp3" autoplay loop></audio>
   <script src="script.js"></script>
 </body>
 </html>
