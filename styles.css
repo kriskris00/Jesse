@@ -4,19 +4,22 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: linear-gradient(to bottom, #d9cbb5, #ffffff 50%, #d9cbb5);
+  text-align: center;
   overflow-x: hidden;
-  align-items: center;
+  max-width: 100vw;
+  background: linear-gradient(to bottom, #d9cbb5, #ffffff 50%, #d9cbb5); /* ✅ 中间白色渐变 */
+  background-size: 400% 400%;
+  animation: backgroundFlow 10s infinite alternate ease-in-out; /* ✅ 让背景动态变化 */
 }
 
+@keyframes backgroundFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
 header, footer, .dynamic-island {
   width: 100%;
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(10px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 .logo {
@@ -28,8 +31,6 @@ header, footer, .dynamic-island {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: textGradient 3s infinite alternate ease-in-out;
-  text-align: center;
-  margin: 0;
 }
 
 .description {
@@ -39,8 +40,6 @@ header, footer, .dynamic-island {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: textGradient 3s infinite alternate ease-in-out;
-  text-align: center;
-  margin: 0;
 }
 
 @keyframes textGradient {
@@ -59,18 +58,16 @@ header, footer, .dynamic-island {
 .music-button {
   padding: 10px 20px;
   background-color: #8A6135;
-  color: #FFFFFF;
+  color: #fff;
   border: none;
   border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease, background-color 0.3s ease;
+  transition: transform 0.2s ease;
 }
 
-.music-button:hover {
-  background-color: #6B4226;
-  transform: scale(1.05);
+.music-button:active {
+  transform: scale(0.95);
 }
 
 .media-container-wrapper {
@@ -118,9 +115,8 @@ header, footer, .dynamic-island {
 footer {
   text-align: center;
   padding: 20px 0;
-  margin-top: 0;
+  margin-top: auto;
   width: 100%;
-  position: relative;
 }
 
 .lightbox {
