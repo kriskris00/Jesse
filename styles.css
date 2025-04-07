@@ -4,10 +4,10 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  text-align: center;
   background: linear-gradient(to bottom, #d9cbb5, #ffffff 50%, #d9cbb5);
   background-size: 400% 400%;
   animation: backgroundFlow 10s infinite alternate ease-in-out;
+  overflow-x: hidden;
 }
 
 @keyframes backgroundFlow {
@@ -19,11 +19,6 @@ header, footer, .dynamic-island {
   width: 100%;
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(10px);
-}
-
-footer {
-  margin-top: auto;
-  padding: 20px;
 }
 
 .logo {
@@ -53,10 +48,10 @@ footer {
 
 .dynamic-island {
   margin: 20px auto;
-  width: fit-content;
   padding: 10px 20px;
   border-radius: 30px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 .music-button {
@@ -74,22 +69,27 @@ footer {
   transform: scale(0.95);
 }
 
+.media-container-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
 .media-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 8px;
+  gap: 10px;
   padding: 20px;
   max-width: 1000px;
-  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .media-container img {
   width: 100%;
   height: auto;
-  object-fit: cover;
   border-radius: 8px;
   cursor: pointer;
-  transition: transform 0.3s;
+  transition: transform 0.3s ease;
 }
 
 .media-container img:hover {
@@ -97,74 +97,111 @@ footer {
 }
 
 .loader {
-  margin: 40px auto;
-  font-size: 1.2em;
-  animation: blink 1s infinite;
+  width: 30px;
+  height: 30px;
+  border: 4px solid #c8a67d;
+  border-top: 4px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 50px auto;
 }
 
-@keyframes blink {
-  50% { opacity: 0.5; }
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
-@media (max-width: 600px) {
-  .media-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
+footer {
+  text-align: center;
+  padding: 20px 0;
+  margin-top: auto;
 }
 
-/* Lightbox styles */
 .lightbox {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.85);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  z-index: 99;
   flex-direction: column;
-  z-index: 1000;
+  padding: 20px;
 }
 
 .lightbox.hidden {
   display: none;
 }
 
-.lightbox img {
-  max-width: 80vw;
-  max-height: 70vh;
-  transition: opacity 0.4s ease-in-out;
+.lightbox-content {
+  position: relative;
+  max-width: 90%;
+  width: 600px;
+  text-align: center;
 }
 
-.lightbox .close-btn,
-.lightbox .nav-btn {
+.lightbox-content img {
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 10px;
+  margin-top: 10px;
+  transition: opacity 0.4s ease;
+  opacity: 1;
+}
+
+.lightbox-content img.fade-out {
+  opacity: 0;
+}
+
+.lightbox-name,
+.lightbox-date {
+  color: #fff;
+  margin: 10px 0;
+  font-size: 1rem;
+}
+
+.lightbox-nav {
   position: absolute;
-  background: none;
-  border: none;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
   color: white;
-  font-size: 2rem;
+  font-size: 1.5rem;
+  border: none;
+  padding: 10px;
   cursor: pointer;
-  user-select: none;
+  border-radius: 50%;
+}
+
+.lightbox-nav.prev {
+  left: -40px;
+}
+
+.lightbox-nav.next {
+  right: -40px;
 }
 
 .close-btn {
-  top: 10px;
-  right: 20px;
-}
-
-.nav-btn.prev {
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.nav-btn.next {
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-#imageName {
+  position: absolute;
+  top: -40px;
+  right: -20px;
+  font-size: 2rem;
   color: white;
-  margin-top: 10px;
-  font-size: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .media-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lightbox-nav.prev {
+    left: 5px;
+  }
+
+  .lightbox-nav.next {
+    right: 5px;
+  }
 }
