@@ -5,15 +5,8 @@ body {
   flex-direction: column;
   min-height: 100vh;
   background: linear-gradient(to bottom, #d9cbb5, #ffffff 50%, #d9cbb5);
-  background-size: 400% 400%;
-  animation: backgroundFlow 10s infinite alternate ease-in-out;
   overflow-x: hidden;
   align-items: center;
-}
-
-@keyframes backgroundFlow {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
 }
 
 header, footer, .dynamic-island {
@@ -22,8 +15,8 @@ header, footer, .dynamic-island {
   backdrop-filter: blur(10px);
   display: flex;
   flex-direction: column;
-  align-items: center;  /* Center the content */
-  justify-content: center;  /* Center vertically */
+  align-items: center;
+  justify-content: center;
 }
 
 .logo {
@@ -35,8 +28,8 @@ header, footer, .dynamic-island {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: textGradient 3s infinite alternate ease-in-out;
-  text-align: center;  /* Center the logo */
-  margin: 0;  /* Remove default margins */
+  text-align: center;
+  margin: 0;
 }
 
 .description {
@@ -46,8 +39,8 @@ header, footer, .dynamic-island {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: textGradient 3s infinite alternate ease-in-out;
-  text-align: center;  /* Center the description */
-  margin: 0;  /* Remove default margins */
+  text-align: center;
+  margin: 0;
 }
 
 @keyframes textGradient {
@@ -125,9 +118,9 @@ header, footer, .dynamic-island {
 footer {
   text-align: center;
   padding: 20px 0;
-  margin-top: 0;  /* Adjust margin-top */
+  margin-top: 0;
   width: 100%;
-  position: relative;  /* Ensures the footer sticks at the bottom of the page */
+  position: relative;
 }
 
 .lightbox {
