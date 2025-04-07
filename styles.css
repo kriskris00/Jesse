@@ -64,19 +64,20 @@ header, footer, .dynamic-island {
 }
 
 .music-button {
-  padding: 12px 30px;  /* Adjust padding */
-  background-color: #8A6135;  /* Ensure background color is applied */
-  color: #fff;
-  border: 2px solid #8A6135;  /* Ensure border color matches background */
+  padding: 10px 20px;
+  background-color: #8A6135;
+  color: #FFFFFF;
+  border: none;
   border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
-  font-size: 1.1rem;  /* Adjust font size if needed */
-  transition: transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
-.music-button:active {
-  transform: scale(0.95);
+.music-button:hover {
+  background-color: #6B4226;
+  transform: scale(1.05);
 }
 
 .media-container-wrapper {
