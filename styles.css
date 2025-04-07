@@ -7,9 +7,8 @@ body {
   text-align: center;
   overflow-x: hidden;
   max-width: 100vw;
-  background: linear-gradient(to bottom, #d9cbb5, #ffffff 50%, #d9cbb5); /* ✅ 中间白色渐变 */
-  background-size: 400% 400%;
-  animation: backgroundFlow 10s infinite alternate ease-in-out; /* ✅ 让背景动态变化 */
+  background: linear-gradient(to bottom, #ffffff, #ffffff 50%, #ffe4b9);
+  animation: backgroundFlow 10s infinite alternate ease-in-out; 
 }
 
 @keyframes backgroundFlow {
@@ -48,22 +47,35 @@ header, footer, .dynamic-island {
 }
 
 .dynamic-island {
-  margin: 20px auto;
+  position: relative;
+  margin: 10px auto ;
+  width: fit-content;
   padding: 10px 20px;
   border-radius: 30px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.dynamic-island:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .music-button {
   padding: 10px 20px;
   background-color: #8A6135;
-  color: #fff;
+  color: #FFFFFF;
   border: none;
   border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.music-button:hover {
+  background-color: #6B4226;
+  transform: scale(1.05);
 }
 
 .music-button:active {
@@ -114,21 +126,23 @@ header, footer, .dynamic-island {
 
 footer {
   text-align: center;
-  padding: 20px 0;
   margin-top: auto;
-  width: 100%;
 }
 
 .lightbox {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.26); 
+  backdrop-filter: blur(24px);   
+  -webkit-backdrop-filter: blur(24px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 99;
   flex-direction: column;
   padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2); 
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);   
 }
 
 .lightbox.hidden {
@@ -168,34 +182,49 @@ footer {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1); 
+  backdrop-filter: blur(10px);  
+  -webkit-backdrop-filter: blur(10px); 
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  padding: 10px;
   color: white;
   font-size: 1.5rem;
-  border: none;
-  padding: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  border-radius: 50%;
-  transition: transform 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .lightbox-nav:hover {
   transform: translateY(-50%) scale(1.1);
 }
 
+.lightbox-nav.prev,
+.lightbox-nav.next {
+  padding: 8px 12px;
+  font-size: 18px;
+}
+
 .lightbox-nav.prev {
-  left: -40px;
+  left: 10px; 
 }
 
 .lightbox-nav.next {
-  right: -40px;
+  right: 10px; 
+}
+
+.lightbox-nav.prev:hover,
+.lightbox-nav.next:hover {
+  background: rgba(255, 255, 255, 0.2); 
+  transform: translateY(-50%) scale(1.1);
 }
 
 .close-btn {
   position: absolute;
-  top: -40px;
-  right: -20px;
+  top: -20px;
+  right: -30px; 
   font-size: 2rem;
-  color: white;
+  color: #ffffff;
   background: none;
   border: none;
   cursor: pointer;
@@ -207,10 +236,14 @@ footer {
   }
 
   .lightbox-nav.prev {
-    left: 5px;
+    left: 10px; 
   }
 
   .lightbox-nav.next {
-    right: 5px;
+    right: 10px; 
   }
+
+  .close-btn {
+    top: -10px;
+    right: -20px; 
 }
