@@ -72,7 +72,7 @@ function openLightbox(index) {
 function updateLightbox() {
   const current = media[currentIndex];
   lightboxImg.src = current.src;
-  lightboxCaption.textContent = `图片 ${currentIndex + 1} / ${media.length}`;
+  lightboxCaption.textContent = `${currentIndex + 1} / ${media.length}`;
 }
 
 document.getElementById('closeBtn').addEventListener('click', () => {
