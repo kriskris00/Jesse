@@ -1,46 +1,45 @@
+<!-- 1.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SELAHX</title>
-  <link rel="icon" href="IMG_2576.jpeg" type="image/png" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <title>Liquid Glass 风格示例</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <div class="header-container">
-      <div class="logo">SELAHX</div>
-      <p class="description">HELLO, I GOT PLACES TO BE</p>
-    </div>
-  </header>
-
-  <div class="dynamic-island">
-    <button id="musicButton" class="music-button">🎵 PLAY</button>
+  
+  <!-- 播放器 (Player) -->
+  <div class="player-container">
+    <button class="control-button play">▶</button>
+    <button class="control-button pause">⏸</button>
+    <!-- 音频元素，可添加 src 播放音频 -->
+    <audio id="audio" src="1.mp3"></audio>
   </div>
 
-  <main>
-    <div class="media-container-wrapper">
-      <div id="mediaContainer" class="media-container">
-        <div class="loader"></div>
-      </div>
-    </div>
-  </main>
+  <!-- 加载转圈动画 (Loader) -->
+  <div id="loader" class="loader-container hidden">
+    <div class="loader"></div>
+  </div>
 
-  <footer>
-    <p>&copy; 2025 SelahX</p>
-  </footer>
+  <!-- 图片画廊 (Image Gallery) -->
+  <div class="gallery">
+    <div class="image-card"><img src="https://via.placeholder.com/300x200?text=Image1" alt="Image1"></div>
+    <div class="image-card"><img src="https://via.placeholder.com/300x200?text=Image2" alt="Image2"></div>
+    <div class="image-card"><img src="https://via.placeholder.com/300x200?text=Image3" alt="Image3"></div>
+  </div>
 
-  <div id="lightbox" class="lightbox hidden">
+  <!-- Lightbox 弹出层 (Lightbox) -->
+  <div id="lightbox" class="lightbox-overlay hidden">
     <div class="lightbox-content">
-      <span id="lightbox-date" class="lightbox-date"></span>
-      <img id="lightbox-img" />
-      <p id="lightbox-name" class="lightbox-name"></p>
-      <button id="prevBtn" class="lightbox-nav prev">←</button>
-      <button id="nextBtn" class="lightbox-nav next">→</button>
-      <button id="closeBtn" class="close-btn">×</button>
+      <span class="lightbox-close">&#x2715;</span>
+      <img id="lightbox-img" src="" alt="Expanded">
     </div>
   </div>
+
+  <!-- 页脚 (Footer) -->
+  <footer class="footer">
+    &copy; SelahX 2025
+  </footer>
 
   <script src="script.js"></script>
 </body>
