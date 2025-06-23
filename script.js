@@ -1,73 +1,36 @@
-const mediaContainer = document.getElementById('mediaContainer');
-const musicButton = document.getElementById('musicButton');
-const backgroundMusic = new Audio('1.mp3');
+// script.js
 
-const media = [
-  { src: 'selahx1.webp', name: 'REED🌄', date: '2025-01-14' },
-  { src: 'DanLevi.webp', name: 'DANLEVI🫶🏻', date: '2025-01-14' },
-  { src: '1.WEBP', name: 'FOOTPATH🚶🏼‍♀️‍➡️', date: '2025-04-07' },
-  { src: '2.WEBP', name: 'WITHERED TREE🌳', date: '2025-04-07' },
-  { src: '3.WEBP', name: 'PEACH BLOSSOM 1🌸', date: '2025-04-07' },
-  { src: '4.WEBP', name: 'PEACH BLOSSOM 2🌸', date: '2025-04-07' }
-];
-
-const loader = mediaContainer.querySelector('.loader');
-let currentIndex = 0;
-
-function initializeMedia() {
-  media.forEach((item, index) => {
-    const img = new Image();
-    img.src = item.src;
-    img.alt = item.name;
-    img.onload = () => {
-      loader.style.display = 'none';
-    };
-    img.onclick = () => openLightbox(index);
-    mediaContainer.appendChild(img);
-  });
-}
-
-musicButton.addEventListener('click', () => {
-  navigator.vibrate?.(100);
-  if (backgroundMusic.paused) {
-    backgroundMusic.play();
-    musicButton.textContent = '⏸️ PLAYING';
-  } else {
-    backgroundMusic.pause();
-    musicButton.textContent = '🎵 PLAY';
-  }
-});
-
-backgroundMusic.addEventListener('ended', () => {
-  musicButton.textContent = '🎵 PLAY';
-});
-
-function openLightbox(index) {
-  currentIndex = index;
+document.addEventListener('DOMContentLoaded', function() {
+  // Lightbox: 点击图片打开弹窗
   const lightbox = document.getElementById('lightbox');
-  const img = document.getElementById('lightbox-img');
-  const name = document.getElementById('lightbox-name');
-  const date = document.getElementById('lightbox-date');
-  const item = media[currentIndex];
-  img.src = item.src;
-  name.textContent = item.name;
-  date.textContent = item.date;
-  lightbox.classList.remove('hidden');
-}
+  const lightboxImg = document.getElementById('lightbox-img');
+  const closeBtn = document.querySelector('.lightbox-close');
+  document.querySelectorAll('.image-card img').forEach(img => {
+    img.addEventListener('click', () => {
+      lightboxImg.src = img.src;        // 设置弹窗图片
+      lightbox.classList.remove('hidden'); // 显示弹窗
+    });
+  });
+  closeBtn.addEventListener('click', () => {
+    lightbox.classList.add('hidden');    // 关闭弹窗
+  });
+  lightbox.addEventListener('click', function(e) {
+    if (e.target === this) {            // 点击遮罩层关闭弹窗
+      this.classList.add('hidden');
+    }
+  });
 
-function closeLightbox() {
-  document.getElementById('lightbox').classList.add('hidden');
-}
-
-function navigateLightbox(direction) {
-  currentIndex = direction === 'prev'
-    ? (currentIndex - 1 + media.length) % media.length
-    : (currentIndex + 1) % media.length;
-  openLightbox(currentIndex);
-}
-
-document.getElementById('closeBtn').addEventListener('click', closeLightbox);
-document.getElementById('prevBtn').addEventListener('click', () => navigateLightbox('prev'));
-document.getElementById('nextBtn').addEventListener('click', () => navigateLightbox('next'));
-
-initializeMedia();
+  // 播放器控制: 模拟加载过程
+  const loader = document.getElementById('loader');
+  document.querySelector('.play').addEventListener('click', () => {
+    loader.classList.remove('hidden');    // 显示加载动画
+    setTimeout(() => {
+      loader.classList.add('hidden');     // 隐藏加载动画
+      // 这里可以添加音频播放逻辑: document.getElementById('audio').play();
+    }, 1000);
+  });
+  document.querySelector('.pause').addEventListener('click', () => {
+    loader.classList.add('hidden');       // 停止加载动画
+    // 这里可以添加音频暂停逻辑: document.getElementById('audio').pause();
+  });
+});
