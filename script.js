@@ -4,11 +4,7 @@ const backgroundMusic = new Audio('1.mp3');
 
 const media = [
   { src: 'selahx1.webp', name: 'REED🌄', date: '2025-01-14' },
-  { src: 'DanLevi.webp', name: 'DANLEVI🫶🏻', date: '2025-01-14' },
-  { src: '1.WEBP', name: 'FOOTPATH🚶🏼‍♀️‍➡️', date: '2025-04-07' },
-  { src: '2.WEBP', name: 'WITHERED TREE🌳', date: '2025-04-07' },
-  { src: '3.WEBP', name: 'PEACH BLOSSOM 1🌸', date: '2025-04-07' },
-  { src: '4.WEBP', name: 'PEACH BLOSSOM 2🌸', date: '2025-04-07' }
+  { src: 'DanLevi.webp', name: 'DANLEVI🫶🏻', date: '2025-01-14' }
 ];
 
 const loader = mediaContainer.querySelector('.loader');
