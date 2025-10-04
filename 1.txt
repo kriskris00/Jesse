@@ -1,3 +1,6 @@
+*更新时间：2025-10-04（此段不复制）*
+
+vless=57.158.24.57:443, method=none, password=11509f91-ea72-4a0e-bc00-be6361685b1e, obfs=wss, obfs-host=lisa.selahx.com, obfs-uri=/lisa, tls-verification=false, fast-open=false, udp-relay=false, tag=hk
 vless=rocket.selahx.com:443, method=none, password=49c9c5af-6a34-40ca-a376-07d4b03233ca, obfs=wss, obfs-uri=/jesse, tls-verification=false, fast-open=false, udp-relay=false, tag=1
 vless=1.cf.cname.vvhan.com:443, method=none, password=49c9c5af-6a34-40ca-a376-07d4b03233ca, obfs=wss, obfs-uri=/jesse, obfs-host=rocket.selahx.com, tls-verification=false, fast-open=false, udp-relay=false, tag=2
 vless=cloudflare.jp:443, method=none, password=49c9c5af-6a34-40ca-a376-07d4b03233ca, obfs=wss, obfs-uri=/jesse, obfs-host=rocket.selahx.com, tls-verification=false, fast-open=false, udp-relay=false, tag=3
