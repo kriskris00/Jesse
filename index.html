@@ -3,119 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>SelahX | Perfect Droplets</title>
+    <title>SelahX</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            /* 背景：亮银灰渐变，纯净高级 */
+            background: radial-gradient(circle at 50% 50%, #e8e8e8 0%, #999999 100%);
+            font-family: 'Arial', sans-serif;
+            user-select: none;
+            cursor: crosshair;
+        }
 
-<style>
-/* -----基础----- */
-body {
-    margin: 0;
-    overflow: hidden;
-    background: radial-gradient(circle at 50% 50%, #e8e8e8 0%, #999999 100%);
-    font-family: 'Arial', sans-serif;
-    user-select: none;
-    cursor: crosshair;
-}
+        #canvas-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+        }
 
-html, body {
-    touch-action: none;
-}
+        .ui-layer {
+            position: absolute;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
 
-/* -----加载文字----- */
-#loader {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    color: #fff;
-    font-size: 3.5vw;
-    letter-spacing: 0.8vw;
-    font-weight: 900;
-    text-shadow: 0 1px 5px rgba(0,0,0,0.2);
-    pointer-events: none;
-}
+        #loader {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 14px;
+            letter-spacing: 6px;
+            font-weight: 900;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.2);
+        }
 
-/* -----控制按钮容器----- */
-.controls {
-    position: absolute;
-    bottom: 8vh;
-    left: 50%;
-    transform: translateX(-50%);
-    pointer-events: auto;
-    transition: transform 0.2s;
-}
+        /* 按钮：圆润液态风格 */
+        .controls {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: auto;
+            transition: transform 0.2s;
+        }
 
-/* -----水银球形按钮----- */
-.drop-btn {
-    width: 18vw;
-    height: 18vw;
-    max-width: 70px;
-    max-height: 70px;
-    min-width: 55px;
-    min-height: 55px;
+        .drop-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            /* 完美的水银球质感 */
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #dcdcdc 40%, #888888 100%);
+            box-shadow: 
+                0 10px 25px rgba(0,0,0,0.2),
+                inset 0 5px 10px rgba(255,255,255,1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
 
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, #ffffff 0%, #dcdcdc 40%, #888888 100%);
-    box-shadow:
-        0 10px 25px rgba(0,0,0,0.2),
-        inset 0 5px 10px rgba(255,255,255,1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    position: relative;
-    border: 1px solid rgba(255,255,255,0.6);
-}
+        .drop-btn:hover { transform: scale(1.05); }
+        .drop-btn:active { transform: scale(0.95); }
 
-.drop-btn:active { transform: scale(0.92); }
+        .play-icon {
+            width: 0; height: 0;
+            border-style: solid;
+            border-width: 10px 0 10px 18px;
+            border-color: transparent transparent transparent #333;
+            margin-left: 6px;
+            filter: drop-shadow(0 1px 0 rgba(255,255,255,0.5));
+        }
 
-/* 播放按钮图标 */
-.play-icon {
-    width: 0; height: 0;
-    border-style: solid;
-    border-width: 2.8vw 0 2.8vw 5vw;
-    border-color: transparent transparent transparent #333;
-    margin-left: 1.2vw;
-    filter: drop-shadow(0 1px 0 rgba(255,255,255,0.5));
-}
+        .playing .drop-btn { animation: pulse 2s infinite ease-in-out; }
+        .playing .play-icon { border: none; width: 14px; height: 14px; background: #333; margin: 0; border-radius: 2px; }
 
-.playing .drop-btn {
-    animation: pulse 2s infinite ease-in-out;
-}
-
-.playing .play-icon {
-    border: none;
-    width: 4vw;
-    height: 4vw;
-    max-width: 14px;
-    max-height: 14px;
-    background: #333;
-    margin: 0;
-    border-radius: 2px;
-}
-
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6); }
-    70% { box-shadow: 0 0 0 10vw rgba(255, 255, 255, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
-}
-
-/* 刘海屏安全区适配 */
-@supports (padding: env(safe-area-inset-bottom)) {
-    .controls {
-        bottom: calc(env(safe-area-inset-bottom) + 4vh);
-    }
-}
-</style>
-
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6); }
+            70% { box-shadow: 0 0 0 25px rgba(255, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+    </style>
 </head>
 <body>
 
     <audio id="bg-music" loop crossorigin="anonymous">
+        <!-- 你的音乐链接 -->
         <source src="xxx.mp3" type="audio/mpeg">
     </audio>
 
     <div class="ui-layer">
         <div id="loader">FORMING DROPLETS...</div>
-
         <div class="controls" onclick="toggleAudio()">
             <div class="drop-btn">
                 <div class="play-icon"></div>
@@ -125,310 +106,318 @@ html, body {
 
     <div id="canvas-container"></div>
 
-<script type="importmap">
-{
-    "imports": {
-        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-    }
-}
-</script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
 
-<script type="module">
-import * as THREE from 'three';
-import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+    <script type="module">
+        import * as THREE from 'three';
+        import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+        import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+        import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-/* ========== 场景基础设置 ========== */
-const scene = new THREE.Scene();
-scene.fog = new THREE.Fog(0xb0b0b0, 20, 60);
+        // 1. 场景设置
+        const scene = new THREE.Scene();
+        // 雾气设置：亮灰，融合背景
+        const fogColor = 0xb0b0b0; 
+        scene.fog = new THREE.Fog(fogColor, 20, 60);
 
-const camera = new THREE.PerspectiveCamera(
-    45,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    100
-);
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 4, 18);
+        camera.lookAt(0, 0, 0);
 
-function autoFitCamera() {
-    if (window.innerWidth < 768) {
-        camera.position.set(0, 3, 22); // 手机：拉远一些
-    } else {
-        camera.position.set(0, 4, 18); // 电脑：原来的距离
-    }
-    camera.lookAt(0, 0, 0);
-}
-autoFitCamera();
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        // 高曝光 + ACESFilmic = 真实且明亮的金属
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.3; 
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.3;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        // 2. 环境贴图 (柔光+条纹混合，保证亮度和细节)
+        const pmremGenerator = new THREE.PMREMGenerator(renderer);
+        
+        function createLiquidStudioTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024; canvas.height = 1024;
+            const ctx = canvas.getContext('2d');
+            
+            // 背景：深灰
+            ctx.fillStyle = '#222222'; ctx.fillRect(0, 0, 1024, 1024);
+            
+            // 顶部大柔光
+            const grdTop = ctx.createLinearGradient(0, 0, 0, 300);
+            grdTop.addColorStop(0, '#ffffff');
+            grdTop.addColorStop(1, '#666666');
+            ctx.fillStyle = grdTop; ctx.fillRect(0, 0, 1024, 300);
 
-document.getElementById('canvas-container').appendChild(renderer.domElement);
+            // 中间流线型反光 (模仿液态)
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.moveTo(0, 400);
+            ctx.bezierCurveTo(300, 350, 700, 550, 1024, 450);
+            ctx.lineTo(1024, 500);
+            ctx.bezierCurveTo(700, 600, 300, 400, 0, 450);
+            ctx.fill();
+            
+            // 底部反光
+            const grdBot = ctx.createLinearGradient(0, 800, 0, 1024);
+            grdBot.addColorStop(0, '#000000');
+            grdBot.addColorStop(1, '#aaaaaa');
+            ctx.fillStyle = grdBot; ctx.fillRect(0, 800, 1024, 224);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.mapping = THREE.EquirectangularReflectionMapping;
+            return texture;
+        }
 
-/* ========== 环境反射贴图 ========== */
-const pmrem = new THREE.PMREMGenerator(renderer);
+        const envMap = pmremGenerator.fromEquirectangular(createLiquidStudioTexture()).texture;
+        scene.environment = envMap;
 
-function createLiquidTexture() {
-    const c = document.createElement('canvas');
-    c.width = 1024; c.height = 1024;
-    const ctx = c.getContext('2d');
+        // 3. 光照 (补光)
+        const dirLight = new THREE.DirectionalLight(0xffffff, 2.0);
+        dirLight.position.set(5, 10, 5);
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.width = 2048;
+        dirLight.shadow.mapSize.height = 2048;
+        scene.add(dirLight);
+        
+        // 半球光：提亮暗部
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0xaaaaaa, 1.0);
+        scene.add(hemiLight);
 
-    ctx.fillStyle = '#222'; 
-    ctx.fillRect(0, 0, 1024, 1024);
-
-    const g1 = ctx.createLinearGradient(0, 0, 0, 300);
-    g1.addColorStop(0, '#fff');
-    g1.addColorStop(1, '#666');
-    ctx.fillStyle = g1;
-    ctx.fillRect(0, 0, 1024, 300);
-
-    ctx.fillStyle = '#fff';
-    ctx.beginPath();
-    ctx.moveTo(0, 400);
-    ctx.bezierCurveTo(300, 350, 700, 550, 1024, 450);
-    ctx.lineTo(1024, 500);
-    ctx.bezierCurveTo(700, 600, 300, 400, 0, 450);
-    ctx.fill();
-
-    const g2 = ctx.createLinearGradient(0, 800, 0, 1024);
-    g2.addColorStop(0, '#000');
-    g2.addColorStop(1, '#aaa');
-    ctx.fillStyle = g2;
-    ctx.fillRect(0, 800, 1024, 224);
-
-    const tex = new THREE.CanvasTexture(c);
-    tex.mapping = THREE.EquirectangularReflectionMapping;
-    return tex;
-}
-scene.environment = pmrem.fromEquirectangular(createLiquidTexture()).texture;
-
-/* ========== 光源 ========== */
-const dirLight = new THREE.DirectionalLight(0xffffff, 2.0);
-dirLight.position.set(5, 10, 5);
-dirLight.castShadow = true;
-scene.add(dirLight);
-
-const hemiLight = new THREE.HemisphereLight(0xffffff, 0xaaaaaa, 1.0);
-scene.add(hemiLight);
-
-/* ========== 地面波动金属液体 ========== */
-const riverGeo = new THREE.PlaneGeometry(120, 120, 100, 100);
-const chromeMat = new THREE.MeshPhysicalMaterial({
-    color: 0xffffff,
-    metalness: 1.0,
-    roughness: 0.05,
-    envMapIntensity: 2.0,
-    clearcoat: 1.0,
-    clearcoatRoughness: 0.0
-});
-
-const river = new THREE.Mesh(riverGeo, chromeMat);
-river.rotation.x = -Math.PI / 2;
-river.position.y = -4;
-river.receiveShadow = true;
-scene.add(river);
-
-/* ========== Logo + 粒子 ========== */
-let textMesh, dropsMesh;
-let dropData = [];
-let isExploded = false;
-const dummy = new THREE.Object3D();
-
-new FontLoader().load(
-    'https://threejs.org/examples/fonts/helvetiker_bold.typeface.json',
-    (font) => {
-        document.getElementById('loader').style.display = 'none';
-
-        const textGeo = new TextGeometry('SelahX', {
-            font,
-            size: 2.8,
-            height: 0.5,
-            curveSegments: 16,
-            bevelEnabled: true,
-            bevelThickness: 0.1,
-            bevelSize: 0.05,
-            bevelSegments: 5
+        // 4. 材质：液态镀铬 (Perfect Chrome)
+        const chromeMat = new THREE.MeshPhysicalMaterial({
+            color: 0xffffff,     // 纯白基底
+            metalness: 1.0,      // 全金属
+            roughness: 0.05,     // 极其光滑
+            envMapIntensity: 2.0,// 强反射
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.0
         });
-        textGeo.center();
 
-        textMesh = new THREE.Mesh(textGeo, chromeMat);
-        textMesh.castShadow = true;
-        scene.add(textMesh);
+        // 5. 背景：水银河 (Liquid Mercury)
+        // 适当的分段数，保证波浪平滑
+        const riverGeo = new THREE.PlaneGeometry(120, 120, 100, 100);
+        const river = new THREE.Mesh(riverGeo, chromeMat);
+        river.rotation.x = -Math.PI / 2;
+        river.position.y = -4;
+        river.receiveShadow = true;
+        scene.add(river);
 
-        /* ⭐⭐⭐ 移动端自动缩小 LOGO 75% ⭐⭐⭐ */
-        if (window.innerWidth < 768) {
-            textMesh.scale.set(0.65, 0.65, 0.65);
-        }
+        // 6. Logo & 完美圆球粒子系统
+        const loader = new FontLoader();
+        let textMesh;
+        let dropsMesh; // InstancedMesh
+        let dropData = [];
+        let isExploded = false;
+        const dummy = new THREE.Object3D();
 
-        const pos = textGeo.attributes.position;
-        const count = Math.floor(pos.count / 2);
+        loader.load('https://threejs.org/examples/fonts/helvetiker_bold.typeface.json', function (font) {
+            document.getElementById('loader').style.display = 'none';
 
-        const dropGeo = new THREE.SphereGeometry(0.12, 16, 16);
-        dropsMesh = new THREE.InstancedMesh(dropGeo, chromeMat, count);
-        dropsMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-        dropsMesh.visible = false;
-
-        let idx = 0;
-        for (let i = 0; i < pos.count; i += 2) {
-            const x = pos.getX(i);
-            const y = pos.getY(i);
-            const z = pos.getZ(i);
-
-            dummy.position.set(x, y, z);
-            dummy.updateMatrix();
-            dropsMesh.setMatrixAt(idx, dummy.matrix);
-
-            dropData.push({
-                originalPos: new THREE.Vector3(x, y, z),
-                currentPos: new THREE.Vector3(x, y, z),
-                velocity: new THREE.Vector3(
-                    (Math.random() - 0.5) * 0.5,
-                    (Math.random() - 0.5) * 0.5,
-                    (Math.random() - 0.5) * 0.5 + 0.3
-                ),
-                noiseOffset: Math.random() * 100,
-                scale: 0.5 + Math.random() * 0.8
+            // A. 实体文字
+            const textGeo = new TextGeometry('SelahX', {
+                font: font, size: 2.8, height: 0.5,
+                curveSegments: 16, bevelEnabled: true, bevelThickness: 0.1, bevelSize: 0.05, bevelSegments: 5
             });
-            idx++;
+            textGeo.center();
+            textMesh = new THREE.Mesh(textGeo, chromeMat);
+            textMesh.castShadow = true;
+            textMesh.receiveShadow = true;
+            scene.add(textMesh);
+
+            // B. 粒子系统：圆球 (SphereGeometry)
+            const posAttr = textGeo.attributes.position;
+            const count = posAttr.count;
+            // 采样率：每2个顶点取1个，保持密集感
+            const instanceCount = Math.floor(count / 2);
+            
+            // 使用 SphereGeometry：这才是你想要的“圆球”
+            // 16x16 的分段数足够让它在小尺寸下看起来完美圆润
+            const dropGeo = new THREE.SphereGeometry(0.12, 16, 16);
+            
+            dropsMesh = new THREE.InstancedMesh(dropGeo, chromeMat, instanceCount);
+            dropsMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+            dropsMesh.castShadow = true;
+            dropsMesh.receiveShadow = true;
+            dropsMesh.visible = false;
+
+            let idx = 0;
+            for(let i=0; i<count; i+=2) {
+                if(idx >= instanceCount) break;
+                
+                const x = posAttr.getX(i);
+                const y = posAttr.getY(i);
+                const z = posAttr.getZ(i);
+
+                dummy.position.set(x, y, z);
+                dummy.updateMatrix();
+                dropsMesh.setMatrixAt(idx, dummy.matrix);
+
+                dropData.push({
+                    originalPos: new THREE.Vector3(x, y, z),
+                    currentPos: new THREE.Vector3(x, y, z),
+                    // 爆炸参数：向四面八方飞溅
+                    velocity: new THREE.Vector3(
+                        (Math.random()-0.5) * 0.5,
+                        (Math.random()-0.5) * 0.5,
+                        (Math.random()-0.5) * 0.5 + 0.3
+                    ),
+                    // 扰动参数 (Turbulence)
+                    noiseOffset: Math.random() * 100,
+                    scale: 0.5 + Math.random() * 0.8 // 大小不一的水银珠
+                });
+                idx++;
+            }
+
+            dropsMesh.position.copy(textMesh.position);
+            dropsMesh.rotation.copy(textMesh.rotation);
+            scene.add(dropsMesh);
+        });
+
+        // 7. 交互
+        function explode() {
+            if(!textMesh || !dropsMesh || isExploded) return;
+            isExploded = true;
+            
+            textMesh.visible = false;
+            dropsMesh.visible = true;
+            dropsMesh.rotation.copy(textMesh.rotation);
+
+            // 重置速度
+            dropData.forEach(d => {
+                const force = 0.5 + Math.random() * 0.8;
+                d.velocity.set(
+                    (Math.random()-0.5) * force,
+                    (Math.random()-0.5) * force,
+                    (Math.random()-0.5) * force + 0.3
+                );
+            });
         }
 
-        dropsMesh.position.copy(textMesh.position);
-        scene.add(dropsMesh);
-    }
-);
+        function restore() {
+            if(!isExploded) return;
+            isExploded = false;
+        }
 
-/* ========== 粒子爆炸与恢复 ========== */
-function explode() {
-    if (!textMesh || !dropsMesh || isExploded) return;
-    isExploded = true;
+        window.addEventListener('mousedown', (e) => {
+            if(e.target.closest('.controls')) return;
+            explode();
+        });
+        window.addEventListener('mouseup', restore);
 
-    textMesh.visible = false;
-    dropsMesh.visible = true;
+        // 8. 动画循环
+        let time = 0;
+        let isPlaying = false;
 
-    dropData.forEach((d) => {
-        const f = 0.5 + Math.random() * 0.8;
-        d.velocity.set(
-            (Math.random() - 0.5) * f,
-            (Math.random() - 0.5) * f,
-            (Math.random() - 0.5) * f + 0.3
-        );
-    });
-}
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.015;
 
-function restore() {
-    if (!isExploded) return;
-    isExploded = false;
-}
+            // A. 水银河波动优化 (Viscous Flow)
+            if(river) {
+                const pos = river.geometry.attributes.position;
+                for(let i=0; i<pos.count; i++) {
+                    const x = pos.getX(i);
+                    const y = pos.getY(i);
+                    
+                    // 算法优化：
+                    // 使用较低的频率 (0.15) 模拟表面张力大的液体（如水银）
+                    // 只有宽阔、平滑的起伏，去掉所有细碎的噪波
+                    const z = Math.sin(x * 0.15 + time * 0.5) * 0.6 + 
+                              Math.cos(y * 0.1 + time * 0.4) * 0.4;
+                    
+                    pos.setZ(i, z);
+                }
+                pos.needsUpdate = true;
+                // 关键：必须每帧重算法线，否则光影是平的，没有流动感
+                // 限制计算频率以优化性能，但保持视觉流畅
+                river.geometry.computeVertexNormals();
+            }
 
-/* ========== 移动端触控优化 ========== */
-window.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('.controls')) return;
-    explode();
-});
-window.addEventListener('pointerup', restore);
+            // B. 实体/粒子逻辑
+            if(textMesh && dropsMesh) {
+                const rotSpeed = isPlaying ? 0.02 : 0.005;
+                textMesh.rotation.y += rotSpeed;
+                dropsMesh.rotation.y = textMesh.rotation.y;
 
-/* ========== 动画循环 ========== */
-let time = 0;
-let isPlaying = false;
+                if(dropsMesh.visible) {
+                    let maxDist = 0;
 
-function animate() {
-    requestAnimationFrame(animate);
-    time += 0.015;
+                    for(let i=0; i<dropData.length; i++) {
+                        const d = dropData[i];
 
-    // 地面波纹
-    const pos = river.geometry.attributes.position;
-    for (let i = 0; i < pos.count; i++) {
-        const x = pos.getX(i);
-        const y = pos.getY(i);
+                        if(isExploded) {
+                            // 爆炸移动
+                            d.currentPos.add(d.velocity);
+                            d.velocity.multiplyScalar(0.96); // 阻力
 
-        const z =
-            Math.sin(x * 0.15 + time * 0.5) * 0.6 +
-            Math.cos(y * 0.1 + time * 0.4) * 0.4;
+                            // 悬浮扰动 (Turbulence)
+                            // 模拟液体在零重力下的缓慢漂浮
+                            d.currentPos.x += Math.sin(time * 2 + d.noiseOffset) * 0.005;
+                            d.currentPos.y += Math.cos(time * 1.5 + d.noiseOffset) * 0.005;
+                            
+                        } else {
+                            // 回归 (Magnetic)
+                            d.currentPos.lerp(d.originalPos, 0.12);
+                            
+                            const dist = d.currentPos.distanceTo(d.originalPos);
+                            if(dist > maxDist) maxDist = dist;
+                        }
 
-        pos.setZ(i, z);
-    }
-    pos.needsUpdate = true;
-    river.geometry.computeVertexNormals();
+                        dummy.position.copy(d.currentPos);
+                        dummy.scale.setScalar(d.scale); // 应用随机大小
+                        dummy.updateMatrix();
+                        dropsMesh.setMatrixAt(i, dummy.matrix);
+                    }
+                    dropsMesh.instanceMatrix.needsUpdate = true;
 
-    // 文字/粒子
-    if (textMesh && dropsMesh) {
-        const rot = isPlaying ? 0.02 : 0.005;
-        textMesh.rotation.y += rot;
-        dropsMesh.rotation.y = textMesh.rotation.y;
-
-        if (dropsMesh.visible) {
-            let maxDist = 0;
-
-            for (let i = 0; i < dropData.length; i++) {
-                const d = dropData[i];
-
-                if (isExploded) {
-                    d.currentPos.add(d.velocity);
-                    d.velocity.multiplyScalar(0.96);
-
-                    d.currentPos.x += Math.sin(time * 2 + d.noiseOffset) * 0.005;
-                    d.currentPos.y += Math.cos(time * 1.5 + d.noiseOffset) * 0.005;
-                } else {
-                    d.currentPos.lerp(d.originalPos, 0.12);
-                    const dist = d.currentPos.distanceTo(d.originalPos);
-                    if (dist > maxDist) maxDist = dist;
+                    if(!isExploded && maxDist < 0.05) {
+                        textMesh.visible = true;
+                        dropsMesh.visible = false;
+                    }
                 }
 
-                dummy.position.copy(d.currentPos);
-                dummy.scale.setScalar(d.scale);
-                dummy.updateMatrix();
-                dropsMesh.setMatrixAt(i, dummy.matrix);
+                if(isPlaying && textMesh.visible) {
+                    const s = 1 + Math.sin(time * 8) * 0.02;
+                    textMesh.scale.set(s,s,s);
+                }
             }
-            dropsMesh.instanceMatrix.needsUpdate = true;
 
-            if (!isExploded && maxDist < 0.05) {
-                textMesh.visible = true;
-                dropsMesh.visible = false;
-            }
+            renderer.render(scene, camera);
         }
 
-        if (isPlaying && textMesh.visible) {
-            const s = 1 + Math.sin(time * 8) * 0.02;
-            textMesh.scale.set(s, s, s);
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        const audio = document.getElementById('bg-music');
+        const ctrl = document.querySelector('.controls');
+        window.toggleAudio = function() {
+            if(audio.paused) {
+                audio.play();
+                isPlaying = true;
+                ctrl.classList.add('playing');
+                explode();
+                setTimeout(restore, 800);
+            } else {
+                audio.pause();
+                isPlaying = false;
+                ctrl.classList.remove('playing');
+            }
         }
-    }
-
-    renderer.render(scene, camera);
-}
-
-animate();
-
-/* ========== 音乐播放按钮 ========== */
-const audio = document.getElementById('bg-music');
-const ctrl = document.querySelector('.controls');
-
-window.toggleAudio = function () {
-    if (audio.paused) {
-        audio.play();
-        isPlaying = true;
-        ctrl.classList.add('playing');
-        explode();
-        setTimeout(restore, 800);
-    } else {
-        audio.pause();
-        isPlaying = false;
-        ctrl.classList.remove('playing');
-    }
-};
-
-/* ========== 自动适配窗口大小 ========== */
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    autoFitCamera();
-});
-</script>
-
+    </script>
 </body>
 </html>
