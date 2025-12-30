@@ -1,11 +1,5 @@
-*更新时间：2025-10-04（新增HK，此段不复制）*
+*更新时间：2025-12-30（新增US，此段不复制）*
 
+vless=154.17.5.160:443, method=none, password=4c686dc1-a4bc-44fb-a124-28a4b64843bb, obfs=wss, obfs-host=2026.selahx.com, obfs-uri=/2026, tls-verification=false, fast-open=false, udp-relay=false, tag=dm
 vless=57.158.24.57:443, method=none, password=11509f91-ea72-4a0e-bc00-be6361685b1e, obfs=wss, obfs-host=lisa.selahx.com, obfs-uri=/lisa, tls-verification=false, fast-open=false, udp-relay=false, tag=hk
-vless=rocket.selahx.com:443, method=none, password=49c9c5af-6a34-40ca-a376-07d4b03233ca, obfs=wss, obfs-uri=/jesse, tls-verification=false, fast-open=false, udp-relay=false, tag=1
-vless=1.cf.cname.vvhan.com:443, method=none, password=49c9c5af-6a34-40ca-a376-07d4b03233ca, obfs=wss, obfs-uri=/jesse, obfs-host=rocket.selahx.com, tls-verification=false, fast-open=false, udp-relay=false, tag=2
-vless=cloudflare.jp:443, method=none, password=49c9c5af-6a34-40ca-a376-07d4b03233ca, obfs=wss, obfs-uri=/jesse, obfs-host=rocket.selahx.com, tls-verification=false, fast-open=false, udp-relay=false, tag=3
-vless=172.67.119.214:443, method=none, password=49c9c5af-6a34-40ca-a376-07d4b03233ca, obfs=wss, obfs-uri=/jesse, obfs-host=rocket.selahx.com, tls-verification=false, fast-open=false, udp-relay=false, tag=4
-vless=104.21.28.144:443, method=none, password=49c9c5af-6a34-40ca-a376-07d4b03233ca, obfs=wss, obfs-uri=/jesse, obfs-host=rocket.selahx.com, tls-verification=false, fast-open=false, udp-relay=false, tag=5
-vless=172.67.75.53:443, method=none, password=49c9c5af-6a34-40ca-a376-07d4b03233ca, obfs=wss, obfs-uri=/jesse, obfs-host=rocket.selahx.com, tls-verification=false, fast-open=false, udp-relay=false, tag=6
-vless=104.17.112.147:443, method=none, password=49c9c5af-6a34-40ca-a376-07d4b03233ca, obfs=wss, obfs-uri=/jesse, obfs-host=rocket.selahx.com, tls-verification=false, fast-open=false, udp-relay=false, tag=7
-vless=bestcf.top:443, method=none, password=49c9c5af-6a34-40ca-a376-07d4b03233ca, obfs=wss, obfs-uri=/jesse, obfs-host=rocket.selahx.com, tls-verification=false, fast-open=false, udp-relay=false, tag=8
+vless=104.17.135.61:443, method=none, password=11509f91-ea72-4a0e-bc00-be6361685b1e, obfs=wss, obfs-host=lisa.selahx.com, obfs-uri=/lisa, tls-verification=false, fast-open=false, udp-relay=false, tag=hk1
