@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -6,48 +7,143 @@
     <title>SelahX</title>
     <style>
         /* --- 基础 --- */
-        body { margin: 0; background-color: #000; font-family: 'Arial', sans-serif; overflow-x: hidden; cursor: pointer; }
+        body { margin: 0; background-color: #050505; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; overflow-x: hidden; }
 
         /* 让 3D canvas 在最上层，但不阻塞鼠标事件 */
         #canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; pointer-events: none; }
 
         #loader { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 12px; letter-spacing: 4px; pointer-events: none; z-index: 220; transition: opacity 0.5s; }
 
-        /* 内容层 */
-        .content-layer { position: relative; z-index: 10; width: 100%; margin-top: 100vh; padding-bottom: 100px; background: linear-gradient(to bottom, rgba(0,0,0,0.0) 0%, rgba(5,5,5,0.72) 18%, #050505 100%); }
+        /* --- 内容层 (修改) --- */
+        .content-layer { 
+            position: relative; 
+            z-index: 10; 
+            width: 100%; 
+            margin-top: 100vh; 
+            padding-bottom: 100px; 
+            /* 调整背景渐变，让银色卡片在黑色背景上更突出 */
+            background: linear-gradient(to bottom, rgba(5,5,5,0) 0%, rgba(5,5,5,0.95) 15%, #050505 100%); 
+        }
 
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; padding: 20px; }
-        @media (min-width: 768px) { .gallery-grid { gap: 32px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); } }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        
+        /* --- 液态银卡片风格 (核心修改) --- */
+        .photo-card { 
+            position: relative;
+            border-radius: 16px; 
+            overflow: hidden; 
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            
+            /* 液态金属核心样式 */
+            background: linear-gradient(135deg, #e0e0e0 0%, #ffffff 20%, #888888 50%, #c0c0c0 80%, #ffffff 100%);
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.6), /* 底部厚重投影 */
+                inset 0 0 0 1px rgba(255,255,255,0.6), /* 边缘高光 */
+                inset 0 0 20px rgba(0,0,0,0.05); /* 内部金属质感 */
+        }
 
-        .photo-card { background: rgba(17,17,17,0.9); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; overflow: hidden; transition: transform 0.28s, box-shadow 0.28s; }
-        .photo-card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.6); border-color: rgba(255,255,255,0.14); }
-        .photo-inner { width: 100%; aspect-ratio: 3/4; overflow: hidden; }
-        .photo-inner img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: transform 0.45s, filter 0.45s; display: block; }
-        .photo-card.in-view img, .photo-card:hover img { filter: grayscale(0%); transform: scale(1.04); }
-        .photo-meta { padding: 10px; color: #9b9b9b; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; background: rgba(0,0,0,0.6); }
+        /* 悬停效果：轻微上浮，金属感更强 */
+        .photo-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.7), 
+                inset 0 0 0 1px rgba(255,255,255,0.9);
+        }
 
-        /* Lightbox */
+        .photo-inner { 
+            position: relative;
+            width: 100%; 
+            aspect-ratio: 4/5; /* 稍微调高一点比例 */
+            overflow: hidden; 
+            border-bottom: 1px solid rgba(255,255,255,0.5); /* 分割线 */
+        }
+
+        .photo-inner img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            /* 图片加一点冷色调滤镜，融合金属感 */
+            filter: contrast(1.05) saturate(0.9); 
+            transition: transform 0.5s ease; 
+            display: block; 
+            /* 关键：禁止图片本身响应鼠标事件，防止误触 */
+            pointer-events: none; 
+            user-select: none;
+        }
+
+        /* --- 防误触按钮 (核心修改) --- */
+        .view-btn {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 20;
+            opacity: 0.9;
+            transition: all 0.2s;
+            /* 扩大点击热区 */
+            touch-action: manipulation; 
+        }
+
+        .view-btn:active { transform: scale(0.9); background: rgba(0,0,0,0.8); }
+        .view-btn::after { content: '⤢'; } /* 放大图标 */
+
+        /* 装饰性金属格栅纹理 */
+        .metal-grill {
+            height: 8px;
+            width: 100%;
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 3px);
+            opacity: 0.6;
+        }
+
+        .photo-meta { 
+            padding: 16px 20px; 
+            /* 文字颜色改为深色以适应银色背景 */
+            color: #333; 
+            font-size: 14px; 
+            font-weight: 700;
+            letter-spacing: 1px; 
+            text-transform: uppercase; 
+            text-shadow: 0 1px 0 rgba(255,255,255,0.8); /* 蚀刻效果 */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .meta-sub { font-size: 10px; color: #666; font-weight: normal; }
+
+        /* Lightbox (保持原有逻辑，微调样式) */
         .lightbox { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 260; background: rgba(0,0,0,0.0); backdrop-filter: blur(0px); transition: backdrop-filter 0.45s ease, background 0.45s ease; pointer-events: auto; }
-        .lightbox.open { display: flex; background: rgba(0,0,0,0.65); backdrop-filter: blur(12px); }
+        .lightbox.open { display: flex; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); }
 
         .lightbox-img {
             max-width: 95vw; max-height: 90vh; transform-origin: center; transform: scale(0.28) translateY(44px); opacity: 0;
-            filter: drop-shadow(0 0 0px rgba(0,150,255,0.0));
+            filter: drop-shadow(0 0 0px rgba(255,255,255,0.0));
             transition: transform 0.58s cubic-bezier(.16,.84,.36,1), opacity 0.45s ease-out, filter 0.6s ease-out;
-            border-radius: 12px; will-change: transform, opacity;
+            border-radius: 4px; will-change: transform, opacity; border: 1px solid rgba(255,255,255,0.2);
         }
-        .lightbox.open .lightbox-img { transform: scale(1) translateY(0px); opacity: 1; filter: drop-shadow(0 18px 40px rgba(0,150,255,0.22)); }
+        .lightbox.open .lightbox-img { transform: scale(1) translateY(0px); opacity: 1; filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5)); }
 
-        .lightbox-close { position: fixed; top: 24px; right: 24px; color: #fff; font-size: 18px; z-index: 270; cursor: pointer; opacity: 0; transform: translateY(-10px); transition: 0.35s ease-out; }
+        .lightbox-close { position: fixed; top: 24px; right: 24px; color: #fff; font-size: 24px; z-index: 270; cursor: pointer; opacity: 0; transform: translateY(-10px); transition: 0.35s ease-out; background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .lightbox.open .lightbox-close { opacity: 1; transform: translateY(0); }
 
         /* 小播放器 */
-        .mini-player { position: fixed; bottom: 30px; right: 30px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(5px); z-index: 240; display: flex; align-items: center; justify-content: center; pointer-events: auto; }
+        .mini-player { position: fixed; bottom: 30px; right: 30px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(5px); z-index: 240; display: flex; align-items: center; justify-content: center; pointer-events: auto; cursor: pointer; }
         .play-icon { width: 0; height: 0; border: 6px solid transparent; border-left: 10px solid #fff; margin-left: 2px; }
         .playing .mini-player { border-color: #ffd700; animation: spin 4s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .footer { text-align: center; color: #9b9b9b; padding: 50px; font-size: 11px; letter-spacing: 2px; }
+        .footer { text-align: center; color: #555; padding: 60px; font-size: 11px; letter-spacing: 2px; }
         @media (max-height: 680px) { .content-layer { margin-top: 110vh; } }
     </style>
 </head>
@@ -57,7 +153,7 @@
         <source src="xxx.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="loader">💫</div>
+    <div id="loader">LOADING</div>
     <div id="canvas-container"></div>
 
     <div class="mini-player" onclick="toggleMusic(event)"><div class="play-icon"></div></div>
@@ -70,20 +166,104 @@
 
     <div class="content-layer">
         <div class="gallery-grid">
-            <div class="photo-card"><div class="photo-inner"><img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1200" loading="lazy" alt="work01"></div><div class="photo-meta">Work 01</div></div>
-            <div class="photo-card"><div class="photo-inner"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1200" loading="lazy" alt="work02"></div><div class="photo-meta">Work 02</div></div>
-            <div class="photo-card"><div class="photo-inner"><img src="https://images.unsplash.com/photo-1504198266287-1659872e6590?w=1200" loading="lazy" alt="work03"></div><div class="photo-meta">Work 03</div></div>
-            <div class="photo-card"><div class="photo-inner"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200" loading="lazy" alt="work04"></div><div class="photo-meta">Work 04</div></div>
-            <div class="photo-card"><div class="photo-inner"><img src="https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?w=1200" loading="lazy" alt="work05"></div><div class="photo-meta">Work 05</div></div>
-            <div class="photo-card"><div class="photo-inner"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200" loading="lazy" alt="work06"></div><div class="photo-meta">Work 06</div></div>
+            <!-- 
+               核心修改：
+               1. 图片本身不再响应点击。
+               2. 新增 <button class="view-btn"> 专门处理点击。
+               3. 增加 metal-grill 装饰。
+            -->
+            <div class="photo-card">
+                <div class="photo-inner">
+                    <img src="IMG_2576.jpeg" loading="lazy" alt="work01">
+                    <button class="view-btn" aria-label="View Fullscreen"></button>
+                </div>
+                <div class="metal-grill"></div>
+                <div class="photo-meta">
+                    <span>A</span>
+                    <span class="meta-sub">01</span>
+                </div>
+            </div>
+
+            <div class="photo-card">
+                <div class="photo-inner">
+                    <img src="IMG_8317.jpeg" loading="lazy" alt="work02">
+                    <button class="view-btn" aria-label="View Fullscreen"></button>
+                </div>
+                <div class="metal-grill"></div>
+                <div class="photo-meta">
+                    <span>B</span>
+                    <span class="meta-sub">02</span>
+                </div>
+            </div>
+
+            <div class="photo-card">
+                <div class="photo-inner">
+                    <img src="IMG_8318.jpeg" loading="lazy" alt="work03">
+                    <button class="view-btn" aria-label="View Fullscreen"></button>
+                </div>
+                <div class="metal-grill"></div>
+                <div class="photo-meta">
+                    <span>C</span>
+                    <span class="meta-sub">03</span>
+                </div>
+            </div>
+
+            <div class="photo-card">
+                <div class="photo-inner">
+                    <img src="IMG_8322.jpeg" loading="lazy" alt="work04">
+                    <button class="view-btn" aria-label="View Fullscreen"></button>
+                </div>
+                <div class="metal-grill"></div>
+                <div class="photo-meta">
+                    <span>D</span>
+                    <span class="meta-sub">04</span>
+                </div>
+            </div>
+
+            <div class="photo-card">
+                <div class="photo-inner">
+                    <img src="IMG_8329.jpeg" loading="lazy" alt="work05">
+                    <button class="view-btn" aria-label="View Fullscreen"></button>
+                </div>
+                <div class="metal-grill"></div>
+                <div class="photo-meta">
+                    <span>E</span>
+                    <span class="meta-sub">05</span>
+                </div>
+            </div>
+
+            <div class="photo-card">
+                <div class="photo-inner">
+                    <img src="IMG_8340.jpeg" loading="lazy" alt="work06">
+                    <button class="view-btn" aria-label="View Fullscreen"></button>
+                </div>
+                <div class="metal-grill"></div>
+                <div class="photo-meta">
+                    <span>F</span>
+                    <span class="meta-sub">06</span>
+                </div>
+            </div>
         </div>
-        <div class="footer">&copy; 2025 SELAHX</div>
+        <div class="footer">&copy; 2026 SELAHX</div>
     </div>
 
     <script type="module">
         import * as THREE from 'https://cdn.skypack.dev/three@0.136.0';
 
-        // make closeLightbox available globally
+        // 音乐控制逻辑
+        window.toggleMusic = function(e){
+            e.stopPropagation();
+            const audio = document.getElementById('bg-music');
+            const btn = document.querySelector('.mini-player');
+            if(audio.paused){
+                audio.play();
+                btn.parentElement.classList.add('playing');
+            } else {
+                audio.pause();
+                btn.parentElement.classList.remove('playing');
+            }
+        };
+
         window.closeLightbox = function(e){
             if(e && e.target && e.target.id === 'lightboxImg') return;
             const lb = document.getElementById('lightbox'); if(!lb) return;
@@ -103,9 +283,7 @@
         const COL_SILVER = new THREE.Color(0xffffff);
         const COL_GOLD = new THREE.Color(0xffaa00);
 
-        // 存储 Logo 的原始 3D 尺寸
         let logoBox = { minY: Infinity, maxY: -Infinity, minX: Infinity, maxX: -Infinity, centerY: 0, width: 0, height: 0 };
-        // 动态计算的 Logo 基础位置
         let particleBaseY = 0;
 
         setTimeout(() => { const l = $('#loader'); if(l) l.style.opacity = '0'; }, 1000);
@@ -133,7 +311,6 @@
             createLogoParticles('SELAHX');
             createMercuryRiver();
 
-            // 初始化后立即调用一次布局更新
             updateCameraLayout();
 
             window.addEventListener('resize', onResize);
@@ -155,7 +332,6 @@
 
             const imgData = ctx.getImageData(0,0,w,h); const data = imgData.data; const points = []; const step = 3;
 
-            // 采样像素生成点
             for(let y=0;y<h;y+=step){
                 for(let x=0;x<w;x+=step){
                     if(data[(y*w+x)*4] > 128){
@@ -163,15 +339,12 @@
                         const py = -(y - h/2) * 0.05; 
                         const pz = 0;
                         points.push({x:px,y:py,z:pz});
-                        
-                        // 记录边界
                         logoBox.minY = Math.min(logoBox.minY, py); logoBox.maxY = Math.max(logoBox.maxY, py);
                         logoBox.minX = Math.min(logoBox.minX, px); logoBox.maxX = Math.max(logoBox.maxX, px);
                     }
                 }
             }
             
-            // 计算 Logo 几何中心和尺寸
             logoBox.centerY = (logoBox.minY + logoBox.maxY) / 2;
             logoBox.width = logoBox.maxX - logoBox.minX;
             logoBox.height = logoBox.maxY - logoBox.minY;
@@ -184,9 +357,7 @@
                 const pt = points[i]; dummy.position.set(pt.x, pt.y, pt.z); dummy.updateMatrix(); particles.setMatrixAt(i, dummy.matrix);
                 particleData.push({ original: new THREE.Vector3(pt.x,pt.y,pt.z), ufo: new THREE.Vector3(), current: new THREE.Vector3(pt.x,pt.y,pt.z), velocity: new THREE.Vector3(), explodeDir: new THREE.Vector3(pt.x,pt.y,pt.z).normalize(), random: Math.random() });
             }
-
             scene.add(particles);
-            // 粒子创建完毕后，需要再次布局以确保缩放正确
             updateCameraLayout(); 
         }
 
@@ -196,48 +367,17 @@
             river = new THREE.Mesh(geo, mat); river.rotation.x = -Math.PI/2; river.position.y = -8; scene.add(river);
         }
 
-        /**
-         * 核心修正：基于视锥体计算缩放
-         * 无论设备宽高比如何，都让 Logo 宽度适应屏幕宽度
-         */
         function updateCameraLayout(){
             if(!camera || !renderer) return;
-
-            // 1. 设置一个固定的标准摄像机距离，保证背景和光照的一致性
-            const dist = 32;
-            camera.position.set(0, 2, dist);
-            camera.lookAt(0, 0, 0);
-
-            // 更新摄像机矩阵
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-
-            // 如果粒子还没生成，无法计算
+            const dist = 32; camera.position.set(0, 2, dist); camera.lookAt(0, 0, 0);
+            camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix();
             if(!particles || logoBox.width === 0) return;
-
-            // 2. 计算在 Z=0 处（Logo 所在平面）摄像机的可视宽度
-            // Visible Height = 2 * tan(fov / 2) * distance
             const vFOV = THREE.MathUtils.degToRad(camera.fov);
             const visibleHeight = 2 * Math.tan(vFOV / 2) * dist;
             const visibleWidth = visibleHeight * camera.aspect;
-
-            // 3. 计算目标缩放比例
-            // 我们希望 Logo 占据屏幕宽度的 85% (0.85)，或者屏幕高度的 50%（防止在超宽屏上过大）
-            let scaleFitWidth = (visibleWidth * 0.85) / logoBox.width;
-            let scaleFitHeight = (visibleHeight * 0.5) / logoBox.height;
-
-            // 取两者较小值，确保 Logo 既不会超出宽度，也不会超出高度
-            let finalScale = Math.min(scaleFitWidth, scaleFitHeight);
-
-            // 限制最大缩放，防止在大屏幕上变得荒谬巨大
+            let finalScale = Math.min((visibleWidth * 0.85) / logoBox.width, (visibleHeight * 0.5) / logoBox.height);
             finalScale = Math.min(finalScale, 1.8); 
-
-            // 应用缩放
             particles.scale.setScalar(finalScale);
-
-            // 4. 重新调整垂直位置
-            // 让 Logo 的视觉中心稍微向上偏移一点，看起来更平衡
-            // 我们减去 centerY * scale 是为了抵消 Logo 自身的原点偏移
             particleBaseY = 4.0 - (logoBox.centerY * finalScale);
             particles.position.y = particleBaseY;
         }
@@ -247,13 +387,8 @@
             time += 0.02;
             const scrollFactor = Math.min(Math.max(scrollY / 500, 0), 1);
 
-            // Logo 随滚动下滑
             if(particles){
-                // 使用计算出的 particleBaseY 作为基准
                 particles.position.y = particleBaseY - scrollY * 0.015;
-            }
-
-            if(particles){
                 const targetColor = isPressed ? COL_GOLD : COL_SILVER;
                 particles.material.color.lerp(targetColor, 0.08);
                 particles.material.emissive.lerp(new THREE.Color(isPressed ? 0x442200 : 0x222222), 0.08);
@@ -263,58 +398,51 @@
                     const d = particleData[i];
                     const angle = d.random * Math.PI * 2 + ufoRot; const radius = 2.0 + d.random * 1.0;
                     d.ufo.set(Math.cos(angle) * radius, Math.sin(angle * radius * 0.5) * 0.5, Math.sin(angle) * radius);
-                    
                     const targetX = d.original.x * (1 - scrollFactor) + d.ufo.x * scrollFactor;
                     const targetY = d.original.y * (1 - scrollFactor) + d.ufo.y * scrollFactor;
                     const targetZ = d.original.z * (1 - scrollFactor) + d.ufo.z * scrollFactor;
-
-                    if(isPressed){
-                        d.velocity.x += (Math.random()-0.5)*0.02; d.velocity.y += (Math.random()-0.5)*0.02; d.velocity.z += (Math.random()-0.5)*0.02;
-                    } else {
-                        const tx = targetX - d.current.x; const ty = targetY - d.current.y; const tz = targetZ - d.current.z;
-                        d.velocity.x += tx * 0.12; d.velocity.y += ty * 0.12; d.velocity.z += tz * 0.12;
-                        d.velocity.multiplyScalar(0.68);
-                    }
+                    
+                    if(isPressed){ d.velocity.x += (Math.random()-0.5)*0.02; d.velocity.y += (Math.random()-0.5)*0.02; d.velocity.z += (Math.random()-0.5)*0.02; } 
+                    else { const tx = targetX - d.current.x; const ty = targetY - d.current.y; const tz = targetZ - d.current.z; d.velocity.x += tx * 0.12; d.velocity.y += ty * 0.12; d.velocity.z += tz * 0.12; d.velocity.multiplyScalar(0.68); }
 
                     const maxSpeed = 2.5; if(d.velocity.length() > maxSpeed) d.velocity.setLength(maxSpeed);
                     d.current.add(d.velocity);
-
                     const distFromCenter = d.current.length(); const maxAllowed = 32;
                     if(distFromCenter > maxAllowed){ d.current.lerp(d.original, 0.06); d.velocity.multiplyScalar(0.35); }
-
                     dummy.position.copy(d.current);
-                    
-                    // 粒子大小也需要随整体缩放调整，否则 Logo 变小时粒子会显得太挤
                     const s = (1 - scrollFactor * 0.45) * (isPressed ? 1.4 : 1.0);
-                    // 这里的 scale.x 已经是我们计算出的 finalScale
                     dummy.scale.setScalar(s * particles.scale.x); 
-                    
                     dummy.updateMatrix(); particles.setMatrixAt(i, dummy.matrix);
                 }
-
                 if(scrollFactor > 0.5) particles.rotation.y += 0.04 * scrollFactor; else particles.rotation.y = 0;
                 particles.instanceMatrix.needsUpdate = true;
             }
-
             if(river){ const pos = river.geometry.attributes.position; for(let i=0;i<pos.count;i++){ const x = pos.getX(i); const y = pos.getY(i); const z = Math.sin(x * 0.12 + time) * 1.6 + Math.cos(y * 0.09 + time) * 0.8; pos.setZ(i, z); } pos.needsUpdate = true; river.geometry.computeVertexNormals(); }
-
             renderer.render(scene, camera);
         }
 
         function initScrollObserver(){ const observer = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in-view'); }); }, { threshold: 0.12 }); document.querySelectorAll('.photo-card').forEach(el=>observer.observe(el)); }
 
-        function initGalleryInteractions(){ document.querySelectorAll('.photo-inner img').forEach(img=>{ img.addEventListener('click', (e)=>{ openLightbox(e.currentTarget.src, e.currentTarget); }); img.addEventListener('touchend', (e)=>{ openLightbox(e.currentTarget.src, e.currentTarget); }); }); }
+        // --- 核心修改：只给 view-btn 绑定事件，解决滑动误触 ---
+        function initGalleryInteractions(){ 
+            document.querySelectorAll('.view-btn').forEach(btn => { 
+                btn.addEventListener('click', (e) => { 
+                    e.stopPropagation(); // 防止冒泡
+                    // 找到同级的前一个 img 元素
+                    const img = e.currentTarget.parentElement.querySelector('img');
+                    if(img) openLightbox(img.src); 
+                });
+            }); 
+        }
 
-        function openLightbox(src, thumb){
+        function openLightbox(src){
             const lb = document.getElementById('lightbox'); const li = document.getElementById('lightboxImg'); if(!li || !lb) return;
-            li.src = src; li.style.transition = 'none'; li.style.transform = 'scale(0.28) translateY(44px)'; li.style.opacity = '0'; li.style.filter = 'drop-shadow(0 0 0 rgba(0,150,255,0))';
+            li.src = src; li.style.transition = 'none'; li.style.transform = 'scale(0.28) translateY(44px)'; li.style.opacity = '0'; li.style.filter = 'drop-shadow(0 0 0 rgba(0,0,0,0))';
             requestAnimationFrame(()=>{ lb.classList.add('open'); requestAnimationFrame(()=>{ li.style.transition = ''; li.style.transform = ''; li.style.opacity = ''; li.style.filter = ''; }); });
             document.body.style.overflow = 'hidden';
         }
 
         function onResize(){ if(renderer && camera){ renderer.setSize(window.innerWidth, window.innerHeight); updateCameraLayout(); } }
-
-        window.toggleMusic = function(e){ e.stopPropagation(); const audio = document.getElementById('bg-music'); const btn = document.querySelector('.mini-player'); if(audio.paused){ audio.play(); btn.classList.add('playing'); } else { audio.pause(); btn.classList.remove('playing'); } };
     </script>
 </body>
 </html>
