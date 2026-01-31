@@ -6,488 +6,487 @@
     <title>SelahX</title>
     <style>
         /* --- 基础设置 --- */
-        body { margin: 0; background-color: #020202; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; overflow-x: hidden; }
-
-        /* 3D Canvas */
-        #canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; pointer-events: none; }
-
-        /* Loading */
-        #loader { 
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            color: rgba(255,255,255,0.6); font-size: 11px; letter-spacing: 3px; font-weight: 300; 
-            z-index: 220; transition: opacity 0.5s ease; pointer-events: none;
-            width: 100%; text-align: center;
+        body { margin: 0; background-color: #000; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; overflow: hidden; }
+        
+        #canvas-container { position: fixed; inset: 0; z-index: 1; }
+        
+        /* 顶部暗角 */
+        .vignette {
+            position: fixed; inset: 0; pointer-events: none; z-index: 2;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 70%, #000 100%);
         }
 
-        /* --- 内容层 --- */
-        .content-layer { 
-            position: relative; 
-            z-index: 10; 
-            width: 100%; 
-            margin-top: 100vh; 
-            padding-bottom: 120px; 
-            background: transparent;
-        }
-
-        .gallery-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 25px; 
-            max-width: 1100px; 
-            margin: 0 auto; 
-            padding: 40px 20px; 
-        }
-
-        @media (max-width: 768px) {
-            .gallery-grid {
-                grid-template-columns: repeat(2, 1fr); 
-                gap: 10px; 
-                padding: 20px 10px;
-            }
-            .content-layer { margin-top: 90vh; }
-        }
-
-        /* --- 卡片 --- */
-        .photo-card { 
-            position: relative;
-            border-radius: 10px; 
-            overflow: hidden; 
-            transition: transform 0.3s ease-out;
-            background: rgba(18, 18, 18, 0.6);
-            backdrop-filter: blur(16px); 
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255,255,255,0.12);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-        }
-
-        .photo-card:hover { 
-            transform: translateY(-5px); 
-            background: rgba(40, 40, 40, 0.7);
-            border-color: rgba(255,255,255,0.3);
-        }
-
-        .photo-inner { position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; }
-        .photo-inner img { 
-            width: 100%; height: 100%; object-fit: cover; display: block; 
-            pointer-events: none; user-select: none; transition: transform 0.6s ease;
-        }
-        .photo-card:hover .photo-inner img { transform: scale(1.04); }
-
-        .view-btn {
-            position: absolute; bottom: 10px; right: 10px; width: 30px; height: 30px;
-            border-radius: 50%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px);
-            border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 20; transition: all 0.2s;
-        }
-        .view-btn svg { width: 14px; height: 14px; fill: #fff; }
-
-        .photo-meta { 
-            padding: 10px 12px; color: rgba(255,255,255,0.85); font-size: 11px; font-weight: 600;
-            letter-spacing: 1px; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center;
-        }
-        .meta-sub { font-size: 9px; color: rgba(255,255,255,0.4); }
-
-        /* --- 播放器 --- */
+        /* --- 播放器 UI (回归原版) --- */
         .mini-player { 
-            position: fixed; bottom: 25px; right: 25px; width: 42px; height: 42px; 
-            border-radius: 50%; background: rgba(25, 25, 25, 0.7); border: 1px solid rgba(255,255,255,0.2); 
+            position: fixed; bottom: 40px; right: 40px; width: 50px; height: 50px; 
+            border-radius: 50%; background: rgba(20, 20, 20, 0.8); border: 1px solid rgba(255,255,255,0.2); 
             backdrop-filter: blur(10px); z-index: 240; display: flex; align-items: center; justify-content: center; 
             cursor: pointer; transition: all 0.3s;
         }
-        .mini-player.playing { border-color: #fff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
-        .player-svg { width: 16px; height: 16px; fill: #fff; display: block; pointer-events: none; }
-        .icon-pause { display: none; } .icon-play { display: block; margin-left: 2px; }
+        .mini-player:hover { transform: scale(1.1); border-color: #fff; }
+        .mini-player.playing { border-color: #00ffff; box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+        .player-svg { width: 18px; height: 18px; fill: #fff; pointer-events: none; }
+        .icon-pause { display: none; } .icon-play { display: block; margin-left: 3px; }
         .mini-player.playing .icon-play { display: none; } .mini-player.playing .icon-pause { display: block; margin-left: 0; }
 
-        /* --- Lightbox --- */
-        .lightbox { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 260; background: rgba(0,0,0,0); transition: all 0.4s; }
-        .lightbox.open { display: flex; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); }
-        .lightbox-img { max-width: 95vw; max-height: 90vh; transform: scale(0.95); opacity: 0; transition: all 0.4s; border-radius: 4px; box-shadow: 0 0 40px rgba(0,0,0,0.8); }
-        .lightbox.open .lightbox-img { transform: scale(1); opacity: 1; }
-        .lightbox-close { position: fixed; top: 25px; right: 25px; color: #fff; width: 40px; height: 40px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transform: translateY(-10px); transition: 0.3s; }
-        .lightbox.open .lightbox-close { opacity: 1; transform: translateY(0); }
+        /* --- 滚动内容层 --- */
+        .content-layer { 
+            position: relative; z-index: 10; width: 100%; height: 100vh;
+            overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth;
+        }
+        .spacer { height: 100vh; width: 100%; }
 
-        .footer { text-align: center; color: rgba(255,255,255,0.3); padding: 60px; font-size: 10px; letter-spacing: 2px; }
+        .gallery-container { 
+            max-width: 1200px; margin: 0 auto; padding: 0 40px 100px 40px; 
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.9) 15%);
+        }
+
+        .section-header {
+            text-align: center; margin-bottom: 60px; color: rgba(255,255,255,0.5);
+            font-size: 11px; letter-spacing: 6px; text-transform: uppercase; padding-top: 50px;
+        }
+
+        .gallery-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; 
+        }
+
+        .photo-card { 
+            background: rgba(15, 15, 15, 0.5); 
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px); 
+            transition: all 0.5s ease;
+        }
+        .photo-card:hover { 
+            transform: translateY(-10px); 
+            border-color: rgba(255,255,255,0.4);
+            background: rgba(30, 30, 30, 0.7);
+        }
+
+        .photo-inner { width: 100%; aspect-ratio: 16/9; overflow: hidden; }
+        .photo-inner img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.7s; filter: grayscale(0.8); }
+        .photo-card:hover .photo-inner img { transform: scale(1.05); opacity: 1; filter: grayscale(0); }
+        .card-meta { padding: 15px; color: #888; font-size: 10px; letter-spacing: 2px; display: flex; justify-content: space-between; }
+        
+        /* 频谱条 (可选装饰) */
+        .equalizer {
+            position: fixed; bottom: 40px; left: 40px; z-index: 100;
+            display: flex; gap: 3px; height: 20px; align-items: flex-end; opacity: 0.5;
+        }
+        .bar { width: 3px; background: #fff; height: 2px; transition: height 0.1s; }
     </style>
 </head>
 <body>
 
+    <!-- 原版音乐标签 -->
     <audio id="bg-music" loop crossorigin="anonymous">
+        <!-- 请替换为真实音频链接 -->
         <source src="xxx.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="loader">VISION</div>
     <div id="canvas-container"></div>
+    <div class="vignette"></div>
 
+    <!-- 播放按钮 -->
     <div class="mini-player" onclick="toggleMusic(event)">
         <svg class="player-svg icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
         <svg class="player-svg icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
     </div>
 
-    <div class="lightbox" id="lightbox" onclick="(event)=>{ if(event.target.id==='lightbox' || event.target.classList.contains('lightbox')) window.closeLightbox(event);} ">
-        <div class="lightbox-close" onclick="window.closeLightbox(event)">✕</div>
-        <img id="lightboxImg" class="lightbox-img" src="" alt="expanded">
+    <!-- 简单的左下角频谱条装饰 -->
+    <div class="equalizer">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
     </div>
 
-    <div class="content-layer">
-        <div class="gallery-grid">
-            <div class="photo-card">
-                <div class="photo-inner"><img src="111.jpg" loading="lazy" alt="work"><button class="view-btn"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button></div>
-                <div class="photo-meta"><span>Alpha</span><span class="meta-sub">01</span></div>
-            </div>
-            <div class="photo-card">
-                <div class="photo-inner"><img src="IMG_8317.jpeg" loading="lazy" alt="work"><button class="view-btn"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button></div>
-                <div class="photo-meta"><span>Beta</span><span class="meta-sub">02</span></div>
-            </div>
-            <div class="photo-card">
-                <div class="photo-inner"><img src="IMG_8318.jpeg" loading="lazy" alt="work"><button class="view-btn"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button></div>
-                <div class="photo-meta"><span>Gamma</span><span class="meta-sub">03</span></div>
-            </div>
-            <div class="photo-card">
-                <div class="photo-inner"><img src="IMG_8322.jpeg" loading="lazy" alt="work"><button class="view-btn"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button></div>
-                <div class="photo-meta"><span>Delta</span><span class="meta-sub">04</span></div>
-            </div>
-             <div class="photo-card">
-                <div class="photo-inner"><img src="IMG_8329.jpeg" loading="lazy" alt="work"><button class="view-btn"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button></div>
-                <div class="photo-meta"><span>Echo</span><span class="meta-sub">05</span></div>
-            </div>
-             <div class="photo-card">
-                <div class="photo-inner"><img src="IMG_8340.jpeg" loading="lazy" alt="work"><button class="view-btn"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button></div>
-                <div class="photo-meta"><span>Zeta</span><span class="meta-sub">06</span></div>
+    <div class="content-layer" id="scroller">
+        <div class="spacer"></div>
+        <div class="gallery-container">
+            <div class="section-header">Archive Collection</div>
+            <div class="gallery-grid">
+                <div class="photo-card"><div class="photo-inner"><img src="111.jpg"></div><div class="card-meta"><span>ALPHA</span><span>01</span></div></div>
+                <div class="photo-card"><div class="photo-inner"><img src="IMG_8317.jpeg"></div><div class="card-meta"><span>BETA</span><span>02</span></div></div>
+                <div class="photo-card"><div class="photo-inner"><img src="IMG_8318.jpeg"></div><div class="card-meta"><span>GAMMA</span><span>03</span></div></div>
+                <div class="photo-card"><div class="photo-inner"><img src="IMG_8322.jpeg"></div><div class="card-meta"><span>DELTA</span><span>04</span></div></div>
+                <div class="photo-card"><div class="photo-inner"><img src="IMG_8329.jpeg"></div><div class="card-meta"><span>EPSILON</span><span>05</span></div></div>
+                <div class="photo-card"><div class="photo-inner"><img src="IMG_8340.jpeg"></div><div class="card-meta"><span>ZETA</span><span>06</span></div></div>
             </div>
         </div>
-        <div class="footer">&copy; 2026 SELAHX</div>
     </div>
 
     <script type="module">
         import * as THREE from 'https://cdn.skypack.dev/three@0.136.0';
 
-        // --- UI Logic ---
+        let scene, camera, renderer;
+        let mistMesh, logoParticles, terrain, stars;
+        let time = 0;
+        let scrollY = 0;
+
+        // 音频分析
+        let audioContext, analyser, dataArray, source;
+        let audioData = { bass: 0, high: 0 };
+        let isPlaying = false;
+
+        init();
+        animate();
+
+        // --- UI 控制逻辑 ---
         window.toggleMusic = (e) => {
             e.stopPropagation();
             const audio = document.getElementById('bg-music');
             const btn = document.querySelector('.mini-player');
-            if(audio.paused){ audio.play(); btn.classList.add('playing'); } 
-            else { audio.pause(); btn.classList.remove('playing'); }
+
+            // 初始化 AudioContext (必须在用户点击后)
+            if(!audioContext) {
+                setupAudioContext(audio);
+            }
+
+            if(audio.paused){ 
+                audio.play(); 
+                btn.classList.add('playing'); 
+                isPlaying = true;
+            } else { 
+                audio.pause(); 
+                btn.classList.remove('playing'); 
+                isPlaying = false;
+            }
         };
-        window.closeLightbox = (e) => {
-            if(e && e.target && e.target.id === 'lightboxImg') return;
-            document.getElementById('lightbox').classList.remove('open');
-            setTimeout(() => { document.getElementById('lightboxImg').src = ''; }, 500);
-        };
-        function openLightbox(src){
-            const li = document.getElementById('lightboxImg'); li.src = src;
-            document.getElementById('lightbox').classList.add('open');
+
+        function setupAudioContext(audioElement) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            source = audioContext.createMediaElementSource(audioElement);
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 256;
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
+            
+            source.connect(analyser);
+            analyser.connect(audioContext.destination);
         }
 
-        // --- 3D Core ---
-        let scene, camera, renderer;
-        let particles, geometry;
-        let river, riverGeometry;
-        let lights = [];
-        let time = 0; 
-        let scrollY = 0; 
-        
-        let currentPositions, targetPositions; // 物理位置缓存
-
-        init(); 
-        animate(); 
-        initEvents();
-
-        function init(){
-            setTimeout(() => { document.getElementById('loader').style.opacity = '0'; }, 500);
-
+        function init() {
             const container = document.getElementById('canvas-container');
-            scene = new THREE.Scene(); 
-            scene.background = new THREE.Color(0x020202); 
-            scene.fog = new THREE.FogExp2(0x020202, 0.015);
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000000);
+            scene.fog = new THREE.FogExp2(0x000000, 0.015);
 
             camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-            
-            renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false, powerPreference: "high-performance" });
+            camera.position.set(0, 35, 50);
+            camera.lookAt(0, 0, 0);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            
-            // 优化关键 1：限制像素比，防止高分屏掉帧
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-            
-            renderer.outputEncoding = THREE.sRGBEncoding;
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
             container.appendChild(renderer.domElement);
 
-            // 光源
-            for(let i=0; i<3; i++){
-                const light = new THREE.PointLight(0xffffff, 4.0, 90); 
-                lights.push(light);
-                scene.add(light);
-            }
-            const ambient = new THREE.AmbientLight(0x111111); 
-            scene.add(ambient);
+            // 灯光
+            const spotLight = new THREE.SpotLight(0xffffff, 8);
+            spotLight.position.set(0, 60, 0);
+            spotLight.angle = Math.PI / 4;
+            spotLight.penumbra = 0.5;
+            scene.add(spotLight);
+            
+            // 辅助彩色光
+            const blueL = new THREE.PointLight(0x0044ff, 2, 50);
+            blueL.position.set(20, 10, 0);
+            scene.add(blueL);
 
-            createMorphParticles();
-            createRiver(); 
-            updateCamera();
+            createStars();         // 1. 顶部星空
+            createTerrain();       // 2. 地面
+            createFluidMist();     // 3. 强劲流体烟雾
+            createLogo('SELAHX');  // 4. 粒子 Logo (已修复方向)
 
+            document.getElementById('scroller').addEventListener('scroll', (e) => {
+                scrollY = e.target.scrollTop;
+            });
             window.addEventListener('resize', onResize);
-            window.addEventListener('scroll', () => { scrollY = window.scrollY || window.pageYOffset; });
         }
 
-        function createMorphParticles(){
+        // --- 1. 星空系统 ---
+        function createStars() {
+            const count = 2000;
+            const pos = new Float32Array(count * 3);
+            const size = new Float32Array(count);
+            
+            for(let i=0; i<count; i++) {
+                // 散布在上方半球
+                const x = (Math.random() - 0.5) * 200;
+                const y = 30 + Math.random() * 100; // 只在顶部
+                const z = (Math.random() - 0.5) * 150;
+                pos[i*3] = x; pos[i*3+1] = y; pos[i*3+2] = z;
+                size[i] = Math.random();
+            }
+            
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            geo.setAttribute('size', new THREE.BufferAttribute(size, 1));
+            
+            const mat = new THREE.PointsMaterial({
+                color: 0xffffff, size: 0.3, transparent: true, opacity: 0.8
+            });
+            
+            stars = new THREE.Points(geo, mat);
+            scene.add(stars);
+        }
+
+        // --- 2. 地面 ---
+        function createTerrain() {
+            const geo = new THREE.PlaneGeometry(120, 120, 128, 128);
+            const mat = new THREE.MeshStandardMaterial({
+                color: 0x111111, roughness: 0.9, metalness: 0.2
+            });
+            terrain = new THREE.Mesh(geo, mat);
+            terrain.rotation.x = -Math.PI / 2;
+            terrain.position.y = -3;
+            
+            // 简单的地形起伏
+            const pos = geo.attributes.position;
+            const baseZ = [];
+            for(let i=0; i<pos.count; i++){
+                const z = (Math.random()-0.5)*1.5;
+                pos.setZ(i, z);
+                baseZ.push(z);
+            }
+            geo.userData = { baseZ: baseZ };
+            scene.add(terrain);
+        }
+
+        // --- 3. 强劲流体烟雾 (Shader) ---
+        function createFluidMist() {
+            const vertexShader = `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `;
+
+            const fragmentShader = `
+                uniform float uTime;
+                uniform float uBass; // 音乐低音
+                uniform vec3 uColor; // 当前主色调
+                varying vec2 vUv;
+
+                // 噪声函数
+                float random(vec2 st) { return fract(sin(dot(st.xy, vec2(12.9898,78.233)))*43758.5453123); }
+                float noise(vec2 st) {
+                    vec2 i = floor(st);
+                    vec2 f = fract(st);
+                    float a = random(i);
+                    float b = random(i + vec2(1.0, 0.0));
+                    float c = random(i + vec2(0.0, 1.0));
+                    float d = random(i + vec2(1.0, 1.0));
+                    vec2 u = f * f * (3.0 - 2.0 * f);
+                    return mix(a, b, u.x) + (c - a)* u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+                }
+                
+                // 更复杂的 FBM
+                float fbm(vec2 st) {
+                    float v = 0.0;
+                    float a = 0.5;
+                    for (int i = 0; i < 5; i++) {
+                        v += a * noise(st);
+                        st *= 2.0;
+                        a *= 0.5;
+                    }
+                    return v;
+                }
+
+                void main() {
+                    vec2 uv = vUv;
+                    
+                    // 增加流速：速度是之前的4倍，且受低音影响
+                    float flowSpeed = uTime * 0.2 + uBass * 0.1;
+                    
+                    // 域扭曲 (Domain Warping) - 制造卷曲感
+                    vec2 q = vec2(0.);
+                    q.x = fbm(uv + flowSpeed);
+                    q.y = fbm(uv + vec2(1.0));
+
+                    vec2 r = vec2(0.);
+                    r.x = fbm(uv + 1.0*q + vec2(1.7,9.2) + 0.15*flowSpeed);
+                    r.y = fbm(uv + 1.0*q + vec2(8.3,2.8) + 0.126*flowSpeed);
+
+                    float f = fbm(uv + r);
+
+                    // 颜色混合
+                    // 核心越亮，边缘越暗
+                    vec3 col = mix(vec3(0.05), uColor, clamp(f*f*3.0, 0.0, 1.0));
+                    
+                    // 音乐冲击：低音会让亮部暴涨
+                    col += vec3(f * uBass * 0.5);
+
+                    // 遮罩
+                    float dist = distance(uv, vec2(0.5));
+                    float mask = smoothstep(0.6, 0.1, dist);
+
+                    gl_FragColor = vec4(col, mask * f * 0.8);
+                }
+            `;
+
+            const geo = new THREE.PlaneGeometry(100, 100);
+            const mat = new THREE.ShaderMaterial({
+                uniforms: { 
+                    uTime: { value: 0 },
+                    uBass: { value: 0 },
+                    uColor: { value: new THREE.Color(0xffffff) } // 初始白
+                },
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShader,
+                transparent: true,
+                depthWrite: false,
+                blending: THREE.AdditiveBlending,
+                side: THREE.DoubleSide
+            });
+
+            mistMesh = new THREE.Mesh(geo, mat);
+            mistMesh.rotation.x = -Math.PI / 2;
+            mistMesh.position.y = -1; 
+            scene.add(mistMesh);
+        }
+
+        // --- 4. 粒子 Logo (修正版) ---
+        function createLogo(text) {
             const canvas = document.createElement('canvas');
-            const w = 1024, h = 512;
-            canvas.width = w; canvas.height = h;
+            canvas.width = 1024; canvas.height = 256;
             const ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#000'; ctx.fillRect(0,0,w,h);
+            ctx.fillStyle = '#000'; ctx.fillRect(0,0,1024,256);
+            ctx.font = '900 130px Arial';
+            ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText(text, 512, 128);
             
-            ctx.font = '900 110px "Arial", sans-serif'; 
-            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillStyle = '#fff';
-            ctx.fillText('SELAHX', w/2, h/2);
-
-            const imgData = ctx.getImageData(0,0,w,h).data;
-            const logoPoints = [];
+            const data = ctx.getImageData(0,0,1024,256).data;
+            const points = [];
+            const initials = [];
             
-            const isMobile = window.innerWidth < 768;
-            const spread = isMobile ? 0.018 : 0.025; 
-            const step = 4;
-
-            for(let y=0; y<h; y+=step){
-                for(let x=0; x<w; x+=step){
-                    if(imgData[(y*w+x)*4] > 128){
-                        const px = (x - w/2) * spread; 
-                        const py = -(y - h/2) * spread + 2.0; 
-                        const pz = (Math.random() - 0.5) * 0.6; 
-                        logoPoints.push(new THREE.Vector3(px, py, pz));
+            for(let y=0; y<256; y+=4){ // step 4 优化性能
+                for(let x=0; x<1024; x+=4){
+                    if(data[(y*1024+x)*4] > 128){
+                        // *** 关键修正 ***
+                        // 使用 -(x - 512) 再次确保镜像反转正确
+                        // 如果之前你看到是反的，这行代码会把它修正回来
+                        const px = -(x - 512) * 0.06; 
+                        const pz = (y - 128) * 0.06;
+                        points.push(px, 0, pz);
+                        initials.push(px, 0, pz);
                     }
                 }
             }
-
-            const eaglePoints = [];
-            const count = logoPoints.length;
             
-            for(let i=0; i<count; i++){
-                const t = (i / count) * 2 - 1; 
-                const wingSpan = isMobile ? 9 : 16; 
-                
-                const x = t * wingSpan;
-                let y = Math.cos(t * Math.PI) * 1.5; 
-                y += Math.pow(Math.abs(t), 3) * 2.0;
-                let z = Math.abs(t) * 3.0; 
-                z += (Math.random()-0.5) * 0.8;
-                eaglePoints.push(new THREE.Vector3(
-                    x + (Math.random()-0.5)*0.3, 
-                    y + (Math.random()-0.5)*0.3 + 5, 
-                    z 
-                ));
-            }
-
-            const randomPoints = [];
-            for(let i=0; i<count; i++){
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.acos((Math.random() * 2) - 1);
-                const r = 40 + Math.random() * 30; 
-                const x = r * Math.sin(phi) * Math.cos(theta);
-                const y = r * Math.sin(phi) * Math.sin(theta);
-                const z = r * Math.cos(phi);
-                randomPoints.push(new THREE.Vector3(x, y, z));
-            }
-
-            geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(count * 3);
-            const posLogo = new Float32Array(count * 3);
-            const posEagle = new Float32Array(count * 3);
-            const colors = new Float32Array(count * 3);
-
-            currentPositions = new Float32Array(count * 3);
-
-            for(let i=0; i<count; i++){
-                currentPositions[i*3] = randomPoints[i].x;
-                currentPositions[i*3+1] = randomPoints[i].y;
-                currentPositions[i*3+2] = randomPoints[i].z;
-
-                positions[i*3] = currentPositions[i*3];
-                positions[i*3+1] = currentPositions[i*3+1];
-                positions[i*3+2] = currentPositions[i*3+2];
-
-                posLogo[i*3] = logoPoints[i].x;
-                posLogo[i*3+1] = logoPoints[i].y;
-                posLogo[i*3+2] = logoPoints[i].z;
-
-                posEagle[i*3] = eaglePoints[i].x;
-                posEagle[i*3+1] = eaglePoints[i].y;
-                posEagle[i*3+2] = eaglePoints[i].z;
-                
-                colors[i*3] = 0.2; colors[i*3+1] = 0.2; colors[i*3+2] = 0.2;
-            }
-
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            geometry.setAttribute('posLogo', new THREE.BufferAttribute(posLogo, 3));
-            geometry.setAttribute('posEagle', new THREE.BufferAttribute(posEagle, 3));
-            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-            const material = new THREE.PointsMaterial({
-                size: isMobile ? 0.09 : 0.08, 
-                vertexColors: true, 
-                transparent: true,
-                opacity: 0.95,
-                blending: THREE.AdditiveBlending,
-                sizeAttenuation: true,
-                // 优化关键 2：关闭深度写入，消除粒子重叠时的闪烁 (Anti-Flicker)
-                depthWrite: false 
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
+            geo.setAttribute('initial', new THREE.Float32BufferAttribute(initials, 3));
+            
+            const mat = new THREE.PointsMaterial({
+                color: 0xffffff, size: 0.15, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending
             });
-
-            particles = new THREE.Points(geometry, material);
-            scene.add(particles);
+            
+            logoParticles = new THREE.Points(geo, mat);
+            logoParticles.position.y = 2.5; 
+            logoParticles.rotation.x = -Math.PI / 4; 
+            scene.add(logoParticles);
         }
 
-        function createRiver(){
-            riverGeometry = new THREE.PlaneGeometry(300, 300, 128, 128); 
-            const mat = new THREE.MeshStandardMaterial({ 
-                color: 0x050505, 
-                metalness: 0.95, 
-                roughness: 0.15, 
-                side: THREE.DoubleSide
-            });
-            river = new THREE.Mesh(riverGeometry, mat);
-            river.rotation.x = -Math.PI / 2; 
-            river.position.y = -4.0; 
-            scene.add(river);
-        }
-
-        function updateCamera(){
-            const isMobile = window.innerWidth < 768;
-            const dist = isMobile ? 35 : 22; 
-            camera.position.set(0, 0, dist);
-            camera.lookAt(0, 0, 0);
-        }
-
-        function animate(){
+        function animate() {
             requestAnimationFrame(animate);
             time += 0.01;
 
-            const hueBase = time * 0.02; 
-            lights.forEach((light, i) => {
-                const angle = time * 0.4 + (i * Math.PI * 2 / 3);
-                const radius = 18;
-                light.position.x = Math.cos(angle) * radius;
-                light.position.z = Math.sin(angle) * radius;
-                light.position.y = 6 + Math.sin(time + i) * 3;
-                const h = (hueBase + i * 0.1) % 1.0;
-                light.color.setHSL(h, 0.9, 0.6); 
-            });
-
-            const scrollFactor = Math.min(Math.max(scrollY / 500, 0), 1);
-            const isIntro = time < 3.0;
-
-            if(particles && geometry){
-                const pos = geometry.attributes.position.array;
-                const pLogo = geometry.attributes.posLogo.array;
-                const pEagle = geometry.attributes.posEagle.array;
-                const cols = geometry.attributes.color.array;
-                const count = pos.length / 3;
+            // 分析音频数据
+            if(isPlaying && analyser) {
+                analyser.getByteFrequencyData(dataArray);
+                let bass = 0, high = 0;
+                // 取低频段平均值
+                for(let i=0; i<20; i++) bass += dataArray[i];
+                audioData.bass = (bass / 20) / 255; // 0.0 ~ 1.0
                 
-                const flapSpeed = time * 2.5; 
-                // 优化关键 3：减少 GC，复用对象
-                const pVec = new THREE.Vector3();
-                const colTemp = new THREE.Color();
-                const baseColor = new THREE.Color(0x1a1a1a); 
-                const damping = 0.05;
-
-                for(let i=0; i<count; i++){
-                    const ix = i * 3; const iy = i * 3 + 1; const iz = i * 3 + 2;
-
-                    let targetX = pLogo[ix] * (1 - scrollFactor) + pEagle[ix] * scrollFactor;
-                    let targetY = pLogo[iy] * (1 - scrollFactor) + pEagle[iy] * scrollFactor;
-                    let targetZ = pLogo[iz] * (1 - scrollFactor) + pEagle[iz] * scrollFactor;
-
-                    if(scrollFactor > 0.01){
-                        const dist = Math.abs(pEagle[ix]);
-                        targetY += Math.sin(flapSpeed) * (dist * 0.12) * scrollFactor;
-                    } else if(!isIntro) {
-                        targetY += Math.sin(time * 2 + pLogo[ix] * 0.5) * 0.05;
-                    }
-
-                    // 物理平滑移动
-                    currentPositions[ix] += (targetX - currentPositions[ix]) * damping;
-                    currentPositions[iy] += (targetY - currentPositions[iy]) * damping;
-                    currentPositions[iz] += (targetZ - currentPositions[iz]) * damping;
-
-                    pos[ix] = currentPositions[ix];
-                    pos[iy] = currentPositions[iy];
-                    pos[iz] = currentPositions[iz];
-
-                    pVec.set(pos[ix], pos[iy], pos[iz]);
-
-                    // 光影计算优化
-                    colTemp.copy(baseColor);
-                    for(let l=0; l<3; l++){
-                        const light = lights[l];
-                        // 快速距离计算，不使用 sqrt，稍微牺牲精度换取性能
-                        const dx = pVec.x - light.position.x;
-                        const dy = pVec.y - light.position.y;
-                        const dz = pVec.z - light.position.z;
-                        const distSq = dx*dx + dy*dy + dz*dz;
-                        
-                        const intensity = 150 / (distSq + 10); 
-                        
-                        colTemp.r += light.color.r * intensity * 0.1;
-                        colTemp.g += light.color.g * intensity * 0.1;
-                        colTemp.b += light.color.b * intensity * 0.1;
-                    }
-                    
-                    cols[ix] = Math.min(colTemp.r, 1.2);
-                    cols[iy] = Math.min(colTemp.g, 1.2);
-                    cols[iz] = Math.min(colTemp.b, 1.2);
-                }
-                geometry.attributes.position.needsUpdate = true;
-                geometry.attributes.color.needsUpdate = true;
-
-                if(!isIntro){
-                    if(scrollFactor > 0.1){
-                        particles.position.z = (scrollFactor - 0.5) * 4; 
-                        particles.rotation.x = Math.sin(time * 0.5) * 0.08;
-                        particles.rotation.y = 0;
-                    } else {
-                        particles.position.z = 0;
-                        particles.rotation.x = 0;
-                        particles.rotation.y = Math.sin(time * 0.6) * 0.25; 
-                    }
-                }
+                // 更新左下角装饰条
+                const bars = document.querySelectorAll('.bar');
+                bars.forEach((bar, i) => {
+                    bar.style.height = (dataArray[i*10] / 5) + 'px';
+                });
+            } else {
+                audioData.bass *= 0.95; // 缓慢衰减
             }
 
-            if(river && riverGeometry){
-                const pos = riverGeometry.attributes.position;
+            // 1. 烟雾更新 (颜色循环 + 流动)
+            if(mistMesh) {
+                mistMesh.material.uniforms.uTime.value = time;
+                mistMesh.material.uniforms.uBass.value = audioData.bass;
+                
+                // 颜色慢速循环逻辑 (Cycle Colors)
+                // 每 15 秒一个周期
+                const tColor = time * 0.1; 
+                const colors = [
+                    new THREE.Color(0xffffff), // 白
+                    new THREE.Color(0x00ffff), // 青
+                    new THREE.Color(0x0044ff), // 蓝
+                    new THREE.Color(0xff00ff), // 紫
+                    new THREE.Color(0xffaa00)  // 金
+                ];
+                // 线性插值找到当前颜色
+                const idx = Math.floor(tColor) % colors.length;
+                const nextIdx = (idx + 1) % colors.length;
+                const alpha = tColor - Math.floor(tColor);
+                
+                const currentColor = colors[idx].clone().lerp(colors[nextIdx], alpha);
+                mistMesh.material.uniforms.uColor.value = currentColor;
+                
+                mistMesh.rotation.z = time * 0.02;
+            }
+
+            // 2. 地面震动
+            if(terrain) {
+                const pos = terrain.geometry.attributes.position;
+                const baseZ = terrain.geometry.userData.baseZ;
+                const shake = audioData.bass * 1.5;
                 for(let i=0; i<pos.count; i++){
-                    const x = pos.getX(i);
-                    const y = pos.getY(i);
-                    const w1 = Math.sin(x*0.1 + time*0.8);
-                    const w2 = Math.cos(y*0.08 + time*0.6);
-                    const w3 = Math.sin((x+y)*0.2 + time);
-                    pos.setZ(i, (w1+w2+w3) * 1.0);
+                    if(shake > 0.01) {
+                         pos.setZ(i, baseZ[i] + (Math.random()-0.5) * shake);
+                    } else {
+                         // 平滑复位
+                         const curr = pos.getZ(i);
+                         pos.setZ(i, curr + (baseZ[i] - curr) * 0.1);
+                    }
                 }
                 pos.needsUpdate = true;
-                riverGeometry.computeVertexNormals();
+                terrain.rotation.z = -time * 0.01;
             }
+
+            // 3. Logo 跳动
+            if(logoParticles) {
+                const pos = logoParticles.geometry.attributes.position.array;
+                const init = logoParticles.geometry.attributes.initial.array;
+                const jump = audioData.bass * 2.0; // 随低音跳动幅度
+                
+                for(let i=0; i<pos.length/3; i++){
+                    const iy = i*3+1;
+                    // 基础呼吸 + 音乐跳动
+                    const wave = Math.sin(time*2 + init[i*3]*0.2) * 0.3;
+                    pos[iy] = init[iy] + wave + jump * Math.max(0, Math.sin(time*10 + i));
+                }
+                logoParticles.geometry.attributes.position.needsUpdate = true;
+            }
+
+            // 4. 星星闪烁
+            if(stars) {
+                stars.rotation.y = time * 0.005;
+            }
+
+            // 5. 背景滚动联动
+            const scrollFactor = Math.min(scrollY / 1500, 1);
+            const targetY = 35 - scrollFactor * 30; 
+            const targetZ = 50 - scrollFactor * 35;
+            camera.position.y += (targetY - camera.position.y) * 0.05;
+            camera.position.z += (targetZ - camera.position.z) * 0.05;
+            camera.lookAt(0, scrollFactor * 5, scrollFactor * -20);
 
             renderer.render(scene, camera);
         }
 
-        function initEvents(){
-            document.querySelectorAll('.view-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const img = e.currentTarget.parentElement.querySelector('img');
-                    if(img) openLightbox(img.src);
-                });
-            });
-        }
-
-        function onResize(){
-            if(renderer && camera){
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                updateCamera();
-            }
+        function onResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         }
     </script>
 </body>
