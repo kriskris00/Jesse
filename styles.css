@@ -1,249 +1,551 @@
-body {
+/* ==========================================================================
+   SELAHX - 自然麦浪原野 + 全色系流体烟雾 + 苹果 iOS 27 流光液态玻璃设计系统
+   ========================================================================== */
+
+:root {
+  --bg-void: #030305;
+  --wheat-gold: #f8cf70;
+  --wheat-amber: #e69d38;
+  --liquid-border-highlight: rgba(255, 255, 255, 0.7);
+  --liquid-border-ambient: rgba(255, 255, 255, 0.25);
+  --radius-card: 16px;
+  --radius-tray: 12px;
+  --radius-pill: 9999px;
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "PingFang SC", sans-serif;
+  --transition-liquid: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-void);
+  color: #ffffff;
+  font-family: var(--font-system);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--bg-void);
+  position: relative;
+}
+
+/* ==========================================================================
+   3D 麦浪原野与全色系流动烟雾画布 (Fixed Background)
+   ========================================================================== */
+#canvas-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 舞台环境自然暗角 */
+.stage-ambient-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 40%, transparent 30%, rgba(3, 3, 5, 0.4) 70%, #030305 100%);
+}
+
+/* ==========================================================================
+   页面滚动内容层 (完全透明自然融合)
+   ========================================================================== */
+.scroll-viewport {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
+
+/* 首屏自然麦浪视差留白区 */
+.hero-stage-spacer {
+  height: 92vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  text-align: center;
-  overflow-x: hidden;
-  max-width: 100vw;
-  background: linear-gradient(to bottom, #ffffff, #ffffff 50%, #ffe4b9);
-  animation: backgroundFlow 10s infinite alternate ease-in-out; 
+  justify-content: flex-end;
+  align-items: center;
+  padding-bottom: 36px;
+  pointer-events: none;
 }
 
-@keyframes backgroundFlow {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
-}
-header, footer, .dynamic-island {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(10px);
-}
-
-.logo {
-  font-size: 1.8rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  background: linear-gradient(270deg, #8a6135, #c8a67d, #8a6135);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: textGradient 3s infinite alternate ease-in-out;
-}
-
-.description {
-  font-size: 1.2rem;
-  background: linear-gradient(270deg, #8a6135, #c8a67d, #8a6135);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: textGradient 3s infinite alternate ease-in-out;
-}
-
-@keyframes textGradient {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
-}
-
-.dynamic-island {
-  position: relative;
-  margin: 10px auto ;
-  width: fit-content;
-  padding: 10px 20px;
-  border-radius: 30px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, background 0.3s ease;
-}
-
-.dynamic-island:hover {
-  transform: scale(1.05);
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.music-button {
-  padding: 10px 20px;
-  background-color: #8A6135;
-  color: #FFFFFF;
-  border: none;
-  border-radius: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease, background-color 0.3s ease;
-}
-
-.music-button:hover {
-  background-color: #6B4226;
-  transform: scale(1.05);
-}
-
-.music-button:active {
-  transform: scale(0.95);
-}
-
-.media-container-wrapper {
+.scroll-whisper {
   display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.media-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  flex-direction: column;
+  align-items: center;
   gap: 10px;
-  padding: 20px;
-  max-width: 1000px;
-  width: 100%;
-  box-sizing: border-box;
+  color: rgba(248, 207, 112, 0.75);
+  font-size: 0.68rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  animation: whisperPulse 2.8s ease-in-out infinite;
 }
 
-.media-container img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
+.scroll-track {
+  width: 1.5px;
+  height: 26px;
+  background: linear-gradient(to bottom, var(--wheat-gold), transparent);
+  animation: trackFlow 2s ease-in-out infinite;
+}
+
+@keyframes trackFlow {
+  0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+  50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+  100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+
+@keyframes whisperPulse {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(5px); opacity: 1; }
+}
+
+.main-content {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 20px 24px 140px;
+}
+
+/* ==========================================================================
+   苹果 iOS 27 极致精致液态玻璃卡片 (小边框、轻盈高折射)
+   ========================================================================== */
+.liquid-glass-card {
+  position: relative;
+  padding: 5px; /* 极细精致液态玻璃托盘 */
+  border-radius: var(--radius-card);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(36px) saturate(220%);
+  -webkit-backdrop-filter: blur(36px) saturate(220%);
+  
+  /* 水晶物理多层折射边缘 */
+  border-top: 1.2px solid var(--liquid-border-highlight);
+  border-left: 1px solid var(--liquid-border-ambient);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+
+  box-shadow: 
+    0 18px 45px -8px rgba(0, 0, 0, 0.8),
+    0 0 25px rgba(248, 207, 112, 0.08),
+    inset 0 1px 2px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.4);
+
+  overflow: hidden;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transform-style: preserve-3d;
+  transition: transform var(--transition-liquid), box-shadow var(--transition-liquid), border-color var(--transition-liquid);
 }
 
-.media-container img:hover {
-  transform: scale(1.03);
+.liquid-glass-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  border-top-color: #ffffff;
+  box-shadow: 
+    0 26px 65px -8px rgba(0, 0, 0, 0.9),
+    0 0 40px rgba(248, 207, 112, 0.25),
+    inset 0 1.5px 3px rgba(255, 255, 255, 0.8),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3);
 }
 
-.loader {
-  width: 30px;
-  height: 30px;
-  border: 4px solid #c8a67d;
-  border-top: 4px solid transparent;
+/* 液态流光划痕掠影 (Liquid Shimmer) */
+.liquid-glass-card::before {
+  content: '';
+  position: absolute;
+  inset: -100%;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.12) 46%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(248, 207, 112, 0.3) 54%,
+    transparent 65%
+  );
+  transform: rotate(25deg) translate(-100%, -100%);
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.liquid-glass-card:hover::before {
+  transform: rotate(25deg) translate(100%, 100%);
+}
+
+/* ==========================================================================
+   动态视频展区 (VD.webm)
+   ========================================================================== */
+.cinema-container {
+  margin-bottom: 55px;
+}
+
+.liquid-cinema-card {
+  padding: 7px;
+  border-radius: calc(var(--radius-card) + 4px);
+}
+
+.cinema-media-tray {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: var(--radius-tray);
+  overflow: hidden;
+  background: #000;
+}
+
+.cinema-video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cinema-floating-pill {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 5px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(10, 10, 16, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  color: var(--wheat-gold);
+  font-family: ui-monospace, monospace;
+}
+
+/* ==========================================================================
+   画廊展区 (全部 13 张高清照片，微边框液态玻璃托盘)
+   ========================================================================== */
+.gallery-wrapper {
+  width: 100%;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 24px;
+}
+
+.liquid-photo-card {
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-tray {
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: var(--radius-tray);
+  overflow: hidden;
+  position: relative;
+  background: #050508;
+}
+
+.photo-inner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+  filter: brightness(0.96) contrast(1.02);
+}
+
+.liquid-photo-card:hover .photo-inner-img {
+  transform: scale(1.05);
+  filter: brightness(1.02) contrast(1.06);
+}
+
+.photo-meta-bar {
+  padding: 9px 8px 3px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.photo-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.photo-index {
+  font-size: 0.68rem;
+  color: rgba(248, 207, 112, 0.8);
+  font-family: ui-monospace, monospace;
+  letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   苹果 iOS 27 流光液态玻璃灵动岛播放器 (Color-Flowing Liquid Glass)
+   告别黑灰色，呈现绚烂流动的虹彩液态玻璃机身
+   ========================================================================== */
+.liquid-dynamic-island {
+  position: fixed;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 7px 20px;
+  border-radius: var(--radius-pill);
+  
+  /* 颜色流动的液态玻璃背景：全色系光波流淌 */
+  background: linear-gradient(
+    135deg,
+    rgba(0, 240, 255, 0.28) 0%,
+    rgba(181, 23, 158, 0.35) 25%,
+    rgba(247, 37, 133, 0.3) 50%,
+    rgba(255, 209, 102, 0.35) 75%,
+    rgba(67, 97, 238, 0.28) 100%
+  );
+  background-size: 300% 300%;
+  animation: liquidFlowRainbow 10s ease-in-out infinite alternate;
+
+  backdrop-filter: blur(36px) saturate(240%);
+  -webkit-backdrop-filter: blur(36px) saturate(240%);
+  
+  /* 高折射率水晶液态边框 */
+  border-top: 1.5px solid rgba(255, 255, 255, 0.85);
+  border-left: 1.2px solid rgba(255, 255, 255, 0.5);
+  border-right: 1.2px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 1.2px solid rgba(0, 240, 255, 0.4);
+
+  box-shadow: 
+    0 20px 55px rgba(0, 0, 0, 0.75),
+    0 0 35px rgba(0, 240, 255, 0.35),
+    0 0 60px rgba(247, 37, 133, 0.25),
+    inset 0 1.5px 3px rgba(255, 255, 255, 0.75),
+    inset 0 -1.5px 3px rgba(0, 0, 0, 0.3);
+
+  max-width: calc(100vw - 32px);
+  transition: all var(--transition-liquid);
+  overflow: hidden;
+}
+
+@keyframes liquidFlowRainbow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 50% 100%; }
+}
+
+.liquid-dynamic-island:hover {
+  transform: translateX(-50%) translateY(-3px) scale(1.02);
+  border-top-color: #ffffff;
+  box-shadow: 
+    0 28px 70px rgba(0, 0, 0, 0.85),
+    0 0 50px rgba(0, 240, 255, 0.5),
+    0 0 80px rgba(247, 37, 133, 0.4);
+}
+
+.island-cover-wrapper {
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 50px auto;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
 }
 
-@keyframes spin {
+.island-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.liquid-dynamic-island.is-playing .island-cover-img {
+  animation: vinylSpin 8s linear infinite;
+}
+
+@keyframes vinylSpin {
+  from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
-footer {
-  text-align: center;
-  margin-top: auto;
+.island-info-box {
+  display: flex;
+  flex-direction: column;
+  min-width: 130px;
+  max-width: 220px;
 }
 
-.lightbox {
+.island-track-name {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.island-artist-name {
+  font-size: 0.66rem;
+  color: #fff;
+  opacity: 0.88;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* 灵动岛跳动频谱条 (炫彩霓虹光斑) */
+.island-equalizer-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 15px;
+  padding: 0 4px;
+}
+
+.eq-column {
+  width: 2.5px;
+  height: 3px;
+  background: #ffffff;
+  border-radius: 1px;
+  box-shadow: 0 0 10px #00f0ff, 0 0 5px #fff;
+  transition: height 0.08s ease;
+}
+
+/* 灵动岛控制器 */
+.island-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.liquid-ctrl-btn {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.liquid-ctrl-btn:hover {
+  background: #ffffff;
+  color: #0c0d14;
+  border-color: #ffffff;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+.liquid-ctrl-btn-play {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* ==========================================================================
+   全屏影院灯箱
+   ========================================================================== */
+.cinema-lightbox {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.26); 
-  backdrop-filter: blur(24px);   
-  -webkit-backdrop-filter: blur(24px);
+  z-index: 9999;
+  background: rgba(3, 3, 5, 0.95);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 99;
-  flex-direction: column;
-  padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2); 
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);   
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-liquid);
+  padding: 24px;
+  cursor: zoom-out;
 }
 
-.lightbox.hidden {
-  display: none;
+.cinema-lightbox.active {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-.lightbox-content {
+.lightbox-content-tray {
   position: relative;
-  max-width: 90%;
-  width: 600px;
-  text-align: center;
-  animation: fadeIn 0.3s ease;
+  max-width: 92vw;
+  max-height: 88vh;
+  cursor: default;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.98); }
+.lightbox-main-photo {
+  max-width: 100%;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: var(--radius-card);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.9), 0 0 50px rgba(0, 240, 255, 0.25);
+  animation: zoomReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes zoomReveal {
+  from { opacity: 0; transform: scale(0.92); }
   to { opacity: 1; transform: scale(1); }
 }
 
-.lightbox-content img {
-  width: 100%;
-  max-height: 70vh;
-  object-fit: contain;
-  border-radius: 10px;
-  margin-top: 10px;
-  transition: opacity 0.3s ease;
-}
-
-.lightbox-name,
-.lightbox-date {
-  color: #fff;
-  margin: 10px 0;
-  font-size: 1rem;
-}
-
-.lightbox-nav {
+.lightbox-close-icon {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.1); 
-  backdrop-filter: blur(10px);  
-  -webkit-backdrop-filter: blur(10px); 
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  top: -16px;
+  right: -16px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  padding: 10px;
-  color: white;
-  font-size: 1.5rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  background: rgba(20, 18, 14, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.lightbox-nav:hover {
-  transform: translateY(-50%) scale(1.1);
+.lightbox-close-icon:hover {
+  background: #00f0ff;
+  color: #000;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px #00f0ff;
 }
 
-.lightbox-nav.prev,
-.lightbox-nav.next {
-  padding: 8px 12px;
-  font-size: 18px;
-}
-
-.lightbox-nav.prev {
-  left: 10px; 
-}
-
-.lightbox-nav.next {
-  right: 10px; 
-}
-
-.lightbox-nav.prev:hover,
-.lightbox-nav.next:hover {
-  background: rgba(255, 255, 255, 0.2); 
-  transform: translateY(-50%) scale(1.1);
-}
-
-.close-btn {
-  position: absolute;
-  top: -20px;
-  right: -30px; 
-  font-size: 2rem;
-  color: #ffffff;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-@media (max-width: 600px) {
-  .media-container {
-    grid-template-columns: repeat(2, 1fr);
+/* ==========================================================================
+   移动端响应式适配
+   ========================================================================== */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 10px 14px 120px;
   }
-
-  .lightbox-nav.prev {
-    left: 10px; 
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
   }
-
-  .lightbox-nav.next {
-    right: 10px; 
+  .liquid-dynamic-island {
+    bottom: 14px;
+    padding: 6px 14px;
+    gap: 10px;
+    width: calc(100% - 20px);
+    justify-content: space-between;
   }
-
-  .close-btn {
-    top: -10px;
-    right: -20px; 
+  .island-info-box {
+    min-width: 80px;
+    max-width: 120px;
+  }
 }

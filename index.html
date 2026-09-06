@@ -1,493 +1,243 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>SelahX</title>
-    <style>
-        /* --- 基础设置 --- */
-        body { margin: 0; background-color: #000; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; overflow: hidden; }
-        
-        #canvas-container { position: fixed; inset: 0; z-index: 1; }
-        
-        /* 顶部暗角 */
-        .vignette {
-            position: fixed; inset: 0; pointer-events: none; z-index: 2;
-            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 70%, #000 100%);
-        }
-
-        /* --- 播放器 UI (回归原版) --- */
-        .mini-player { 
-            position: fixed; bottom: 40px; right: 40px; width: 50px; height: 50px; 
-            border-radius: 50%; background: rgba(20, 20, 20, 0.8); border: 1px solid rgba(255,255,255,0.2); 
-            backdrop-filter: blur(10px); z-index: 240; display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; transition: all 0.3s;
-        }
-        .mini-player:hover { transform: scale(1.1); border-color: #fff; }
-        .mini-player.playing { border-color: #00ffff; box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
-        .player-svg { width: 18px; height: 18px; fill: #fff; pointer-events: none; }
-        .icon-pause { display: none; } .icon-play { display: block; margin-left: 3px; }
-        .mini-player.playing .icon-play { display: none; } .mini-player.playing .icon-pause { display: block; margin-left: 0; }
-
-        /* --- 滚动内容层 --- */
-        .content-layer { 
-            position: relative; z-index: 10; width: 100%; height: 100vh;
-            overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth;
-        }
-        .spacer { height: 100vh; width: 100%; }
-
-        .gallery-container { 
-            max-width: 1200px; margin: 0 auto; padding: 0 40px 100px 40px; 
-            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.9) 15%);
-        }
-
-        .section-header {
-            text-align: center; margin-bottom: 60px; color: rgba(255,255,255,0.5);
-            font-size: 11px; letter-spacing: 6px; text-transform: uppercase; padding-top: 50px;
-        }
-
-        .gallery-grid { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-            gap: 30px; 
-        }
-
-        .photo-card { 
-            background: rgba(15, 15, 15, 0.5); 
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px); 
-            transition: all 0.5s ease;
-        }
-        .photo-card:hover { 
-            transform: translateY(-10px); 
-            border-color: rgba(255,255,255,0.4);
-            background: rgba(30, 30, 30, 0.7);
-        }
-
-        .photo-inner { width: 100%; aspect-ratio: 16/9; overflow: hidden; }
-        .photo-inner img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.7s; filter: grayscale(0.8); }
-        .photo-card:hover .photo-inner img { transform: scale(1.05); opacity: 1; filter: grayscale(0); }
-        .card-meta { padding: 15px; color: #888; font-size: 10px; letter-spacing: 2px; display: flex; justify-content: space-between; }
-        
-        /* 频谱条 (可选装饰) */
-        .equalizer {
-            position: fixed; bottom: 40px; left: 40px; z-index: 100;
-            display: flex; gap: 3px; height: 20px; align-items: flex-end; opacity: 0.5;
-        }
-        .bar { width: 3px; background: #fff; height: 2px; transition: height 0.1s; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#040406">
+  <title>SELAHX</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
-    <!-- 原版音乐标签 -->
-    <audio id="bg-music" loop crossorigin="anonymous">
-        <!-- 请替换为真实音频链接 -->
-        <source src="xxx.mp3" type="audio/mpeg">
-    </audio>
+  <!-- 3D 黄金麦田大地舞台：金黄麦浪 + 体育场繁星看台 + 舞台流云 + 金辉 SELAHX 徽标 -->
+  <div id="canvas-container"></div>
+  <div class="stage-ambient-vignette"></div>
 
-    <div id="canvas-container"></div>
-    <div class="vignette"></div>
+  <!-- 背景音频元素 -->
+  <audio id="bgAudio" preload="auto" crossorigin="anonymous"></audio>
 
-    <!-- 播放按钮 -->
-    <div class="mini-player" onclick="toggleMusic(event)">
-        <svg class="player-svg icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        <svg class="player-svg icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+  <!-- 页面滚动视差层 (全透明流体融合) -->
+  <div class="scroll-viewport">
+
+    <!-- 首屏留白：完整沉浸欣赏 Kanye 同款黄金麦浪大地与星光舞台 -->
+    <div class="hero-stage-spacer">
+      <div class="scroll-whisper">
+        <div class="scroll-track"></div>
+        <span>SCROLL TO EXPLORE</span>
+      </div>
     </div>
 
-    <!-- 简单的左下角频谱条装饰 -->
-    <div class="equalizer">
-        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-    </div>
+    <main class="main-content">
 
-    <div class="content-layer" id="scroller">
-        <div class="spacer"></div>
-        <div class="gallery-container">
-            <div class="section-header">Archive Collection</div>
-            <div class="gallery-grid">
-                <div class="photo-card"><div class="photo-inner"><img src="111.jpg"></div><div class="card-meta"><span>ALPHA</span><span>01</span></div></div>
-                <div class="photo-card"><div class="photo-inner"><img src="IMG_8317.jpeg"></div><div class="card-meta"><span>BETA</span><span>02</span></div></div>
-                <div class="photo-card"><div class="photo-inner"><img src="IMG_8318.jpeg"></div><div class="card-meta"><span>GAMMA</span><span>03</span></div></div>
-                <div class="photo-card"><div class="photo-inner"><img src="IMG_8322.jpeg"></div><div class="card-meta"><span>DELTA</span><span>04</span></div></div>
-                <div class="photo-card"><div class="photo-inner"><img src="IMG_8329.jpeg"></div><div class="card-meta"><span>EPSILON</span><span>05</span></div></div>
-                <div class="photo-card"><div class="photo-inner"><img src="IMG_8340.jpeg"></div><div class="card-meta"><span>ZETA</span><span>06</span></div></div>
-            </div>
+      <!-- 动态视频展区 (VD.webm) - 苹果 iOS 27 液态玻璃影院卡片 -->
+      <section class="cinema-container">
+        <div class="liquid-glass-card liquid-cinema-card">
+          <div class="cinema-media-tray">
+            <video class="cinema-video-element" autoplay loop muted playsinline poster="111.jpg">
+              <source src="VD.webm" type="video/webm">
+            </video>
+            <div class="cinema-floating-pill">4K MOTION CINEMA</div>
+          </div>
         </div>
+      </section>
+
+      <!-- 纯粹典藏画廊 (全部13张高清大片，苹果 iOS 27 液态玻璃材质) -->
+      <section class="gallery-wrapper">
+        <div class="gallery-grid">
+
+          <article class="liquid-glass-card liquid-photo-card">
+            <div class="photo-tray">
+              <img class="photo-inner-img" src="111.jpg" alt="ALPHA" loading="lazy">
+            </div>
+            <div class="photo-meta-bar">
+              <span class="photo-title">ALPHA</span>
+              <span class="photo-index">01 / 13</span>
+            </div>
+          </article>
+
+          <article class="liquid-glass-card liquid-photo-card">
+            <div class="photo-tray">
+              <img class="photo-inner-img" src="DanLevi.webp" alt="DANLEVI 磐石" loading="lazy">
+            </div>
+            <div class="photo-meta-bar">
+              <span class="photo-title">DANLEVI 磐石</span>
+              <span class="photo-index">02 / 13</span>
+            </div>
+          </article>
+
+          <article class="liquid-glass-card liquid-photo-card">
+            <div class="photo-tray">
+              <img class="photo-inner-img" src="selahx1.webp" alt="REED 芦苇" loading="lazy">
+            </div>
+            <div class="photo-meta-bar">
+              <span class="photo-title">REED 芦苇</span>
+              <span class="photo-index">03 / 13</span>
+            </div>
+          </article>
+
+          <article class="liquid-glass-card liquid-photo-card">
+            <div class="photo-tray">
+              <img class="photo-inner-img" src="1.WEBP" alt="DANDELION 蒲公英" loading="lazy">
+            </div>
+            <div class="photo-meta-bar">
+              <span class="photo-title">DANDELION</span>
+              <span class="photo-index">04 / 13</span>
+            </div>
+          </article>
+
+          <article class="liquid-glass-card liquid-photo-card">
+            <div class="photo-tray">
+              <img class="photo-inner-img" src="IMG_8317.jpeg" alt="BETA" loading="lazy">
+            </div>
+            <div class="photo-meta-bar">
+              <span class="photo-title">BETA</span>
+              <span class="photo-index">05 / 13</span>
+            </div>
+          </article>
+
+          <article class="liquid-glass-card liquid-photo-card">
+            <div class="photo-tray">
+              <img class="photo-inner-img" src="2.WEBP" alt="ETHEREAL" loading="lazy">
+            </div>
+            <div class="photo-meta-bar">
+              <span class="photo-title">ETHEREAL</span>
+              <span class="photo-index">06 / 13</span>
+            </div>
+          </article>
+
+          <article class="liquid-glass-card liquid-photo-card">
+            <div class="photo-tray">
+              <img class="photo-inner-img" src="IMG_8318.jpeg" alt="GAMMA" loading="lazy">
+            </div>
+            <div class="photo-meta-bar">
+              <span class="photo-title">GAMMA</span>
+              <span class="photo-index">07 / 13</span>
+            </div>
+          </article>
+
+          <article class="liquid-glass-card liquid-photo-card">
+            <div class="photo-tray">
+              <img class="photo-inner-img" src="3.WEBP" alt="CHRONICLE" loading="lazy">
+            </div>
+            <div class="photo-meta-bar">
+              <span class="photo-title">CHRONICLE</span>
+              <span class="photo-index">08 / 13</span>
+            </div>
+          </article>
+
+          <article class="liquid-glass-card liquid-photo-card">
+            <div class="photo-tray">
+              <img class="photo-inner-img" src="IMG_8322.jpeg" alt="DELTA" loading="lazy">
+            </div>
+            <div class="photo-meta-bar">
+              <span class="photo-title">DELTA</span>
+              <span class="photo-index">09 / 13</span>
+            </div>
+          </article>
+
+          <article class="liquid-glass-card liquid-photo-card">
+            <div class="photo-tray">
+              <img class="photo-inner-img" src="4.WEBP" alt="HORIZON" loading="lazy">
+            </div>
+            <div class="photo-meta-bar">
+              <span class="photo-title">HORIZON</span>
+              <span class="photo-index">10 / 13</span>
+            </div>
+          </article>
+
+          <article class="liquid-glass-card liquid-photo-card">
+            <div class="photo-tray">
+              <img class="photo-inner-img" src="IMG_8329.jpeg" alt="EPSILON" loading="lazy">
+            </div>
+            <div class="photo-meta-bar">
+              <span class="photo-title">EPSILON</span>
+              <span class="photo-index">11 / 13</span>
+            </div>
+          </article>
+
+          <article class="liquid-glass-card liquid-photo-card">
+            <div class="photo-tray">
+              <img class="photo-inner-img" src="IMG_8340.jpeg" alt="ZETA" loading="lazy">
+            </div>
+            <div class="photo-meta-bar">
+              <span class="photo-title">ZETA</span>
+              <span class="photo-index">12 / 13</span>
+            </div>
+          </article>
+
+          <article class="liquid-glass-card liquid-photo-card">
+            <div class="photo-tray">
+              <img class="photo-inner-img" src="IMG_2576.jpeg" alt="AURA" loading="lazy">
+            </div>
+            <div class="photo-meta-bar">
+              <span class="photo-title">AURA</span>
+              <span class="photo-index">13 / 13</span>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- 全屏沉浸式影院灯箱 (点击任意照片弹出，点击关闭) -->
+  <div class="cinema-lightbox" id="cinemaLightbox" role="dialog" aria-modal="true">
+    <div class="lightbox-content-tray">
+      <img src="" alt="" class="lightbox-main-photo" id="lightboxImg">
+      <button class="lightbox-close-icon" id="lightboxClose" aria-label="Close Lightbox">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- 苹果 iOS 27 液态玻璃灵动岛播放器 (Liquid Dynamic Island) -->
+  <aside class="liquid-dynamic-island" id="liquidDynamicIsland">
+    <div class="island-cover-wrapper">
+      <img src="selahx.PNG" alt="Album Cover" class="island-cover-img">
     </div>
 
-    <script type="module">
-        import * as THREE from 'https://cdn.skypack.dev/three@0.136.0';
+    <div class="island-info-box">
+      <span class="island-track-name" id="islandTrackName">SelahX Ambient Resonance</span>
+      <span class="island-artist-name" id="islandArtistName">Jesse / Haikou Golden Wheat</span>
+    </div>
 
-        let scene, camera, renderer;
-        let mistMesh, logoParticles, terrain, stars;
-        let time = 0;
-        let scrollY = 0;
+    <!-- 麦浪金辉频谱条 -->
+    <div class="island-equalizer-bars">
+      <div class="eq-column"></div>
+      <div class="eq-column"></div>
+      <div class="eq-column"></div>
+      <div class="eq-column"></div>
+      <div class="eq-column"></div>
+    </div>
 
-        // 音频分析
-        let audioContext, analyser, dataArray, source;
-        let audioData = { bass: 0, high: 0 };
-        let isPlaying = false;
+    <div class="island-btn-group">
+      <button class="liquid-ctrl-btn" id="islandPrevBtn" title="上一曲" aria-label="Previous Track">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="19 20 9 12 19 4 19 20"></polygon>
+          <line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2.5"></line>
+        </svg>
+      </button>
 
-        init();
-        animate();
+      <button class="liquid-ctrl-btn liquid-ctrl-btn-play" id="islandPlayBtn" title="播放 / 暂停" aria-label="Play or Pause">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-left: 2px;">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+      </button>
 
-        // --- UI 控制逻辑 ---
-        window.toggleMusic = (e) => {
-            e.stopPropagation();
-            const audio = document.getElementById('bg-music');
-            const btn = document.querySelector('.mini-player');
+      <button class="liquid-ctrl-btn" id="islandNextBtn" title="下一曲" aria-label="Next Track">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="5 4 15 12 5 20 5 4"></polygon>
+          <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2.5"></line>
+        </svg>
+      </button>
+    </div>
+  </aside>
 
-            // 初始化 AudioContext (必须在用户点击后)
-            if(!audioContext) {
-                setupAudioContext(audio);
-            }
-
-            if(audio.paused){ 
-                audio.play(); 
-                btn.classList.add('playing'); 
-                isPlaying = true;
-            } else { 
-                audio.pause(); 
-                btn.classList.remove('playing'); 
-                isPlaying = false;
-            }
-        };
-
-        function setupAudioContext(audioElement) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            source = audioContext.createMediaElementSource(audioElement);
-            analyser = audioContext.createAnalyser();
-            analyser.fftSize = 256;
-            dataArray = new Uint8Array(analyser.frequencyBinCount);
-            
-            source.connect(analyser);
-            analyser.connect(audioContext.destination);
-        }
-
-        function init() {
-            const container = document.getElementById('canvas-container');
-
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x000000);
-            scene.fog = new THREE.FogExp2(0x000000, 0.015);
-
-            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 35, 50);
-            camera.lookAt(0, 0, 0);
-
-            renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            container.appendChild(renderer.domElement);
-
-            // 灯光
-            const spotLight = new THREE.SpotLight(0xffffff, 8);
-            spotLight.position.set(0, 60, 0);
-            spotLight.angle = Math.PI / 4;
-            spotLight.penumbra = 0.5;
-            scene.add(spotLight);
-            
-            // 辅助彩色光
-            const blueL = new THREE.PointLight(0x0044ff, 2, 50);
-            blueL.position.set(20, 10, 0);
-            scene.add(blueL);
-
-            createStars();         // 1. 顶部星空
-            createTerrain();       // 2. 地面
-            createFluidMist();     // 3. 强劲流体烟雾
-            createLogo('SELAHX');  // 4. 粒子 Logo (已修复方向)
-
-            document.getElementById('scroller').addEventListener('scroll', (e) => {
-                scrollY = e.target.scrollTop;
-            });
-            window.addEventListener('resize', onResize);
-        }
-
-        // --- 1. 星空系统 ---
-        function createStars() {
-            const count = 2000;
-            const pos = new Float32Array(count * 3);
-            const size = new Float32Array(count);
-            
-            for(let i=0; i<count; i++) {
-                // 散布在上方半球
-                const x = (Math.random() - 0.5) * 200;
-                const y = 30 + Math.random() * 100; // 只在顶部
-                const z = (Math.random() - 0.5) * 150;
-                pos[i*3] = x; pos[i*3+1] = y; pos[i*3+2] = z;
-                size[i] = Math.random();
-            }
-            
-            const geo = new THREE.BufferGeometry();
-            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-            geo.setAttribute('size', new THREE.BufferAttribute(size, 1));
-            
-            const mat = new THREE.PointsMaterial({
-                color: 0xffffff, size: 0.3, transparent: true, opacity: 0.8
-            });
-            
-            stars = new THREE.Points(geo, mat);
-            scene.add(stars);
-        }
-
-        // --- 2. 地面 ---
-        function createTerrain() {
-            const geo = new THREE.PlaneGeometry(120, 120, 128, 128);
-            const mat = new THREE.MeshStandardMaterial({
-                color: 0x111111, roughness: 0.9, metalness: 0.2
-            });
-            terrain = new THREE.Mesh(geo, mat);
-            terrain.rotation.x = -Math.PI / 2;
-            terrain.position.y = -3;
-            
-            // 简单的地形起伏
-            const pos = geo.attributes.position;
-            const baseZ = [];
-            for(let i=0; i<pos.count; i++){
-                const z = (Math.random()-0.5)*1.5;
-                pos.setZ(i, z);
-                baseZ.push(z);
-            }
-            geo.userData = { baseZ: baseZ };
-            scene.add(terrain);
-        }
-
-        // --- 3. 强劲流体烟雾 (Shader) ---
-        function createFluidMist() {
-            const vertexShader = `
-                varying vec2 vUv;
-                void main() {
-                    vUv = uv;
-                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                }
-            `;
-
-            const fragmentShader = `
-                uniform float uTime;
-                uniform float uBass; // 音乐低音
-                uniform vec3 uColor; // 当前主色调
-                varying vec2 vUv;
-
-                // 噪声函数
-                float random(vec2 st) { return fract(sin(dot(st.xy, vec2(12.9898,78.233)))*43758.5453123); }
-                float noise(vec2 st) {
-                    vec2 i = floor(st);
-                    vec2 f = fract(st);
-                    float a = random(i);
-                    float b = random(i + vec2(1.0, 0.0));
-                    float c = random(i + vec2(0.0, 1.0));
-                    float d = random(i + vec2(1.0, 1.0));
-                    vec2 u = f * f * (3.0 - 2.0 * f);
-                    return mix(a, b, u.x) + (c - a)* u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-                }
-                
-                // 更复杂的 FBM
-                float fbm(vec2 st) {
-                    float v = 0.0;
-                    float a = 0.5;
-                    for (int i = 0; i < 5; i++) {
-                        v += a * noise(st);
-                        st *= 2.0;
-                        a *= 0.5;
-                    }
-                    return v;
-                }
-
-                void main() {
-                    vec2 uv = vUv;
-                    
-                    // 增加流速：速度是之前的4倍，且受低音影响
-                    float flowSpeed = uTime * 0.2 + uBass * 0.1;
-                    
-                    // 域扭曲 (Domain Warping) - 制造卷曲感
-                    vec2 q = vec2(0.);
-                    q.x = fbm(uv + flowSpeed);
-                    q.y = fbm(uv + vec2(1.0));
-
-                    vec2 r = vec2(0.);
-                    r.x = fbm(uv + 1.0*q + vec2(1.7,9.2) + 0.15*flowSpeed);
-                    r.y = fbm(uv + 1.0*q + vec2(8.3,2.8) + 0.126*flowSpeed);
-
-                    float f = fbm(uv + r);
-
-                    // 颜色混合
-                    // 核心越亮，边缘越暗
-                    vec3 col = mix(vec3(0.05), uColor, clamp(f*f*3.0, 0.0, 1.0));
-                    
-                    // 音乐冲击：低音会让亮部暴涨
-                    col += vec3(f * uBass * 0.5);
-
-                    // 遮罩
-                    float dist = distance(uv, vec2(0.5));
-                    float mask = smoothstep(0.6, 0.1, dist);
-
-                    gl_FragColor = vec4(col, mask * f * 0.8);
-                }
-            `;
-
-            const geo = new THREE.PlaneGeometry(100, 100);
-            const mat = new THREE.ShaderMaterial({
-                uniforms: { 
-                    uTime: { value: 0 },
-                    uBass: { value: 0 },
-                    uColor: { value: new THREE.Color(0xffffff) } // 初始白
-                },
-                vertexShader: vertexShader,
-                fragmentShader: fragmentShader,
-                transparent: true,
-                depthWrite: false,
-                blending: THREE.AdditiveBlending,
-                side: THREE.DoubleSide
-            });
-
-            mistMesh = new THREE.Mesh(geo, mat);
-            mistMesh.rotation.x = -Math.PI / 2;
-            mistMesh.position.y = -1; 
-            scene.add(mistMesh);
-        }
-
-        // --- 4. 粒子 Logo (修正版) ---
-        function createLogo(text) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 1024; canvas.height = 256;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#000'; ctx.fillRect(0,0,1024,256);
-            ctx.font = '900 130px Arial';
-            ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText(text, 512, 128);
-            
-            const data = ctx.getImageData(0,0,1024,256).data;
-            const points = [];
-            const initials = [];
-            
-            for(let y=0; y<256; y+=4){ // step 4 优化性能
-                for(let x=0; x<1024; x+=4){
-                    if(data[(y*1024+x)*4] > 128){
-                        // *** 关键修正 ***
-                        // 使用 -(x - 512) 再次确保镜像反转正确
-                        // 如果之前你看到是反的，这行代码会把它修正回来
-                        const px = -(x - 512) * 0.06; 
-                        const pz = (y - 128) * 0.06;
-                        points.push(px, 0, pz);
-                        initials.push(px, 0, pz);
-                    }
-                }
-            }
-            
-            const geo = new THREE.BufferGeometry();
-            geo.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
-            geo.setAttribute('initial', new THREE.Float32BufferAttribute(initials, 3));
-            
-            const mat = new THREE.PointsMaterial({
-                color: 0xffffff, size: 0.15, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending
-            });
-            
-            logoParticles = new THREE.Points(geo, mat);
-            logoParticles.position.y = 2.5; 
-            logoParticles.rotation.x = -Math.PI / 4; 
-            scene.add(logoParticles);
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            time += 0.01;
-
-            // 分析音频数据
-            if(isPlaying && analyser) {
-                analyser.getByteFrequencyData(dataArray);
-                let bass = 0, high = 0;
-                // 取低频段平均值
-                for(let i=0; i<20; i++) bass += dataArray[i];
-                audioData.bass = (bass / 20) / 255; // 0.0 ~ 1.0
-                
-                // 更新左下角装饰条
-                const bars = document.querySelectorAll('.bar');
-                bars.forEach((bar, i) => {
-                    bar.style.height = (dataArray[i*10] / 5) + 'px';
-                });
-            } else {
-                audioData.bass *= 0.95; // 缓慢衰减
-            }
-
-            // 1. 烟雾更新 (颜色循环 + 流动)
-            if(mistMesh) {
-                mistMesh.material.uniforms.uTime.value = time;
-                mistMesh.material.uniforms.uBass.value = audioData.bass;
-                
-                // 颜色慢速循环逻辑 (Cycle Colors)
-                // 每 15 秒一个周期
-                const tColor = time * 0.1; 
-                const colors = [
-                    new THREE.Color(0xffffff), // 白
-                    new THREE.Color(0x00ffff), // 青
-                    new THREE.Color(0x0044ff), // 蓝
-                    new THREE.Color(0xff00ff), // 紫
-                    new THREE.Color(0xffaa00)  // 金
-                ];
-                // 线性插值找到当前颜色
-                const idx = Math.floor(tColor) % colors.length;
-                const nextIdx = (idx + 1) % colors.length;
-                const alpha = tColor - Math.floor(tColor);
-                
-                const currentColor = colors[idx].clone().lerp(colors[nextIdx], alpha);
-                mistMesh.material.uniforms.uColor.value = currentColor;
-                
-                mistMesh.rotation.z = time * 0.02;
-            }
-
-            // 2. 地面震动
-            if(terrain) {
-                const pos = terrain.geometry.attributes.position;
-                const baseZ = terrain.geometry.userData.baseZ;
-                const shake = audioData.bass * 1.5;
-                for(let i=0; i<pos.count; i++){
-                    if(shake > 0.01) {
-                         pos.setZ(i, baseZ[i] + (Math.random()-0.5) * shake);
-                    } else {
-                         // 平滑复位
-                         const curr = pos.getZ(i);
-                         pos.setZ(i, curr + (baseZ[i] - curr) * 0.1);
-                    }
-                }
-                pos.needsUpdate = true;
-                terrain.rotation.z = -time * 0.01;
-            }
-
-            // 3. Logo 跳动
-            if(logoParticles) {
-                const pos = logoParticles.geometry.attributes.position.array;
-                const init = logoParticles.geometry.attributes.initial.array;
-                const jump = audioData.bass * 2.0; // 随低音跳动幅度
-                
-                for(let i=0; i<pos.length/3; i++){
-                    const iy = i*3+1;
-                    // 基础呼吸 + 音乐跳动
-                    const wave = Math.sin(time*2 + init[i*3]*0.2) * 0.3;
-                    pos[iy] = init[iy] + wave + jump * Math.max(0, Math.sin(time*10 + i));
-                }
-                logoParticles.geometry.attributes.position.needsUpdate = true;
-            }
-
-            // 4. 星星闪烁
-            if(stars) {
-                stars.rotation.y = time * 0.005;
-            }
-
-            // 5. 背景滚动联动
-            const scrollFactor = Math.min(scrollY / 1500, 1);
-            const targetY = 35 - scrollFactor * 30; 
-            const targetZ = 50 - scrollFactor * 35;
-            camera.position.y += (targetY - camera.position.y) * 0.05;
-            camera.position.z += (targetZ - camera.position.z) * 0.05;
-            camera.lookAt(0, scrollFactor * 5, scrollFactor * -20);
-
-            renderer.render(scene, camera);
-        }
-
-        function onResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-    </script>
+  <script src="script.js"></script>
 </body>
 </html>
