@@ -1,18 +1,23 @@
 /* ==========================================================================
-   SELAHX - 自然麦浪原野 + 全色系流体烟雾 + 苹果 iOS 27 流光液态玻璃设计系统
+   SELAHX — Everywhere & Agentic WebGL Design
+   Apple Liquid Glass UI System (Inspired by iyinchao/liquid-glass-studio)
+   Pure Pitch Black (#000000) Atmospheric Architecture
    ========================================================================== */
 
 :root {
-  --bg-void: #030305;
-  --wheat-gold: #f8cf70;
-  --wheat-amber: #e69d38;
-  --liquid-border-highlight: rgba(255, 255, 255, 0.7);
-  --liquid-border-ambient: rgba(255, 255, 255, 0.25);
-  --radius-card: 16px;
-  --radius-tray: 12px;
+  --bg-deep: #000000;
+  --bg-darker: #000000;
+  --text-white: #ffffff;
+  --text-sub: rgba(255, 255, 255, 0.75);
+  --text-dim: rgba(255, 255, 255, 0.45);
+  --accent-cyan: #00f0ff;
+  --accent-pink: #ff007f;
+  --accent-green: #10b981;
+  --accent-gold: #fde047;
   --radius-pill: 9999px;
-  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "PingFang SC", sans-serif;
-  --transition-liquid: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --radius-squircle: 24px;
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 *, *::before, *::after {
@@ -23,21 +28,21 @@
 
 html {
   scroll-behavior: smooth;
-  background-color: var(--bg-void);
-  color: #ffffff;
-  font-family: var(--font-system);
+  background-color: #000000;
+  color: var(--text-white);
+  font-family: var(--font-main);
   -webkit-font-smoothing: antialiased;
 }
 
 body {
   min-height: 100vh;
   overflow-x: hidden;
-  background-color: var(--bg-void);
+  background: #000000;
   position: relative;
 }
 
 /* ==========================================================================
-   3D 麦浪原野与全色系流动烟雾画布 (Fixed Background)
+   Three.js 3D WebGL Canvas Layer
    ========================================================================== */
 #canvas-container {
   position: fixed;
@@ -48,413 +53,354 @@ body {
   pointer-events: none;
 }
 
-/* 舞台环境自然暗角 */
-.stage-ambient-vignette {
+/* 全景无黑边虚空遮罩 (100% 畅通通透) */
+.scene-vignette-overlay {
   position: fixed;
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  background: radial-gradient(circle at 50% 40%, transparent 30%, rgba(3, 3, 5, 0.4) 70%, #030305 100%);
+  background: transparent;
 }
 
 /* ==========================================================================
-   页面滚动内容层 (完全透明自然融合)
+   SelahX 独立先锋顶部导航栏 (Apple Liquid Glass Header)
    ========================================================================== */
-.scroll-viewport {
-  position: relative;
-  z-index: 10;
-  width: 100%;
+.editions-nav-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  padding: 14px 32px;
+  background: rgba(10, 10, 14, 0.65);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 -1px 0 rgba(255, 255, 255, 0.05);
 }
 
-/* 首屏自然麦浪视差留白区 */
-.hero-stage-spacer {
-  height: 92vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  padding-bottom: 36px;
-  pointer-events: none;
-}
-
-.scroll-whisper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  color: rgba(248, 207, 112, 0.75);
-  font-size: 0.68rem;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  animation: whisperPulse 2.8s ease-in-out infinite;
-}
-
-.scroll-track {
-  width: 1.5px;
-  height: 26px;
-  background: linear-gradient(to bottom, var(--wheat-gold), transparent);
-  animation: trackFlow 2s ease-in-out infinite;
-}
-
-@keyframes trackFlow {
-  0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
-  50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
-  100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
-}
-
-@keyframes whisperPulse {
-  0%, 100% { transform: translateY(0); opacity: 0.6; }
-  50% { transform: translateY(5px); opacity: 1; }
-}
-
-.main-content {
-  max-width: 1360px;
+.nav-inner {
+  max-width: 1720px;
   margin: 0 auto;
-  padding: 20px 24px 140px;
-}
-
-/* ==========================================================================
-   苹果 iOS 27 极致精致液态玻璃卡片 (小边框、轻盈高折射)
-   ========================================================================== */
-.liquid-glass-card {
-  position: relative;
-  padding: 5px; /* 极细精致液态玻璃托盘 */
-  border-radius: var(--radius-card);
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(36px) saturate(220%);
-  -webkit-backdrop-filter: blur(36px) saturate(220%);
-  
-  /* 水晶物理多层折射边缘 */
-  border-top: 1.2px solid var(--liquid-border-highlight);
-  border-left: 1px solid var(--liquid-border-ambient);
-  border-right: 1px solid rgba(255, 255, 255, 0.12);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-
-  box-shadow: 
-    0 18px 45px -8px rgba(0, 0, 0, 0.8),
-    0 0 25px rgba(248, 207, 112, 0.08),
-    inset 0 1px 2px rgba(255, 255, 255, 0.5),
-    inset 0 -1px 2px rgba(0, 0, 0, 0.4);
-
-  overflow: hidden;
-  cursor: pointer;
-  transform-style: preserve-3d;
-  transition: transform var(--transition-liquid), box-shadow var(--transition-liquid), border-color var(--transition-liquid);
-}
-
-.liquid-glass-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  border-top-color: #ffffff;
-  box-shadow: 
-    0 26px 65px -8px rgba(0, 0, 0, 0.9),
-    0 0 40px rgba(248, 207, 112, 0.25),
-    inset 0 1.5px 3px rgba(255, 255, 255, 0.8),
-    inset 0 -1px 2px rgba(0, 0, 0, 0.3);
-}
-
-/* 液态流光划痕掠影 (Liquid Shimmer) */
-.liquid-glass-card::before {
-  content: '';
-  position: absolute;
-  inset: -100%;
-  background: linear-gradient(
-    115deg,
-    transparent 35%,
-    rgba(255, 255, 255, 0.12) 46%,
-    rgba(255, 255, 255, 0.5) 50%,
-    rgba(248, 207, 112, 0.3) 54%,
-    transparent 65%
-  );
-  transform: rotate(25deg) translate(-100%, -100%);
-  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
-  z-index: 3;
-}
-
-.liquid-glass-card:hover::before {
-  transform: rotate(25deg) translate(100%, 100%);
-}
-
-/* ==========================================================================
-   动态视频展区 (VD.webm)
-   ========================================================================== */
-.cinema-container {
-  margin-bottom: 55px;
-}
-
-.liquid-cinema-card {
-  padding: 7px;
-  border-radius: calc(var(--radius-card) + 4px);
-}
-
-.cinema-media-tray {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16/9;
-  border-radius: var(--radius-tray);
-  overflow: hidden;
-  background: #000;
-}
-
-.cinema-video-element {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.cinema-floating-pill {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  padding: 5px 14px;
-  border-radius: var(--radius-pill);
-  background: rgba(10, 10, 16, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  font-size: 0.68rem;
-  letter-spacing: 2px;
-  color: var(--wheat-gold);
-  font-family: ui-monospace, monospace;
-}
-
-/* ==========================================================================
-   画廊展区 (全部 13 张高清照片，微边框液态玻璃托盘)
-   ========================================================================== */
-.gallery-wrapper {
-  width: 100%;
-}
-
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-  gap: 24px;
-}
-
-.liquid-photo-card {
-  padding: 5px;
-  display: flex;
-  flex-direction: column;
-}
-
-.photo-tray {
-  width: 100%;
-  aspect-ratio: 4/3;
-  border-radius: var(--radius-tray);
-  overflow: hidden;
-  position: relative;
-  background: #050508;
-}
-
-.photo-inner-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
-  filter: brightness(0.96) contrast(1.02);
-}
-
-.liquid-photo-card:hover .photo-inner-img {
-  transform: scale(1.05);
-  filter: brightness(1.02) contrast(1.06);
-}
-
-.photo-meta-bar {
-  padding: 9px 8px 3px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.photo-title {
-  font-size: 0.8rem;
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.nav-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.nav-brand-icon {
+  color: #ffffff;
+  filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.6));
+  transition: transform var(--transition-smooth);
+}
+
+.nav-brand-group:hover .nav-brand-icon {
+  transform: rotate(30deg) scale(1.1);
+}
+
+.nav-brand-title {
+  font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 0.12em;
   color: #ffffff;
   text-transform: uppercase;
 }
 
-.photo-index {
+.nav-badge-season {
   font-size: 0.68rem;
-  color: rgba(248, 207, 112, 0.8);
-  font-family: ui-monospace, monospace;
-  letter-spacing: 1px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.nav-action-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.88);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-smooth);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.nav-action-pill:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-text-link {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: 0.84rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: color var(--transition-smooth);
+}
+
+.nav-text-link:hover {
+  color: #fff;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+}
+
+.nav-cta-btn {
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  padding: 8px 20px;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth), background-color var(--transition-smooth);
+}
+
+.nav-cta-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.75);
+  background: #f4f4f4;
 }
 
 /* ==========================================================================
-   苹果 iOS 27 流光液态玻璃灵动岛播放器 (Color-Flowing Liquid Glass)
-   告别黑灰色，呈现绚烂流动的虹彩液态玻璃机身
+   多段滚动剧情流容器
    ========================================================================== */
-.liquid-dynamic-island {
-  position: fixed;
-  bottom: 26px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 7px 20px;
-  border-radius: var(--radius-pill);
-  
-  /* 颜色流动的液态玻璃背景：全色系光波流淌 */
-  background: linear-gradient(
-    135deg,
-    rgba(0, 240, 255, 0.28) 0%,
-    rgba(181, 23, 158, 0.35) 25%,
-    rgba(247, 37, 133, 0.3) 50%,
-    rgba(255, 209, 102, 0.35) 75%,
-    rgba(67, 97, 238, 0.28) 100%
-  );
-  background-size: 300% 300%;
-  animation: liquidFlowRainbow 10s ease-in-out infinite alternate;
-
-  backdrop-filter: blur(36px) saturate(240%);
-  -webkit-backdrop-filter: blur(36px) saturate(240%);
-  
-  /* 高折射率水晶液态边框 */
-  border-top: 1.5px solid rgba(255, 255, 255, 0.85);
-  border-left: 1.2px solid rgba(255, 255, 255, 0.5);
-  border-right: 1.2px solid rgba(255, 255, 255, 0.3);
-  border-bottom: 1.2px solid rgba(0, 240, 255, 0.4);
-
-  box-shadow: 
-    0 20px 55px rgba(0, 0, 0, 0.75),
-    0 0 35px rgba(0, 240, 255, 0.35),
-    0 0 60px rgba(247, 37, 133, 0.25),
-    inset 0 1.5px 3px rgba(255, 255, 255, 0.75),
-    inset 0 -1.5px 3px rgba(0, 0, 0, 0.3);
-
-  max-width: calc(100vw - 32px);
-  transition: all var(--transition-liquid);
-  overflow: hidden;
-}
-
-@keyframes liquidFlowRainbow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 50% 100%; }
-}
-
-.liquid-dynamic-island:hover {
-  transform: translateX(-50%) translateY(-3px) scale(1.02);
-  border-top-color: #ffffff;
-  box-shadow: 
-    0 28px 70px rgba(0, 0, 0, 0.85),
-    0 0 50px rgba(0, 240, 255, 0.5),
-    0 0 80px rgba(247, 37, 133, 0.4);
-}
-
-.island-cover-wrapper {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-  flex-shrink: 0;
-}
-
-.island-cover-img {
+.scroll-storyboard {
+  position: relative;
+  z-index: 10;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
 }
 
-.liquid-dynamic-island.is-playing .island-cover-img {
-  animation: vinylSpin 8s linear infinite;
-}
-
-@keyframes vinylSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.island-info-box {
+.story-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-width: 130px;
-  max-width: 220px;
-}
-
-.island-track-name {
-  font-size: 0.82rem;
-  font-weight: 800;
-  color: #ffffff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
-}
-
-.island-artist-name {
-  font-size: 0.66rem;
-  color: #fff;
-  opacity: 0.88;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-}
-
-/* 灵动岛跳动频谱条 (炫彩霓虹光斑) */
-.island-equalizer-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  height: 15px;
-  padding: 0 4px;
-}
-
-.eq-column {
-  width: 2.5px;
-  height: 3px;
-  background: #ffffff;
-  border-radius: 1px;
-  box-shadow: 0 0 10px #00f0ff, 0 0 5px #fff;
-  transition: height 0.08s ease;
-}
-
-/* 灵动岛控制器 */
-.island-btn-group {
-  display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  background: transparent !important;
 }
 
-.liquid-ctrl-btn {
-  background: rgba(255, 255, 255, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: #ffffff;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+/* 阶段 1：首页纯粹 SELAHX 独立品牌视觉 (小字全部删除) */
+.section-everywhere {
+  min-height: 85vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  pointer-events: none;
 }
 
-.liquid-ctrl-btn:hover {
-  background: #ffffff;
-  color: #0c0d14;
-  border-color: #ffffff;
-  transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+.everywhere-stage-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
-.liquid-ctrl-btn-play {
-  width: 36px;
-  height: 36px;
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.6);
+.everywhere-stage-anchor {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: auto;
+  user-select: none;
+  z-index: 10;
 }
+
+.hero-selahx-title {
+  font-size: clamp(4.5rem, 13vw, 10.5rem);
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.0;
+  background: linear-gradient(180deg, #ffffff 40%, rgba(255, 255, 255, 0.68) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 60px rgba(255, 255, 255, 0.35);
+}
+
+.everywhere-sub-hint {
+  position: absolute;
+  bottom: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-dim);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  pointer-events: auto;
+}
+
+.hint-down-line {
+  width: 1.5px;
+  height: 24px;
+  background: linear-gradient(to bottom, #fff, transparent);
+  animation: hintLineStream 2s ease-in-out infinite;
+}
+
+@keyframes hintLineStream {
+  0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+  50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+  100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+
+/* 阶段 2：3D 液态波浪过渡 */
+.section-wave {
+  height: 110vh;
+  pointer-events: none;
+}
+
+.wave-stage-content {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+}
+
+.wave-label-pill {
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 7px 18px;
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* 阶段 3：超光速粒子穿梭与先锋宣言 */
+.section-agentic {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 clamp(24px, 8vw, 130px);
+  pointer-events: none;
+}
+
+.agentic-stage-content {
+  max-width: 920px;
+  pointer-events: auto;
+}
+
+.agentic-headline {
+  font-size: clamp(4.5rem, 11.5vw, 13rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  color: #ffffff;
+  margin-bottom: 24px;
+  text-shadow: 0 10px 40px rgba(0, 0, 0, 0.95), 0 0 80px rgba(255, 255, 255, 0.35);
+}
+
+.agentic-subdeck {
+  font-size: clamp(1.1rem, 2.2vw, 2.2rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  max-width: 700px;
+}
+
+/* ==========================================================================
+   阶段 4：SelahX 典藏画廊与 4K 影院 (Apple Liquid Glass Architecture)
+   ========================================================================== */
+.section-portfolio {
+  min-height: 100vh;
+  padding: 40px 32px 180px;
+  justify-content: flex-start;
+  background: transparent !important;
+}
+
+.portfolio-container {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.portfolio-header-bar {
+  margin-bottom: 48px;
+}
+
+.portfolio-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: var(--accent-cyan);
+  margin-bottom: 12px;
+  text-shadow: 0 0 14px rgba(0, 240, 255, 0.6);
+}
+
+.portfolio-title {
+  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.portfolio-desc {
+  font-size: 1.08rem;
+  color: var(--text-sub);
+}
+
+/* ==========================================================================
+   Apple Liquid Glass UI 材质核心实现 (对标 iyinchao/liquid-glass-studio)
+   - 超椭圆 Squircle 曲线
+   - 双层光学色散边缘 (Chromatic Dispersion Rim)
+   - 动态扫光高光反射 (Specular Glare Sweep with Angle)
+   - 高透光物理磨砂微晶折射
+   ========================================================================== */
+
+
+
 
 /* ==========================================================================
    全屏影院灯箱
@@ -463,89 +409,456 @@ body {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: rgba(3, 3, 5, 0.95);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--transition-liquid);
-  padding: 24px;
-  cursor: zoom-out;
+  transition: opacity 0.35s ease;
+  padding: 40px;
 }
 
-.cinema-lightbox.active {
+.cinema-lightbox.is-active {
   opacity: 1;
   pointer-events: auto;
 }
 
-.lightbox-content-tray {
+.lightbox-modal-content {
   position: relative;
   max-width: 92vw;
-  max-height: 88vh;
-  cursor: default;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-.lightbox-main-photo {
+.lightbox-main-img {
   max-width: 100%;
-  max-height: 88vh;
+  max-height: 90vh;
   object-fit: contain;
-  border-radius: var(--radius-card);
-  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.9), 0 0 50px rgba(0, 240, 255, 0.25);
-  animation: zoomReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
 }
 
-@keyframes zoomReveal {
-  from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.lightbox-close-icon {
+.lightbox-close-btn {
   position: absolute;
-  top: -16px;
-  right: -16px;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: rgba(20, 18, 14, 0.85);
+  top: 18px;
+  right: 18px;
+  background: rgba(0, 0, 0, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.4);
   color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-smooth);
 }
 
-.lightbox-close-icon:hover {
-  background: #00f0ff;
-  color: #000;
-  transform: scale(1.1);
-  box-shadow: 0 0 15px #00f0ff;
+.lightbox-close-btn:hover {
+  transform: rotate(90deg) scale(1.1);
+  background: #ffffff;
+  color: #000000;
 }
 
 /* ==========================================================================
-   移动端响应式适配
+   SelahX 底部固定悬浮胶囊 (Apple Liquid Glass Capsule Pill)
    ========================================================================== */
-@media (max-width: 768px) {
-  .main-content {
-    padding: 10px 14px 120px;
-  }
-  .gallery-grid {
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 16px;
-  }
-  .liquid-dynamic-island {
-    bottom: 14px;
-    padding: 6px 14px;
-    gap: 10px;
-    width: calc(100% - 20px);
-    justify-content: space-between;
-  }
-  .island-info-box {
-    min-width: 80px;
-    max-width: 120px;
-  }
+/* SelahX 底部固定悬浮胶囊 (超通透高反射 Apple Liquid Glass 灵动岛)
+   ========================================================================== */
+.docked-agentic-pill {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 24px;
+  border-radius: var(--radius-pill);
+  overflow: visible; /* 必须 visible，否则展开面板会被截断无法显示！ */
+
+  /* 极致通透的 Apple Liquid Glass 水晶液态质感 (超高透光 + 双层折射高光 + 色散彩虹边) */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.05) 45%, rgba(255, 255, 255, 0.18) 100%) !important;
+  backdrop-filter: blur(20px) saturate(260%) contrast(115%);
+  -webkit-backdrop-filter: blur(20px) saturate(260%) contrast(115%);
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 
+    0 20px 45px rgba(0, 0, 0, 0.5),
+    0 0 25px rgba(255, 255, 255, 0.2),
+    0 0 15px rgba(0, 240, 255, 0.35),
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 1),
+    inset 0 -1.5px 2px 0 rgba(255, 255, 255, 0.3),
+    inset 0 0 18px 0 rgba(255, 255, 255, 0.12);
+  
+  cursor: pointer;
+  user-select: none;
+  transition: all var(--transition-smooth);
+}
+
+.docked-agentic-pill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, rgba(0, 240, 255, 0.2), rgba(255, 0, 128, 0.15), rgba(255, 215, 0, 0.2));
+  opacity: 0.35;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+.docked-agentic-pill::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 220%;
+  height: 200%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    transparent 42%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 58%,
+    transparent 100%
+  );
+  transform: rotate(-15deg);
+  pointer-events: none;
+  animation: glassGlareSweep 6s ease-in-out infinite;
+}
+
+@keyframes glassGlareSweep {
+  0% { transform: translateX(-80%) rotate(-15deg); opacity: 0; }
+  15% { opacity: 0.8; }
+  50% { transform: translateX(80%) rotate(-15deg); opacity: 0.8; }
+  65%, 100% { transform: translateX(80%) rotate(-15deg); opacity: 0; }
+}
+
+.docked-agentic-pill:hover {
+  transform: translateX(-50%) translateY(-3px) scale(1.04);
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 28px 60px rgba(0, 0, 0, 0.55),
+    0 0 45px rgba(0, 240, 255, 0.4),
+    inset 0 2.5px 2px 0 rgba(255, 255, 255, 1);
+}
+
+
+.pill-left-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pill-label-text {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.pill-track-info {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pill-mini-equalizer {
+  display: flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  height: 12px;
+}
+
+.mini-eq-bar {
+  width: 2.5px;
+  height: 3px;
+  background: #00f0ff;
+  border-radius: 1px;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.8);
+  transition: height 0.08s ease;
+}
+
+.pill-menu-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-left: 2px;
+}
+
+.menu-bar {
+  width: 12px;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 1px;
+}
+
+/* 展开式完整液态音频控制面板 */
+.pill-expanded-panel {
+  position: absolute;
+  bottom: calc(100% + 16px);
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  width: 330px;
+  /* 极致水晶通透液态面板 */
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.16) 100%) !important;
+  backdrop-filter: blur(36px) saturate(280%) contrast(110%);
+  -webkit-backdrop-filter: blur(36px) saturate(280%) contrast(110%);
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius-squircle);
+  padding: 20px;
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.6),
+    0 0 35px rgba(255, 255, 255, 0.25),
+    0 0 20px rgba(0, 240, 255, 0.3),
+    inset 0 2px 2px rgba(255, 255, 255, 1),
+    inset 0 -2px 3px rgba(255, 255, 255, 0.25),
+    inset 0 0 25px rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: all var(--transition-smooth);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: #fff;
+}
+
+.docked-agentic-pill.is-expanded .pill-expanded-panel {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translateX(-50%) translateY(0) !important;
+  visibility: visible !important;
+}
+
+/* 胶囊常驻快捷播放/暂停按钮 */
+.pill-quick-play-btn {
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: #ffffff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 1005;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.pill-quick-play-btn:hover {
+  background: rgba(255, 255, 255, 0.45);
+  transform: scale(1.1);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.5);
+}
+
+.docked-agentic-pill.is-playing .pill-quick-play-btn {
+  background: #ffffff;
+  color: #000000;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.6);
+}
+
+.expanded-cover-wrapper {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+}
+
+.expanded-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.docked-agentic-pill.is-playing .expanded-cover-img {
+  animation: vinylSpin 7s linear infinite;
+}
+
+@keyframes vinylSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.expanded-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.expanded-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.expanded-artist {
+  font-size: 0.74rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.expanded-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.dock-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.dock-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.1);
+}
+
+.dock-btn-play {
+  width: 40px;
+  height: 40px;
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.5);
+}
+
+.dock-btn-play:hover {
+  background: #ffffff;
+  transform: scale(1.12);
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.8);
+}
+
+/* ==========================================================================
+   响应式断点适配
+   ========================================================================== */
+@media (max-width: 900px) {
+  .editions-nav-header { padding: 12px 20px; }
+  .nav-action-pill { display: none; }
+  .section-portfolio { padding: 60px 20px 140px; }
+  .gallery-cards-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+}
+
+
+/* 阶段 3：SELAHX 超光速跃迁发光大标 (与阶段 1 凸透镜曲面区分) */
+.selahx-warp-title {
+  font-size: clamp(5.2rem, 13vw, 15rem) !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.04em !important;
+  line-height: 0.88 !important;
+  background: linear-gradient(135deg, #ffffff 0%, #a5f3fc 40%, #f472b6 75%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 35px rgba(0, 240, 255, 0.5)) drop-shadow(0 0 70px rgba(244, 114, 182, 0.35));
+}
+
+/* 卡片纯数字编号 01 / 02 / 03 极简微晶胶囊 */
+.card-num-tag {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.18em;
+  font-variant-numeric: tabular-nums;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+
+/* ==========================================================================
+/* ==========================================================================
+   永远在最顶层的 Apple 物理液态玻璃 WebGL 画布层
+   - z-index: 999999 (绝对最顶层，覆盖文字、图片、视频、播放器与背景)
+   - pointer-events: none !important (100% 穿透，绝不影响任何点击交互)
+   ========================================================================== */
+.pure-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 28px;
+  width: 100%;
+  max-width: 1720px;
+  margin: 0 auto;
+  padding: 10px 0 160px;
+}
+
+.pure-photo-item {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.75);
+  aspect-ratio: 4/3;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.pure-photo-item:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 255, 255, 0.18);
+}
+
+.pure-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+}
+
+.pure-photo-item:hover .pure-photo-img {
+  transform: scale(1.04);
+  filter: brightness(108%) contrast(104%);
+}
+
+.pure-photo-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1.5px 2px rgba(255, 255, 255, 0.5), inset 0 -1.5px 2px rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+  opacity: 0.6;
+  transition: opacity 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.pure-photo-item:hover::after {
+  opacity: 1;
+  border-color: rgba(255, 255, 255, 0.65);
+  box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.8), 0 0 20px rgba(0, 240, 255, 0.25);
 }
