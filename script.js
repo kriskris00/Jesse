@@ -18,9 +18,9 @@
      1. 全局播放列表与音频状态
      -------------------------------------------------------------------------- */
   const PLAYLIST = [
-    { src: '1.mp3', title: 'SelahX Resonance', artist: 'Jesse / Atmospheric Forest' },
-    { src: 'background-music.mp3', title: 'Atmospheric Drift', artist: 'Wind & Reeds Acoustic' },
-    { src: 'xxx.mp3', title: 'Obsidian Pulse Beat', artist: 'Sylva Sub Frequency' }
+    { src: '1.mp3', title: '1', artist: '' },
+    { src: 'background-music.mp3', title: 'Atmospheric Drift', artist: '' },
+    { src: 'xxx.mp3', title: '2', artist: '' }
   ];
 
   let currentTrackIdx = 0;
