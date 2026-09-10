@@ -1,88 +1,19 @@
 /* ==========================================================================
-   Apple Liquid Glass UI System — Circular Liquid Droplet & Optics
-   Powered by Snell's Law Refraction & Apple 5th-Order Fresnel Optics
+   Apple Liquid Glass UI System — WebGL2 Multi-Pass Canvas Layer
+   Powered by iyinchao/liquid-glass-studio (Snell Refraction & Dispersion)
+   - Absolute top layer (z-index: 999999) covering text, photos, player
+   - 100% click-through (pointer-events: none)
    ========================================================================== */
 
-.apple-liquid-glass-droplet {
+#liquidGlassCanvas,
+.apple-liquid-glass-canvas {
   position: fixed;
   top: 0;
   left: 0;
-  width: 94px;
-  height: 94px;
-  border-radius: 50%;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none !important;
   z-index: 999999 !important;
-  transform: translate3d(-50%, -50%, 0);
-  will-change: transform;
-  
-  /* Genuine Optical Refraction bending DOM pixels underneath */
-  backdrop-filter: url(#liquidGlassRefract) saturate(165%) brightness(108%);
-  -webkit-backdrop-filter: url(#liquidGlassRefract) saturate(165%) brightness(108%);
-  
-  /* Liquid Meniscus Caustics */
-  background: radial-gradient(
-    circle at var(--glare-x, 32%) var(--glare-y, 28%),
-    rgba(255, 255, 255, 0.18) 0%,
-    rgba(255, 255, 255, 0.03) 40%,
-    rgba(255, 255, 255, 0.0) 65%
-  );
-  
-  /* Apple 5th-Order Diamond Fresnel Bevel */
-  border: 1.5px solid rgba(255, 255, 255, 0.72);
-  box-shadow:
-    0 14px 34px rgba(0, 0, 0, 0.35),
-    inset 0 2px 3px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -2px 3px 0 rgba(255, 255, 255, 0.3),
-    inset 2px 0 3px 0 rgba(255, 255, 255, 0.42),
-    inset -2px 0 3px 0 rgba(255, 255, 255, 0.42),
-    inset 0 0 14px rgba(255, 255, 255, 0.18);
-  
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  display: block;
 }
 
-.apple-liquid-glass-droplet.is-active {
-  opacity: 1;
-}
-
-/* RGB Chromatic Dispersion Ring (Prismatic rainbow edge) */
-.apple-liquid-glass-droplet::before {
-  content: '';
-  position: absolute;
-  inset: -1.5px;
-  border-radius: 50%;
-  padding: 1.5px;
-  background: conic-gradient(
-    from var(--glare-angle, -45deg),
-    rgba(255, 255, 255, 0.95) 0deg,
-    rgba(100, 220, 255, 0.8) 45deg,
-    rgba(255, 255, 255, 0.25) 90deg,
-    rgba(255, 130, 230, 0.8) 135deg,
-    rgba(255, 255, 255, 0.9) 180deg,
-    rgba(100, 220, 255, 0.7) 225deg,
-    rgba(255, 255, 255, 0.2) 270deg,
-    rgba(255, 130, 230, 0.7) 315deg,
-    rgba(255, 255, 255, 0.95) 360deg
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  opacity: 0.95;
-}
-
-/* -45° Specular Light Flare (Dynamic Glare) */
-.apple-liquid-glass-droplet::after {
-  content: '';
-  position: absolute;
-  inset: 2px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at var(--glare-x, 30%) var(--glare-y, 26%),
-    rgba(255, 255, 255, 0.85) 0%,
-    rgba(255, 255, 255, 0.22) 25%,
-    transparent 55%
-  );
-  pointer-events: none;
-  mix-blend-mode: screen;
-}

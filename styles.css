@@ -14,10 +14,23 @@
   --accent-pink: #ff007f;
   --accent-green: #10b981;
   --accent-gold: #fde047;
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-bg: rgba(255, 255, 255, 0.08);
   --radius-pill: 9999px;
   --radius-squircle: 24px;
   --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
   --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --theme-transition: background-color 0.6s cubic-bezier(0.16, 1, 0.3, 1), color 0.6s ease;
+}
+
+html[data-color-mode="light"] {
+  --bg-deep: #f7f8fc;
+  --bg-darker: #ffffff;
+  --text-white: #0a0e1a;
+  --text-sub: rgba(15, 23, 42, 0.75);
+  --text-dim: rgba(15, 23, 42, 0.48);
+  --glass-border: rgba(0, 0, 0, 0.09);
+  --glass-bg: rgba(255, 255, 255, 0.82);
 }
 
 *, *::before, *::after {
@@ -28,17 +41,19 @@
 
 html {
   scroll-behavior: smooth;
-  background-color: #000000;
+  background-color: var(--bg-deep);
   color: var(--text-white);
   font-family: var(--font-main);
   -webkit-font-smoothing: antialiased;
+  transition: var(--theme-transition);
 }
 
 body {
   min-height: 100vh;
   overflow-x: hidden;
-  background: #000000;
+  background-color: var(--bg-deep);
   position: relative;
+  transition: var(--theme-transition);
 }
 
 /* ==========================================================================
@@ -246,13 +261,16 @@ body {
 }
 
 .hero-selahx-title {
-  font-size: clamp(4.5rem, 13vw, 10.5rem);
+  font-size: clamp(3.6rem, 12vw, 10.5rem);
   font-weight: 900;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
+  padding-left: 0.18em; /* 完美对称末尾 letter-spacing 产生的间距，实现绝对像素级数学居中 */
+  margin: 0 auto;
   color: #ffffff;
   text-transform: uppercase;
-  margin: 0;
   line-height: 1.0;
+  text-align: center;
+  display: inline-block;
   background: linear-gradient(180deg, #ffffff 40%, rgba(255, 255, 255, 0.68) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -517,33 +535,6 @@ body {
   mix-blend-mode: overlay;
 }
 
-.docked-agentic-pill::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -60%;
-  width: 220%;
-  height: 200%;
-  background: linear-gradient(
-    115deg,
-    transparent 0%,
-    transparent 42%,
-    rgba(255, 255, 255, 0.35) 50%,
-    transparent 58%,
-    transparent 100%
-  );
-  transform: rotate(-15deg);
-  pointer-events: none;
-  animation: glassGlareSweep 6s ease-in-out infinite;
-}
-
-@keyframes glassGlareSweep {
-  0% { transform: translateX(-80%) rotate(-15deg); opacity: 0; }
-  15% { opacity: 0.8; }
-  50% { transform: translateX(80%) rotate(-15deg); opacity: 0.8; }
-  65%, 100% { transform: translateX(80%) rotate(-15deg); opacity: 0; }
-}
-
 .docked-agentic-pill:hover {
   transform: translateX(-50%) translateY(-3px) scale(1.04);
   background: rgba(255, 255, 255, 0.18) !important;
@@ -739,7 +730,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+  position: relative;
+  z-index: 1020;
   transition: all var(--transition-smooth);
 }
 
@@ -755,6 +750,11 @@ body {
   color: #000000;
   border: none;
   box-shadow: 0 0 16px rgba(255, 255, 255, 0.5);
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+  position: relative;
+  z-index: 1020;
 }
 
 .dock-btn-play:hover {
@@ -769,8 +769,46 @@ body {
 @media (max-width: 900px) {
   .editions-nav-header { padding: 12px 20px; }
   .nav-action-pill { display: none; }
-  .section-portfolio { padding: 60px 20px 140px; }
-  .gallery-cards-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+  .section-portfolio { padding: 50px 20px 140px; }
+  .pure-gallery-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+}
+
+@media (max-width: 768px) {
+  .hero-selahx-title {
+    font-size: clamp(2.4rem, 11vw, 4.4rem);
+    letter-spacing: 0.12em;
+    padding-left: 0.12em; /* 移动端对称 letter-spacing 实现零误差完美居中 */
+    margin: 0 auto;
+  }
+  .everywhere-stage-content {
+    padding: 0 16px;
+  }
+  .everywhere-stage-anchor {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .section-portfolio {
+    padding: 40px 16px 140px;
+  }
+  .pure-gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 10px 0 140px;
+  }
+  .docked-agentic-pill {
+    bottom: 18px;
+    padding: 8px 16px;
+    gap: 10px;
+    max-width: calc(100vw - 32px);
+  }
+  .pill-track-info {
+    max-width: 110px;
+  }
+  .pill-expanded-panel {
+    width: min(320px, calc(100vw - 32px));
+  }
 }
 
 
@@ -861,4 +899,197 @@ body {
   opacity: 1;
   border-color: rgba(255, 255, 255, 0.65);
   box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.8), 0 0 20px rgba(0, 240, 255, 0.25);
+}
+
+/* ==========================================================================
+   高级明暗昼夜切换开关 (Floating Theme Toggle Capsule)
+   ========================================================================== */
+.theme-toggle-btn {
+  position: fixed;
+  top: 24px;
+  right: 28px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.theme-toggle-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 16px rgba(255, 255, 255, 0.25);
+}
+
+.theme-toggle-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+}
+
+/* 黑暗模式默认图标 */
+html[data-color-mode="dark"] .icon-sun { display: none; }
+html[data-color-mode="dark"] .icon-moon {
+  display: block;
+  color: #38bdf8;
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.6));
+}
+
+/* 明亮模式图标与按钮 */
+html[data-color-mode="light"] .theme-toggle-btn {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #0f172a;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), inset 0 1px 1.5px rgba(255, 255, 255, 1);
+}
+
+html[data-color-mode="light"] .theme-toggle-btn:hover {
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12), 0 0 16px rgba(245, 158, 11, 0.25);
+}
+
+html[data-color-mode="light"] .icon-moon { display: none; }
+html[data-color-mode="light"] .icon-sun {
+  display: block;
+  color: #f59e0b;
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.6));
+}
+
+.theme-toggle-text {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   明亮模式 (Light Mode) 纯净白调联动视觉重构
+   ========================================================================== */
+html[data-color-mode="light"] .hero-selahx-title {
+  background: linear-gradient(180deg, #090e18 20%, #29354d 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: 0 10px 40px rgba(0, 0, 0, 0.12) !important;
+}
+
+html[data-color-mode="light"] .docked-agentic-pill {
+  background: rgba(255, 255, 255, 0.82) !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.08) !important;
+  color: #0f172a !important;
+  box-shadow: 
+    0 20px 45px rgba(0, 0, 0, 0.08),
+    0 0 25px rgba(255, 255, 255, 0.8),
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 1) !important;
+}
+
+html[data-color-mode="light"] .docked-agentic-pill:hover {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.12), inset 0 2px 2px 0 rgba(255, 255, 255, 1) !important;
+}
+
+html[data-color-mode="light"] .docked-agentic-pill::before {
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.1), rgba(168, 85, 247, 0.1), rgba(245, 158, 11, 0.1));
+}
+
+html[data-color-mode="light"] .pill-label-text {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+
+html[data-color-mode="light"] .pill-track-info {
+  color: rgba(15, 23, 42, 0.65) !important;
+}
+
+html[data-color-mode="light"] .mini-eq-bar {
+  background: #2563eb !important;
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.5) !important;
+}
+
+html[data-color-mode="light"] .pill-quick-play-btn {
+  background: rgba(15, 23, 42, 0.08) !important;
+  border: 1px solid rgba(15, 23, 42, 0.15) !important;
+  color: #0f172a !important;
+}
+
+html[data-color-mode="light"] .pill-quick-play-btn:hover {
+  background: rgba(15, 23, 42, 0.15) !important;
+}
+
+html[data-color-mode="light"] .docked-agentic-pill.is-playing .pill-quick-play-btn {
+  background: #0f172a !important;
+  color: #ffffff !important;
+}
+
+html[data-color-mode="light"] .menu-bar {
+  background: #0f172a !important;
+}
+
+html[data-color-mode="light"] .pill-expanded-panel {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #0f172a !important;
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.12),
+    0 0 35px rgba(255, 255, 255, 0.8),
+    inset 0 2px 2px rgba(255, 255, 255, 1) !important;
+}
+
+html[data-color-mode="light"] .expanded-title {
+  color: #0f172a !important;
+}
+
+html[data-color-mode="light"] .expanded-artist {
+  color: rgba(15, 23, 42, 0.6) !important;
+}
+
+html[data-color-mode="light"] .dock-btn {
+  background: rgba(15, 23, 42, 0.06) !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  color: #0f172a !important;
+}
+
+html[data-color-mode="light"] .dock-btn:hover {
+  background: rgba(15, 23, 42, 0.12) !important;
+}
+
+html[data-color-mode="light"] .dock-btn-play {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(15, 23, 42, 0.35) !important;
+}
+
+html[data-color-mode="light"] .pure-photo-item {
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08) !important;
+}
+
+html[data-color-mode="light"] .pure-photo-item:hover {
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.15), 0 0 25px rgba(37, 99, 235, 0.12) !important;
+}
+
+html[data-color-mode="light"] .pure-photo-item::after {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: inset 0 1.5px 2px rgba(255, 255, 255, 0.8) !important;
+}
+
+@media (max-width: 768px) {
+  .theme-toggle-btn {
+    top: 16px;
+    right: 16px;
+    padding: 6px 12px;
+  }
 }
