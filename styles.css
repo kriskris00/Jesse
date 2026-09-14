@@ -410,18 +410,52 @@ body {
 }
 
 /* ==========================================================================
-   Apple Liquid Glass UI 材质核心实现 (对标 iyinchao/liquid-glass-studio)
-   - 超椭圆 Squircle 曲线
-   - 双层光学色散边缘 (Chromatic Dispersion Rim)
-   - 动态扫光高光反射 (Specular Glare Sweep with Angle)
-   - 高透光物理磨砂微晶折射
+   SELAHX 典藏摄影画廊网格 (Pure Gallery Grid with Content-Visibility Optimization)
    ========================================================================== */
+.pure-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 28px;
+  width: 100%;
+}
 
+.pure-photo-item {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  aspect-ratio: 4 / 3;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease;
+  /* 关键速度优化：浏览器视口虚拟化渲染，不渲染屏幕外的DOM节点计算与布局绘制 */
+  content-visibility: auto;
+  contain-intrinsic-size: 350px 260px;
+}
 
+.pure-photo-item:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 255, 255, 0.1);
+}
 
+.pure-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pure-photo-item:hover .pure-photo-img {
+  transform: scale(1.05);
+}
 
 /* ==========================================================================
-   全屏影院灯箱
+   全屏影院灯箱 (Cinema Lightbox)
    ========================================================================== */
 .cinema-lightbox {
   position: fixed;
@@ -464,6 +498,60 @@ body {
   display: block;
 }
 
+.lightbox-counter {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.lightbox-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  z-index: 10;
+}
+
+.lightbox-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  color: #000000;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+}
+
+.lightbox-prev {
+  left: 20px;
+}
+
+.lightbox-next {
+  right: 20px;
+}
+
 .lightbox-close-btn {
   position: absolute;
   top: 18px;
@@ -479,6 +567,7 @@ body {
   justify-content: center;
   cursor: pointer;
   transition: all var(--transition-smooth);
+  z-index: 11;
 }
 
 .lightbox-close-btn:hover {
@@ -1091,5 +1180,19 @@ html[data-color-mode="light"] .pure-photo-item::after {
     top: 16px;
     right: 16px;
     padding: 6px 12px;
+  }
+  .pure-gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .lightbox-nav-btn {
+    width: 40px;
+    height: 40px;
+  }
+  .lightbox-prev {
+    left: 10px;
+  }
+  .lightbox-next {
+    right: 10px;
   }
 }

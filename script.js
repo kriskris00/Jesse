@@ -18,9 +18,8 @@
      1. 全局播放列表与音频状态
      -------------------------------------------------------------------------- */
   const PLAYLIST = [
-    { src: '1.mp3', title: '1', artist: '' },
-    { src: 'background-music.mp3', title: 'Atmospheric Drift', artist: '' },
-    { src: 'xxx.mp3', title: '2', artist: '' }
+    { src: '01 ALL I CAN TAKE.mp3', title: 'ALL I CAN TAKE', artist: 'SELAHX / Jesse' },
+    { src: '08 FIRST PLACE.mp3', title: 'FIRST PLACE', artist: 'SELAHX / Jesse' }
   ];
 
   let currentTrackIdx = 0;
@@ -677,21 +676,35 @@
 
   /* --------------------------------------------------------------------------
      8. 典藏画廊与大图影院弹窗 (Cinema Lightbox)
+     - 支持全量 83 张照片画廊任意缩略图点开
+     - 支持上一张/下一张按钮切换与键盘箭头键左右切图
+     - 支持 ESC 键与背景点击关闭，具备照片序号状态指示
      -------------------------------------------------------------------------- */
   const lightbox = document.getElementById('cinemaLightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   const lightboxClose = document.getElementById('lightboxClose');
+  const lightboxPrevBtn = document.getElementById('lightboxPrevBtn');
+  const lightboxNextBtn = document.getElementById('lightboxNextBtn');
+  const lightboxCounter = document.getElementById('lightboxCounter');
 
-  document.querySelectorAll('.pure-photo-item').forEach(photo => {
-    photo.addEventListener('click', () => {
-      const img = photo.querySelector('.pure-photo-img');
-      if (img && lightbox && lightboxImg) {
-        lightboxImg.src = img.src;
-        lightbox.classList.add('is-active');
-        document.body.style.overflow = 'hidden';
+  const photoItems = Array.from(document.querySelectorAll('.pure-photo-item'));
+  let currentLightboxIdx = 0;
+
+  function showLightbox(idx) {
+    if (!photoItems.length || !lightbox || !lightboxImg) return;
+    currentLightboxIdx = (idx + photoItems.length) % photoItems.length;
+    const targetItem = photoItems[currentLightboxIdx];
+    const img = targetItem ? targetItem.querySelector('.pure-photo-img') : null;
+    if (img) {
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt || `SELAHX Collection #${currentLightboxIdx + 1}`;
+      if (lightboxCounter) {
+        lightboxCounter.textContent = `${currentLightboxIdx + 1} / ${photoItems.length}`;
       }
-    });
-  });
+      lightbox.classList.add('is-active');
+      document.body.style.overflow = 'hidden';
+    }
+  }
 
   function closeLightbox() {
     if (lightbox) {
@@ -700,15 +713,60 @@
     }
   }
 
+  function prevLightbox(e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    showLightbox(currentLightboxIdx - 1);
+  }
+
+  function nextLightbox(e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    showLightbox(currentLightboxIdx + 1);
+  }
+
+  photoItems.forEach((photo, idx) => {
+    photo.addEventListener('click', () => {
+      showLightbox(idx);
+    });
+  });
+
+  if (lightboxPrevBtn) lightboxPrevBtn.addEventListener('click', prevLightbox);
+  if (lightboxNextBtn) lightboxNextBtn.addEventListener('click', nextLightbox);
   if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+
   if (lightbox) {
     lightbox.addEventListener('click', (e) => {
       if (e.target === lightbox) closeLightbox();
     });
   }
+
   document.addEventListener('keydown', (e) => {
+    if (!lightbox || !lightbox.classList.contains('is-active')) return;
     if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') prevLightbox();
+    if (e.key === 'ArrowRight') nextLightbox();
   });
+
+  // 移动端轻触滑动手势支持
+  let touchStartX = 0;
+  let touchEndX = 0;
+  if (lightbox) {
+    lightbox.addEventListener('touchstart', (e) => {
+      if (e.changedTouches && e.changedTouches.length > 0) {
+        touchStartX = e.changedTouches[0].clientX;
+      }
+    }, { passive: true });
+
+    lightbox.addEventListener('touchend', (e) => {
+      if (e.changedTouches && e.changedTouches.length > 0) {
+        touchEndX = e.changedTouches[0].clientX;
+        const diff = touchEndX - touchStartX;
+        if (Math.abs(diff) > 45) {
+          if (diff > 0) prevLightbox();
+          else nextLightbox();
+        }
+      }
+    }, { passive: true });
+  }
 
   /* --------------------------------------------------------------------------
      9. 核心动画渲染循环 (Render Animation Loop)

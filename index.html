@@ -4,12 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta name="theme-color" content="#000000">
-  <title>SELAHX</title>
+  <title>SELAHX | Official Space</title>
+
+  <!-- 网站徽章 (Logo Favicon & Apple Touch Icon) -->
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <!-- Three.js 3D 粒子星海画卷容器 (z-index: 1) -->
@@ -36,12 +41,12 @@
     <span class="theme-toggle-text" id="themeToggleText">DARK</span>
   </button>
 
-  <audio id="bgAudio" preload="auto"></audio>
+  <!-- 音频播放元素 (preload=none 避免初次打开占用大量带宽) -->
+  <audio id="bgAudio" preload="none"></audio>
 
-  
   <div class="scroll-storyboard" id="scrollStoryboard">
 
-    <!-- 首页：纯净 SELAHX 独立品牌视觉 (小字全部删除) -->
+    <!-- 首页：纯净 SELAHX 独立品牌视觉 -->
     <section class="story-section section-everywhere" id="secEverywhere">
       <div class="everywhere-stage-content">
         <div class="everywhere-stage-anchor" id="lensTriggerBox">
@@ -50,61 +55,333 @@
       </div>
     </section>
 
-    <!-- 典藏画廊 (卡片全部移除，视频彻底删除，纯净大片呈现) -->
+    <!-- 典藏画廊 (83 张摄影大片全量上线，原生视口惰性加载与异步解码) -->
     <section class="story-section section-portfolio" id="gallery">
       <div class="portfolio-container">
-        <div class="pure-gallery-grid">
+        <div class="pure-gallery-grid" id="galleryGrid">
 
-          <div class="pure-photo-item">
-            <img class="pure-photo-img" src="111.jpg" alt="ALPHA" loading="lazy">
+          <div class="pure-photo-item" data-index="0">
+            <img class="pure-photo-img" src="1.WEBP" alt="SELAHX Collection #01" loading="lazy" decoding="async">
           </div>
 
-          <div class="pure-photo-item">
-            <img class="pure-photo-img" src="DanLevi.webp" alt="DANLEVI" loading="lazy">
+          <div class="pure-photo-item" data-index="1">
+            <img class="pure-photo-img" src="111.jpg" alt="SELAHX Collection #02" loading="lazy" decoding="async">
           </div>
 
-          <div class="pure-photo-item">
-            <img class="pure-photo-img" src="selahx1.webp" alt="REED" loading="lazy">
+          <div class="pure-photo-item" data-index="2">
+            <img class="pure-photo-img" src="3.WEBP" alt="SELAHX Collection #03" loading="lazy" decoding="async">
           </div>
 
-          <div class="pure-photo-item">
-            <img class="pure-photo-img" src="1.WEBP" alt="DANDELION" loading="lazy">
+          <div class="pure-photo-item" data-index="3">
+            <img class="pure-photo-img" src="4.WEBP" alt="SELAHX Collection #04" loading="lazy" decoding="async">
           </div>
 
-          <div class="pure-photo-item">
-            <img class="pure-photo-img" src="IMG_8317.jpeg" alt="BETA" loading="lazy">
+          <div class="pure-photo-item" data-index="4">
+            <img class="pure-photo-img" src="90299a7be0ab78e7f27b9682b9adbec5.jpeg" alt="SELAHX Collection #05" loading="lazy" decoding="async">
           </div>
 
-          <div class="pure-photo-item">
-            <img class="pure-photo-img" src="2.WEBP" alt="ETHEREAL" loading="lazy">
+          <div class="pure-photo-item" data-index="5">
+            <img class="pure-photo-img" src="IMG_0296.jpeg" alt="SELAHX Collection #06" loading="lazy" decoding="async">
           </div>
 
-          <div class="pure-photo-item">
-            <img class="pure-photo-img" src="IMG_8318.jpeg" alt="GAMMA" loading="lazy">
+          <div class="pure-photo-item" data-index="6">
+            <img class="pure-photo-img" src="IMG_0585.jpeg" alt="SELAHX Collection #07" loading="lazy" decoding="async">
           </div>
 
-          <div class="pure-photo-item">
-            <img class="pure-photo-img" src="3.WEBP" alt="CHROMA" loading="lazy">
+          <div class="pure-photo-item" data-index="7">
+            <img class="pure-photo-img" src="IMG_0727.jpeg" alt="SELAHX Collection #08" loading="lazy" decoding="async">
           </div>
 
-          <div class="pure-photo-item">
-            <img class="pure-photo-img" src="IMG_2576.jpeg" alt="DELTA" loading="lazy">
+          <div class="pure-photo-item" data-index="8">
+            <img class="pure-photo-img" src="IMG_0756.jpeg" alt="SELAHX Collection #09" loading="lazy" decoding="async">
           </div>
 
-          <div class="pure-photo-item">
-            <img class="pure-photo-img" src="4.WEBP" alt="PRISM" loading="lazy">
+          <div class="pure-photo-item" data-index="9">
+            <img class="pure-photo-img" src="IMG_0819.jpeg" alt="SELAHX Collection #10" loading="lazy" decoding="async">
           </div>
 
-          <div class="pure-photo-item">
-            <img class="pure-photo-img" src="IMG_8322.jpeg" alt="EPSILON" loading="lazy">
+          <div class="pure-photo-item" data-index="10">
+            <img class="pure-photo-img" src="IMG_2199.jpeg" alt="SELAHX Collection #11" loading="lazy" decoding="async">
           </div>
 
-          <div class="pure-photo-item">
-            <img class="pure-photo-img" src="IMG_8329.jpeg" alt="NEBULA" loading="lazy">
+          <div class="pure-photo-item" data-index="11">
+            <img class="pure-photo-img" src="IMG_2272.jpeg" alt="SELAHX Collection #12" loading="lazy" decoding="async">
           </div>
 
-          <div class="pure-photo-item">
-            <img class="pure-photo-img" src="IMG_8340.jpeg" alt="ZETA" loading="lazy">
+          <div class="pure-photo-item" data-index="12">
+            <img class="pure-photo-img" src="IMG_2300.jpeg" alt="SELAHX Collection #13" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="13">
+            <img class="pure-photo-img" src="IMG_2497.jpeg" alt="SELAHX Collection #14" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="14">
+            <img class="pure-photo-img" src="IMG_2499.jpeg" alt="SELAHX Collection #15" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="15">
+            <img class="pure-photo-img" src="IMG_2500.jpeg" alt="SELAHX Collection #16" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="16">
+            <img class="pure-photo-img" src="IMG_2576.jpeg" alt="SELAHX Collection #17" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="17">
+            <img class="pure-photo-img" src="IMG_2753.jpeg" alt="SELAHX Collection #18" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="18">
+            <img class="pure-photo-img" src="IMG_2781.jpeg" alt="SELAHX Collection #19" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="19">
+            <img class="pure-photo-img" src="IMG_2782.jpeg" alt="SELAHX Collection #20" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="20">
+            <img class="pure-photo-img" src="IMG_2792.jpeg" alt="SELAHX Collection #21" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="21">
+            <img class="pure-photo-img" src="IMG_2796.jpeg" alt="SELAHX Collection #22" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="22">
+            <img class="pure-photo-img" src="IMG_2801.jpeg" alt="SELAHX Collection #23" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="23">
+            <img class="pure-photo-img" src="IMG_3344.jpeg" alt="SELAHX Collection #24" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="24">
+            <img class="pure-photo-img" src="IMG_3607.jpeg" alt="SELAHX Collection #25" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="25">
+            <img class="pure-photo-img" src="IMG_4416.jpeg" alt="SELAHX Collection #26" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="26">
+            <img class="pure-photo-img" src="IMG_4457.jpeg" alt="SELAHX Collection #27" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="27">
+            <img class="pure-photo-img" src="IMG_4458.jpeg" alt="SELAHX Collection #28" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="28">
+            <img class="pure-photo-img" src="IMG_4483.jpeg" alt="SELAHX Collection #29" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="29">
+            <img class="pure-photo-img" src="IMG_4523.jpeg" alt="SELAHX Collection #30" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="30">
+            <img class="pure-photo-img" src="IMG_4524.jpeg" alt="SELAHX Collection #31" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="31">
+            <img class="pure-photo-img" src="IMG_4525.jpeg" alt="SELAHX Collection #32" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="32">
+            <img class="pure-photo-img" src="IMG_4553.jpeg" alt="SELAHX Collection #33" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="33">
+            <img class="pure-photo-img" src="IMG_4554.jpeg" alt="SELAHX Collection #34" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="34">
+            <img class="pure-photo-img" src="IMG_4572.jpeg" alt="SELAHX Collection #35" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="35">
+            <img class="pure-photo-img" src="IMG_4630.jpeg" alt="SELAHX Collection #36" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="36">
+            <img class="pure-photo-img" src="IMG_4648.jpeg" alt="SELAHX Collection #37" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="37">
+            <img class="pure-photo-img" src="IMG_4650.jpeg" alt="SELAHX Collection #38" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="38">
+            <img class="pure-photo-img" src="IMG_4662.jpeg" alt="SELAHX Collection #39" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="39">
+            <img class="pure-photo-img" src="IMG_4691.jpeg" alt="SELAHX Collection #40" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="40">
+            <img class="pure-photo-img" src="IMG_4726.jpeg" alt="SELAHX Collection #41" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="41">
+            <img class="pure-photo-img" src="IMG_4729.jpeg" alt="SELAHX Collection #42" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="42">
+            <img class="pure-photo-img" src="IMG_4763.jpeg" alt="SELAHX Collection #43" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="43">
+            <img class="pure-photo-img" src="IMG_4784.jpeg" alt="SELAHX Collection #44" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="44">
+            <img class="pure-photo-img" src="IMG_4795.jpeg" alt="SELAHX Collection #45" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="45">
+            <img class="pure-photo-img" src="IMG_4863.jpeg" alt="SELAHX Collection #46" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="46">
+            <img class="pure-photo-img" src="IMG_4864.jpeg" alt="SELAHX Collection #47" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="47">
+            <img class="pure-photo-img" src="IMG_4865.jpeg" alt="SELAHX Collection #48" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="48">
+            <img class="pure-photo-img" src="IMG_4875.jpeg" alt="SELAHX Collection #49" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="49">
+            <img class="pure-photo-img" src="IMG_4889.jpeg" alt="SELAHX Collection #50" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="50">
+            <img class="pure-photo-img" src="IMG_4898.jpeg" alt="SELAHX Collection #51" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="51">
+            <img class="pure-photo-img" src="IMG_5081.jpeg" alt="SELAHX Collection #52" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="52">
+            <img class="pure-photo-img" src="IMG_5086.jpeg" alt="SELAHX Collection #53" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="53">
+            <img class="pure-photo-img" src="IMG_5101.jpeg" alt="SELAHX Collection #54" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="54">
+            <img class="pure-photo-img" src="IMG_5122.jpeg" alt="SELAHX Collection #55" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="55">
+            <img class="pure-photo-img" src="IMG_5126.jpeg" alt="SELAHX Collection #56" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="56">
+            <img class="pure-photo-img" src="IMG_6040.jpeg" alt="SELAHX Collection #57" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="57">
+            <img class="pure-photo-img" src="IMG_6050.jpeg" alt="SELAHX Collection #58" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="58">
+            <img class="pure-photo-img" src="IMG_6075.jpeg" alt="SELAHX Collection #59" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="59">
+            <img class="pure-photo-img" src="IMG_6133.jpeg" alt="SELAHX Collection #60" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="60">
+            <img class="pure-photo-img" src="IMG_6169.jpeg" alt="SELAHX Collection #61" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="61">
+            <img class="pure-photo-img" src="IMG_6192.jpeg" alt="SELAHX Collection #62" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="62">
+            <img class="pure-photo-img" src="IMG_6282.jpeg" alt="SELAHX Collection #63" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="63">
+            <img class="pure-photo-img" src="IMG_6430.jpeg" alt="SELAHX Collection #64" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="64">
+            <img class="pure-photo-img" src="IMG_6705.jpeg" alt="SELAHX Collection #65" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="65">
+            <img class="pure-photo-img" src="IMG_6747.jpeg" alt="SELAHX Collection #66" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="66">
+            <img class="pure-photo-img" src="IMG_6763.jpeg" alt="SELAHX Collection #67" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="67">
+            <img class="pure-photo-img" src="IMG_6797.jpeg" alt="SELAHX Collection #68" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="68">
+            <img class="pure-photo-img" src="IMG_6799.jpeg" alt="SELAHX Collection #69" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="69">
+            <img class="pure-photo-img" src="IMG_8219.jpeg" alt="SELAHX Collection #70" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="70">
+            <img class="pure-photo-img" src="IMG_8241.jpeg" alt="SELAHX Collection #71" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="71">
+            <img class="pure-photo-img" src="IMG_8244.jpeg" alt="SELAHX Collection #72" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="72">
+            <img class="pure-photo-img" src="IMG_8317.jpeg" alt="SELAHX Collection #73" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="73">
+            <img class="pure-photo-img" src="IMG_8318.jpeg" alt="SELAHX Collection #74" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="74">
+            <img class="pure-photo-img" src="IMG_8322.jpeg" alt="SELAHX Collection #75" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="75">
+            <img class="pure-photo-img" src="IMG_8329.jpeg" alt="SELAHX Collection #76" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="76">
+            <img class="pure-photo-img" src="IMG_8340.jpeg" alt="SELAHX Collection #77" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="77">
+            <img class="pure-photo-img" src="IMG_8883.jpeg" alt="SELAHX Collection #78" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="78">
+            <img class="pure-photo-img" src="IMG_9031.jpeg" alt="SELAHX Collection #79" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="79">
+            <img class="pure-photo-img" src="IMG_9065.jpeg" alt="SELAHX Collection #80" loading="lazy" decoding="async">
+          </div>
+
+          <div class="pure-photo-item" data-index="80">
+            <img class="pure-photo-img" src="IMG_9066.jpeg" alt="SELAHX Collection #81" loading="lazy" decoding="async">
           </div>
 
         </div>
@@ -113,12 +390,23 @@
 
   </div>
 
-  
-  <div class="cinema-lightbox" id="cinemaLightbox" role="dialog" aria-modal="true">
+  <!-- 增强型全屏大图影院 (支持上一张/下一张切换、照片序号指示与手势) -->
+  <div class="cinema-lightbox" id="cinemaLightbox" role="dialog" aria-modal="true" aria-label="全屏预览">
     <div class="lightbox-modal-content">
       <img src="" alt="" class="lightbox-main-img" id="lightboxImg">
-      <button class="lightbox-close-btn" id="lightboxClose" aria-label="Close Lightbox">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <div class="lightbox-counter" id="lightboxCounter">1 / 81</div>
+      <button class="lightbox-nav-btn lightbox-prev" id="lightboxPrevBtn" aria-label="上一张">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <button class="lightbox-nav-btn lightbox-next" id="lightboxNextBtn" aria-label="下一张">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+      <button class="lightbox-close-btn" id="lightboxClose" aria-label="关闭预览">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
@@ -126,14 +414,14 @@
     </div>
   </div>
 
-  
+  <!-- SelahX 底部药丸灵动岛播放器 -->
   <aside class="docked-agentic-pill" id="agenticDockPill" title="展开/收起播放器">
     <div class="pill-left-state">
       <span class="pill-label-text">SELAHX</span>
-      <span class="pill-track-info" id="dockTrackTitle">SelahX Ambient Resonance</span>
+      <span class="pill-track-info" id="dockTrackTitle">ALL I CAN TAKE</span>
     </div>
 
-    
+    <!-- 动态微型均衡器跳动频谱 -->
     <div class="pill-mini-equalizer">
       <div class="mini-eq-bar"></div>
       <div class="mini-eq-bar"></div>
@@ -148,20 +436,20 @@
       </svg>
     </button>
 
-    
+    <!-- 极简控制面板展开触发钮 -->
     <div class="pill-menu-icon" id="pillMenuTrigger" title="展开详细控制面板">
       <span class="menu-bar"></span>
       <span class="menu-bar"></span>
     </div>
 
-    
+    <!-- 展开式 Apple 晶面悬浮面板 -->
     <div class="pill-expanded-panel" id="pillExpandPanel">
       <div class="expanded-cover-wrapper">
-        <img src="selahx.PNG" alt="Cover" class="expanded-cover-img" id="expandedCoverImg">
+        <img src="logo.png" alt="Cover" class="expanded-cover-img" id="expandedCoverImg">
       </div>
       <div class="expanded-details">
-        <span class="expanded-title" id="expandedTitle">SelahX</span>
-        <span class="expanded-artist" id="expandedArtist"></span>
+        <span class="expanded-title" id="expandedTitle">ALL I CAN TAKE</span>
+        <span class="expanded-artist" id="expandedArtist">SELAHX / Jesse</span>
       </div>
       <div class="expanded-controls">
         <button class="dock-btn" id="dockPrevBtn" title="上一首">
